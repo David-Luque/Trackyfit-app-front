@@ -19,17 +19,23 @@ class NavComp extends React.Component {
         return (
             <div className= "Navbar">
             <Navbar bg="light" expand="lg">
-            <Navbar.Brand><Link to="/">Home </Link></Navbar.Brand>
+            <Navbar.Brand><Link to="/">app name </Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                 {!this.state.loggedInUser && <Nav.Link to="/signup"><Link to="/signup">Sign Up</Link></Nav.Link>}
                 {!this.state.loggedInUser && <Nav.Link><Link to="/login">Log in</Link></Nav.Link>}
-                {this.state.loggedInUser && <NavDropdown title="Account" id="basic-nav-dropdown">
+
+                {this.state.loggedInUser && <Nav.Link><Link to="/user-profile">Profile</Link></Nav.Link>}
+                <NavDropdown.Divider />
+                {this.state.loggedInUser && <Nav.Link onClick={()=>this.props.logOut()}>Log out</Nav.Link>}
+                
+                
+                {/* {this.state.loggedInUser && <NavDropdown title="Account" id="basic-nav-dropdown">
                     <NavDropdown.Item ><Link to="/user-profile">Profile</Link></NavDropdown.Item>
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={()=>this.props.logOut()}>Log out</NavDropdown.Item>
-                </NavDropdown> }
+                </NavDropdown> } */}
                 </Nav>
             </Navbar.Collapse>
             </Navbar>

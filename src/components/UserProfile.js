@@ -30,7 +30,7 @@ class UserProfile extends React.Component{
         <h2>Welcome {this.props.loggedInUser.username}</h2>
         <div className="user-info-buttons">
         <Button variant="info">
-          <Link to="/all-exercises">My performance</Link>
+          <Link to="/details-workout">My performance</Link>
         </Button>
         <br />
         <Button variant="info">

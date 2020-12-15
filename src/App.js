@@ -48,7 +48,9 @@ class App extends React.Component {
 	}
 
 	getTheUser = (userObj) => {
+		console.log(userObj)
 		this.setState({
+			
 			loggedInUser: userObj
 		});
 	};
@@ -89,7 +91,7 @@ class App extends React.Component {
 				{/*<Navbar loggedInUser={this.state.loggedInUser} logOut={this.logOut}/>*/}
 
 				<Route exact path="/" render={() => <Home loggedInUser={this.state.loggedInUser} logOut={this.logOut} />} />
-				<Route exact path="/all-exercises" render={() => <DetailsWorkouts loggedInUser={this.state.loggedInUser} />} />
+				<Route exact path="/details-workout" render={() => <DetailsWorkouts loggedInUser={this.state.loggedInUser} />} />
 				<Route exact path="/details-metrics" render={() => <DetailsMetrics loggedInUser={this.state.loggedInUser} />} />
 				<Route path="/create-exercise" render={()=> <FormExercise loggedInUser={this.state.loggedInUser} />} />
 				<Route path="/add-new-metrics" render={()=> <FormMetrics loggedInUser={this.state.loggedInUser} />} />
@@ -111,7 +113,8 @@ class App extends React.Component {
 							/>
 						) : (
 							<Redirect to="/" />
-						)}
+						)
+					}
 				/>
 				
 				<Route

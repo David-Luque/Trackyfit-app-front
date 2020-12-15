@@ -8,7 +8,8 @@ class SignUp extends React.Component {
 		super(props);
 		this.state = {
 			username: '',
-			password: ''
+			password: '',
+			message:''
 		};
 		this.service = new Service();
 	}
@@ -19,9 +20,11 @@ class SignUp extends React.Component {
 		this.service
 			.signup(this.state.username, this.state.password)
 			.then((response) => {
+				console.log(response)
 				this.setState({
 					username: '',
-					password: ''
+					password: '',
+					message: response.errorMessage
 				});
 				this.props.getUser(response);
 			})
@@ -49,6 +52,7 @@ class SignUp extends React.Component {
 						<Form.Label>Password</Form.Label>
 						<Form.Control type="password" name="password" placeholder="Password" value={this.state.password} onChange={(event) => this.handleChange(event)} />
 					</Form.Group>
+					<p>{this.state.message}</p>
 					<Button variant="info" type="submit">
 						sign up
 					</Button>

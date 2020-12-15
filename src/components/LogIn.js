@@ -19,13 +19,14 @@ class LogIn extends React.Component {
 		this.service
 			.login(this.state.username, this.state.password)
 			.then((response) => {
+				console.log(response)
 				this.setState({
 					username: '',
 					password: ''
 				});
         this.props.getUser(response);
 			})
-			.catch((err) => console.error(err));
+			.catch((err) => console.log(err));
 	};
 
 	handleChange = (event) => {

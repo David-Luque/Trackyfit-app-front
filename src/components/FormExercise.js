@@ -1,7 +1,7 @@
 
 import React from 'react'
 import '../styles/FormExercise.css'
-// import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import ExerciseService from '../services/ExerciseService'
 import { Button, Form } from 'react-bootstrap';
 
@@ -21,16 +21,7 @@ class FormExercise extends React.Component {
 
 
     componentDidMount(){
-        // const getDate = ()=>{
-        //     var today = new Date();
-        //     var dd = String(today.getDate()).padStart(2, '0');
-        //     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        //     var yyyy = today.getFullYear();
-        //     today = mm + '/' + dd + '/' + yyyy;
-        //     return today
-        // }
-        // const todayDate = getDate()
-
+    
         this.setState({owner: this.props.loggedInUser._id})
     }
 
@@ -58,46 +49,14 @@ class FormExercise extends React.Component {
         this.setState({ [name]: value });
     };
 
+    redirect = ()=>{
+        <Redirect to="/details-workout" />
+    }
+
 
   render() {
     return (
         <div className="FormExercise">
-            
-            {/* <form onSubmit={this.handleFormSubmit}>
-                <label htmlFor="name">Name: </label>
-                <input
-                    type="text"
-                    name="name"
-                    value={this.state.name}
-                    onChange={(event) => this.handleChange(event)}
-                />
-                <br />
-                <label htmlFor="exerType">Type: </label>
-                <input
-                    type="text"
-                    name="exerType"
-                    value={this.state.exerType}
-                    onChange={(event) => this.handleChange(event)}
-                />
-                <br />
-                <label htmlFor="totalTime">total time: </label>
-                <input
-                    type="number"
-                    name="totalTime"
-                    value={this.state.totalTime}
-                    onChange={(event) => this.handleChange(event)}
-                />
-                <br />
-                <label htmlFor="totalReps">total reps: </label>
-                <input
-                    type="number"
-                    name="totalReps"
-                    value={this.state.totalReps}
-                    onChange={(event) => this.handleChange(event)}
-                />
-                <br />
-                <button type="submit">Create</button>
-            </form> */}
 
             <Form className="form" onSubmit={this.handleFormSubmit}>
                     <Form.Group controlId="formBasicEmail">
@@ -130,6 +89,7 @@ class FormExercise extends React.Component {
                     </Button>
             </Form>
 
+            <Button onClick={()=>this.redirect()} >redirect chart</Button>
         </div>
     );
 }
