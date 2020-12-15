@@ -1,0 +1,22 @@
+
+.UserProfile {
+    color: whitesmoke;
+}
+
+.UserProfile a {
+    color: whitesmoke
+}
+
+.user-info-buttons {
+    margin: 1.5rem;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: stretch;
+}
+
+.user-info-buttons btn {
+    padding: 1.8rem ;
+    font-size: 1.5rem;
+}

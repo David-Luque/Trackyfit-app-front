@@ -1,0 +1,12 @@
+
+.DetailsMetrics a {
+    color: whitesmoke;
+}
+
+
+/* background-image: unset; */
+
+.chart {
+    margin-top: 1rem;
+    position: relative;
+}

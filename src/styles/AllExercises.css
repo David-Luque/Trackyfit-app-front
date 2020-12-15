@@ -1,0 +1,91 @@
+a:hover {
+  cursor: pointer;
+}
+
+#pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100vh;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+ul li {
+  color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+ul li a {
+  background-color: #444B6E;
+  padding: 5px 10px;
+  border: 2px solid #3D315B;
+  border-right: 0;
+}
+ul li.active a {
+  background-color: #9AB87A;
+}
+ul li:first-child a {
+  border-radius: 5px 0 0 5px;
+}
+ul li:last-child a {
+  border-radius: 0 5px 5px 0;
+  border-right: 2px solid #3D315B;
+}
+
+.all-exercises-container {
+  
+}
+
+
+.exercise-container {
+  background-color: rgb(74, 94, 202);
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exercise-container h5,
+.exercise-container p {
+  margin: 0;
+  padding: 0;
+  color: whitesmoke
+}
+
+.manga-container img {
+  margin-top: 30px;
+}
+
+.title-and-score {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+/*# sourceMappingURL=AllMangas.css.map */
