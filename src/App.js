@@ -87,7 +87,7 @@ class App extends React.Component {
 				<Route exact path="/details-metrics" render={() => <DetailsMetrics loggedInUser={this.state.loggedInUser} />} />
 				<Route path="/create-exercise" render={()=> <FormExercise loggedInUser={this.state.loggedInUser} />} />
 				<Route path="/add-new-metrics" render={()=> <FormMetrics loggedInUser={this.state.loggedInUser} />} />
-				<Route path="/signup" render={() => {
+				<Route path="/signup" render={() => (
 					!this.state.loggedInUser 
 					? (
 						<SignUp
@@ -97,13 +97,10 @@ class App extends React.Component {
 							getUser={this.getUser}
 								/>
 					) : <Redirect to="/" />
-				}} />
-				<Route path="/login" render={() => {
-					!this.state.loggedInUser ? <LogIn getUser={this.getUser} /> : <Redirect to="/" />
-				}} />
-				{this.state.loggedInUser && (
-					<Route path="/user-profile" render={() => <UserProfile loggedInUser={this.state.loggedInUser} />} />
-				)}
+				)} />
+				<Route path="/login" render={() => !this.state.loggedInUser ? <LogIn getUser={this.getUser} /> : <Redirect to="/" />} />
+				
+				{this.state.loggedInUser && <Route path="/user-profile" render={() => <UserProfile loggedInUser={this.state.loggedInUser} />} />}
 			
 			</div>
 		);
