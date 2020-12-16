@@ -3,3 +3,10 @@
     margin-bottom: 1rem;
     color: black;
 }
+
+.navbar-image {
+    margin: 0;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+}
