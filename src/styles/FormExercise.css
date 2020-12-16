@@ -1,5 +1,10 @@
 
 
+.FormExercise {
+    color: whitesmoke;
+    margin: 2rem
+}
+
 .form {
     margin: 0.5rem 1.5rem;
 }

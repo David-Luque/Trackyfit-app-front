@@ -6,8 +6,8 @@ class UserService {
 
   constructor() {
     let service = axios.create({
-      baseURL: "https://dvdlq99-react-project.herokuapp.com",
-      // "http://localhost:3000",
+      baseURL: "http://localhost:3000",
+      // "https://dvdlq99-react-project.herokuapp.com"
       withCredentials: true
     });
 
@@ -21,7 +21,6 @@ class UserService {
   }
 
   login = (username, password) => {
-    console.log('login de service')
     return this.service.post("/login", {username, password})
     .then(response => response.data)
   }

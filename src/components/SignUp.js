@@ -1,15 +1,15 @@
 import React from 'react';
 import Service from '../services/UserService';
 import '../styles/LoginSignUp.css'
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Alert } from 'react-bootstrap';
 
 class SignUp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			username: '',
-			password: '',
-			message:''
+			// username: '',
+			// password: '',
+			// message:''
 		};
 		this.service = new Service();
 	}
@@ -26,7 +26,7 @@ class SignUp extends React.Component {
 					password: '',
 					message: response.errorMessage
 				});
-				this.props.getUser(response);
+				this.props.getUser(response.errorMessage);
 			})
 			.catch((err) => console.error(err));
 	};
@@ -40,22 +40,20 @@ class SignUp extends React.Component {
 		return (
 			<div>
 				<Form className="form" onSubmit={this.handleFormSubmit}>
+					
 					<Form.Group controlId="formBasicEmail">
 						<Form.Label htmlFor="username">Username</Form.Label>
 						<Form.Control type="text" name="username" placeholder="Enter username" value={this.state.username} onChange={(event) => this.handleChange(event)} />
-						{/* <Form.Text className="text-muted">
-							We'll never share your email with anyone else.
-						</Form.Text> */}
 					</Form.Group>
 
 					<Form.Group controlId="formBasicPassword">
 						<Form.Label>Password</Form.Label>
 						<Form.Control type="password" name="password" placeholder="Password" value={this.state.password} onChange={(event) => this.handleChange(event)} />
 					</Form.Group>
-					<p>{this.state.message}</p>
-					<Button variant="info" type="submit">
-						sign up
-					</Button>
+
+					{this.state.message && <Alert variant='dark'> {this.state.message} </Alert>}
+					
+					<Button variant="info" type="submit"> sign up </Button>
 				</Form>
 			</div>
 		);

@@ -1,20 +1,22 @@
 
 import React from 'react'
 import '../styles/FormExercise.css'
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 import ExerciseService from '../services/ExerciseService'
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Alert } from 'react-bootstrap';
 
 
 class FormExercise extends React.Component {
 
     state = {
-        pushUps: '',
-        pullUps: '',
-        plank: '',
-        squats: '',
-        date: '',
-        owner: ''
+        // pushUps: '',
+        // pullUps: '',
+        // plank: '',
+        // squats: '',
+        // date: '',
+        // owner: ''
+        dataWarningMessage: false,
+        successUpload: false
     };
 
   service = new ExerciseService()
@@ -27,9 +29,24 @@ class FormExercise extends React.Component {
 
 
   handleFormSubmit = (event) => {
-        event.preventDefault();
+        // event.preventDefault();
         
-        this.service
+        if(
+            !this.state.pushUps ||
+            !this.state.pullUps ||
+            !this.state.plank ||
+            !this.state.squats ||
+            !this.state.date
+        ) {
+            event.preventDefault();
+            this.setState({dataWarningMessage: true, successUpload: false})
+
+        } else {
+            event.preventDefault();
+            console.log("enviado!")
+            this.setState({dataWarningMessage: false})
+            
+            this.service
             .addExercise (
                 this.state.pushUps,
                 this.state.pullUps,
@@ -40,8 +57,13 @@ class FormExercise extends React.Component {
             )
             .then((response) => {
                 console.log(response)
+                this.setState({successUpload: true, dataWarningMessage: false})
+                setTimeout(()=>{
+                    this.setState({successUpload: false})
+                }, 2000);
             })
             .catch((err) => console.error(err));
+        }        
     };
 
     handleChange = (event) => {
@@ -49,14 +71,23 @@ class FormExercise extends React.Component {
         this.setState({ [name]: value });
     };
 
-    redirect = ()=>{
-        <Redirect to="/details-workout" />
+    
+    renderWarningMessage = () => {
+        return <Alert variant='danger'>Some fields are empty!</Alert>
     }
+
+    renderSuccessMessage = () => {
+        return <Alert variant='success'>successfuly uploaded</Alert>
+    }
+
 
 
   render() {
     return (
         <div className="FormExercise">
+
+            {this.state.dataWarningMessage && this.renderWarningMessage()}
+            {this.state.successUpload && this.renderSuccessMessage()}
 
             <Form className="form" onSubmit={this.handleFormSubmit}>
                     
@@ -92,7 +123,7 @@ class FormExercise extends React.Component {
                     </Button>
             </Form>
 
-            <Button onClick={()=>this.redirect()} >redirect chart</Button>
+            {/* <Button onClick={()=>this.redirect()} >redirect chart</Button> */}
         </div>
     );
 }

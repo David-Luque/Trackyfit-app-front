@@ -1,7 +1,7 @@
 
 import React from 'react'
 import '../styles/FormMetrics.css'
-import { Link, Redirect } from 'react-router-dom';
+// import { Link, Redirect } from 'react-router-dom';
 import { Button, Form, Alert } from 'react-bootstrap';
 import MetricsService from '../services/MetricsService'
 
@@ -37,10 +37,13 @@ class FormMetrics extends React.Component {
             !this.state.date
         ) {
             event.preventDefault();
-            // console.log('meter los datos!!')
-            this.setState({dataWarningMessage: true})
-            
+            this.setState({dataWarningMessage: true, successUpload: false})
+
         } else {
+            event.preventDefault();
+            console.log("enviado!")
+            this.setState({dataWarningMessage: false})
+            
             this.service
             .addMetrics (
                 this.state.weight,
@@ -52,6 +55,10 @@ class FormMetrics extends React.Component {
             )
             .then((response) => {
                 console.log(response)
+                this.setState({successUpload: true, dataWarningMessage: false})
+                setTimeout(()=>{
+                    this.setState({successUpload: false})
+                }, 2000);
             })
             .catch((err) => console.error(err));
         }

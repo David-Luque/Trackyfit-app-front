@@ -8,8 +8,7 @@
 }
 
 .user-info-buttons {
-    margin: 1.5rem;
-    
+    margin: 2.5rem;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -17,6 +16,6 @@
 }
 
 .user-info-buttons btn {
-    padding: 1.8rem ;
-    font-size: 1.5rem;
+    padding: 3rem ;
+    font-size: 2rem;
 }
