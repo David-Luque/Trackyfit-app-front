@@ -83,8 +83,7 @@ class FormMetrics extends React.Component {
     return (
         <div className="FormMetrics">
 
-            {this.state.dataWarningMessage && this.renderWarningMessage()}
-            {this.state.successUpload && this.renderSuccessMessage()}
+            
 
             <Form className="form" onSubmit={this.handleFormSubmit}>
                 <Form.Group controlId="formBasicDate">
@@ -115,6 +114,10 @@ class FormMetrics extends React.Component {
                 <Button variant="info" type="submit">
                     confirm
                 </Button>
+
+                {this.state.dataWarningMessage && this.renderWarningMessage()}
+                {this.state.successUpload && this.renderSuccessMessage()}
+
             </Form>
         </div>
     );

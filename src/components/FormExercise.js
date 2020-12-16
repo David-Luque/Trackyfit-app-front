@@ -86,8 +86,6 @@ class FormExercise extends React.Component {
     return (
         <div className="FormExercise">
 
-            {this.state.dataWarningMessage && this.renderWarningMessage()}
-            {this.state.successUpload && this.renderSuccessMessage()}
 
             <Form className="form" onSubmit={this.handleFormSubmit}>
                     
@@ -116,7 +114,8 @@ class FormExercise extends React.Component {
                         <Form.Control type="number" name="squats" placeholder="reps" value={this.state.squats} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
 
-                    
+                    {this.state.dataWarningMessage && this.renderWarningMessage()}
+                    {this.state.successUpload && this.renderSuccessMessage()}
 
                     <Button variant="info" type="submit">
                         confirm
