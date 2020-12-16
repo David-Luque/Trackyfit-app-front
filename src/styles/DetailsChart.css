@@ -1,0 +1,16 @@
+
+.DetailsMetrics a {
+    color: whitesmoke;
+}
+
+
+#myChart {
+    position: relative;
+}
+
+
+button.btn.btn-info {
+  font-size: 1.5rem;
+  width: 100%;
+  border-radius: 0;
+}

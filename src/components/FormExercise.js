@@ -1,7 +1,6 @@
 
 import React from 'react'
 import '../styles/FormExercise.css'
-// import { Redirect } from 'react-router-dom';
 import ExerciseService from '../services/ExerciseService'
 import { Button, Form, Alert } from 'react-bootstrap';
 
@@ -9,28 +8,24 @@ import { Button, Form, Alert } from 'react-bootstrap';
 class FormExercise extends React.Component {
 
     state = {
-        // pushUps: '',
-        // pullUps: '',
-        // plank: '',
-        // squats: '',
-        // date: '',
-        // owner: ''
+        // pushUps
+        // pullUps
+        // plank
+        // squats
+        // date
+        // owner
         dataWarningMessage: false,
         successUpload: false
     };
 
-  service = new ExerciseService()
-
+    service = new ExerciseService()
 
     componentDidMount(){
-    
         this.setState({owner: this.props.loggedInUser._id})
     }
 
 
-  handleFormSubmit = (event) => {
-        // event.preventDefault();
-        
+    handleFormSubmit = (event) => {
         if(
             !this.state.pushUps ||
             !this.state.pullUps ||
@@ -71,7 +66,6 @@ class FormExercise extends React.Component {
         this.setState({ [name]: value });
     };
 
-    
     renderWarningMessage = () => {
         return <Alert variant='danger'>Some fields are empty!</Alert>
     }
@@ -81,34 +75,26 @@ class FormExercise extends React.Component {
     }
 
 
-
-  render() {
-    return (
-        <div className="FormExercise">
-
-
-            <Form className="form" onSubmit={this.handleFormSubmit}>
-                    
+    render() {
+        return (
+            <div className="FormExercise">
+                <Form className="form" onSubmit={this.handleFormSubmit}>
                     <Form.Group controlId="formBasicDate">
                         <Form.Label htmlFor="date">Date</Form.Label>
                         <Form.Control type="date" name="date" value={this.state.date} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-                    
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label htmlFor="pushUps">push ups</Form.Label>
                         <Form.Control type="number" name="pushUps" placeholder="reps" value={this.state.pushUps} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label htmlFor="pullUps">pull ups</Form.Label>
                         <Form.Control type="number" name="pullUps" placeholder="reps" value={this.state.pullUps} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label htmlFor="plank">plank</Form.Label>
                         <Form.Control type="number" name="plank" placeholder=" seconds" value={this.state.plank} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label htmlFor="squats">squats</Form.Label>
                         <Form.Control type="number" name="squats" placeholder="reps" value={this.state.squats} onChange={(event) => this.handleChange(event)} />
@@ -120,12 +106,10 @@ class FormExercise extends React.Component {
                     <Button variant="info" type="submit">
                         confirm
                     </Button>
-            </Form>
-
-            {/* <Button onClick={()=>this.redirect()} >redirect chart</Button> */}
-        </div>
-    );
-}
+                </Form>
+            </div>
+        );
+    }
 }
 
 export default FormExercise

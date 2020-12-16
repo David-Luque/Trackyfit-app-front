@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/DetailsExercise.css'
+import '../styles/DetailsWorkout.css'
 import { Link } from 'react-router-dom';
 import { Button} from 'react-bootstrap';
 import ExerciseService from '../services/ExerciseService'
@@ -26,39 +26,19 @@ class DetailsWorkouts extends React.Component {
     })
   }
 
-  // renderExercises = ()=>{
-  //   return this.state.exercises.map((exercise, index)=>{
-  //     return(
-  //       <Link to={`/all-exercises/${exercise._id}`} key={index}>
-  //         <div className="exercise-container">
-  //           <h5>{exercise.name}</h5>
-  //           <p>{exercise.exerType}</p>
-  //         </div>
-  //       </Link>
-  //     )
-  //   })
-  // }
-
-
   renderChart(){
-    console.log('RENDER CHART workouts')
-
       const pushUpsData = this.state.exercisesData.map((element)=>{
         return element.pushUps
       })
-
       const pullUpsData = this.state.exercisesData.map((element)=>{
         return element.pullUps
       })
-
       const plankData = this.state.exercisesData.map((element)=>{
         return element.plank
       })
-
       const squatsData = this.state.exercisesData.map((element)=>{
         return element.squats
       })
-
       const dateData = this.state.exercisesData.map((element)=>{
         return element.date
       })
@@ -67,7 +47,6 @@ class DetailsWorkouts extends React.Component {
       
       const chart = new Chart(ctx, {
           type: 'line',
-          
           data: {
               labels: dateData,
               datasets: [
@@ -94,8 +73,6 @@ class DetailsWorkouts extends React.Component {
                 }
               ]
           },
-
-          // Configuration options go here
           options: {
             aspectRatio: 1,
             layout: {
@@ -108,6 +85,7 @@ class DetailsWorkouts extends React.Component {
             },
             legend: {
               labels: {
+                fontSize: 17,
                 boxWidth: 25,
                 padding: 20,
                 fontColor: '#D6D6D6'
@@ -115,27 +93,25 @@ class DetailsWorkouts extends React.Component {
             }
           }
       });
-
       return chart
   }
 
 
 
-  renderLoadingImage = ()=>{
-    // return <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading"/> 
+  renderLoadingMessage = ()=>{
     return <p>Loading...</p>
   }
 
+
   render(){
     return(
-      <div className="DetailsExercise">
-        <Button variant="info">
-          <Link to="/create-exercise">add workout</Link>
-        </Button>
-
+      <div className="DetailsWorkout">
+        <Link to="/create-exercise">
+          <Button variant="info">new workout</Button>
+        </Link>
         <div className="all-exercises-container">
           {this.state.exercisesData.length === 0 
-            ? this.renderLoadingImage() 
+            ? this.renderLoadingMessage() 
             : <canvas className="workouts-chart" id="myChart"></canvas>}          
         </div>
       </div>

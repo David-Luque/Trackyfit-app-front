@@ -3,10 +3,6 @@
     color: whitesmoke;
 }
 
-.UserProfile a {
-    color: whitesmoke
-}
-
 .user-info-buttons {
     margin: 2.5rem;
     display: flex;
@@ -18,4 +14,10 @@
 .user-info-buttons btn {
     padding: 3rem ;
     font-size: 2rem;
+    width: 100%;
+}
+
+button.btn.btn-info {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }

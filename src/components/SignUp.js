@@ -1,15 +1,15 @@
 import React from 'react';
 import Service from '../services/UserService';
-import '../styles/LoginSignUp.css'
 import { Button, Form, Alert } from 'react-bootstrap';
+import '../styles/LoginSignUp.css'
 
 class SignUp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// username: '',
-			// password: '',
-			// message:''
+			// username
+			// password
+			// message
 		};
 		this.service = new Service();
 	}
@@ -35,9 +35,10 @@ class SignUp extends React.Component {
 		this.setState({ [name]: value });
 	};
 
+	
 	render() {
 		return (
-			<div>
+			<div className="SignUp">
 				<Form className="form" onSubmit={this.handleFormSubmit}>
 					
 					<Form.Group controlId="formBasicEmail">

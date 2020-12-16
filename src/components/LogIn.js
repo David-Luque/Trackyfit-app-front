@@ -7,9 +7,9 @@ class LogIn extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// username: '',
-			// password: ''
-			// message:
+			// username
+			// password
+			// message
 		};
 		this.service = new Service();
 	}
@@ -35,9 +35,10 @@ class LogIn extends React.Component {
 		this.setState({ [name]: value });
 	};
 
+	
 	render() {
 		return (
-			<div>
+			<div className="LogIn">
 				<Form className="form" onSubmit={this.handleFormSubmit}>
 					<Form.Group controlId="formBasicEmail">
 						<Form.Label htmlFor="username">Username</Form.Label>

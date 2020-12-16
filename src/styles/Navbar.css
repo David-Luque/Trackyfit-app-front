@@ -1,7 +1,16 @@
 
 .Navbar {
     margin-bottom: 1rem;
+}
+
+a {
     color: black;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #17A2B8;
+    text-decoration: none;
 }
 
 .navbar-image {

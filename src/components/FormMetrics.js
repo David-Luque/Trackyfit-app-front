@@ -1,7 +1,6 @@
 
 import React from 'react'
 import '../styles/FormMetrics.css'
-// import { Link, Redirect } from 'react-router-dom';
 import { Button, Form, Alert } from 'react-bootstrap';
 import MetricsService from '../services/MetricsService'
 
@@ -9,26 +8,23 @@ import MetricsService from '../services/MetricsService'
 class FormMetrics extends React.Component {
 
     state = {
-        // weight: '',
-        // shoulders: '',
-        // abs: '',
-        // cuadriceps: '',
-        // date: '',
-        // owner: ''
+        // weight
+        // shoulders
+        // abs
+        // cuadriceps
+        // date
+        // owner
         dataWarningMessage: false,
         successUpload: false
     };
 
-  service = new MetricsService()
+    service = new MetricsService()
 
     componentDidMount(){
         this.setState({owner: this.props.loggedInUser._id})
     }
 
-
     handleFormSubmit = (event) => {
-        //event.preventDefault();
-
         if(
             !this.state.weight || 
             !this.state.shoulders ||
@@ -41,7 +37,6 @@ class FormMetrics extends React.Component {
 
         } else {
             event.preventDefault();
-            console.log("enviado!")
             this.setState({dataWarningMessage: false})
             
             this.service
@@ -79,49 +74,45 @@ class FormMetrics extends React.Component {
     }
 
 
-  render() {
-    return (
-        <div className="FormMetrics">
+    render() {
+        return (
+            <div className="FormMetrics">
+                <Form className="form" onSubmit={this.handleFormSubmit}>
+                    <Form.Group controlId="formBasicDate">
+                        <Form.Label htmlFor="date">Date</Form.Label>
+                        <Form.Control type="date" name="date" value={this.state.date} onChange={(event) => this.handleChange(event)} />
+                    </Form.Group>
 
-            
+                    <Form.Group controlId="formBasicWeight">
+                        <Form.Label htmlFor="weight">Your weight</Form.Label>
+                        <Form.Control type="number" name="weight" placeholder="kg" value={this.state.weight} onChange={(event) => this.handleChange(event)} />
+                    </Form.Group>
 
-            <Form className="form" onSubmit={this.handleFormSubmit}>
-                <Form.Group controlId="formBasicDate">
-                    <Form.Label htmlFor="date">Date</Form.Label>
-                    <Form.Control type="date" name="date" value={this.state.date} onChange={(event) => this.handleChange(event)} />
-                </Form.Group>
+                    <Form.Group controlId="formBasicShoulders">
+                        <Form.Label htmlFor="shoulders">Shoulders</Form.Label>
+                        <Form.Control type="number" name="shoulders" placeholder="cm" value={this.state.shoulders} onChange={(event) => this.handleChange(event)} />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicWeight">
-                    <Form.Label htmlFor="weight">Your weight</Form.Label>
-                    <Form.Control type="number" name="weight" placeholder="kg" value={this.state.weight} onChange={(event) => this.handleChange(event)} />
-                </Form.Group>
+                    <Form.Group controlId="formBasicAbs">
+                        <Form.Label htmlFor="abs">ABS</Form.Label>
+                        <Form.Control type="number" name="abs" placeholder="cm" value={this.state.abs} onChange={(event) => this.handleChange(event)} />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicShoulders">
-                    <Form.Label htmlFor="shoulders">Shoulders</Form.Label>
-                    <Form.Control type="number" name="shoulders" placeholder="cm" value={this.state.shoulders} onChange={(event) => this.handleChange(event)} />
-                </Form.Group>
+                    <Form.Group controlId="formBasicCuadriceps">
+                        <Form.Label htmlFor="cuadriceps">Cuadriceps</Form.Label>
+                        <Form.Control type="number" name="cuadriceps" placeholder="cm" value={this.state.cuadriceps} onChange={(event) => this.handleChange(event)} />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicAbs">
-                    <Form.Label htmlFor="abs">ABS</Form.Label>
-                    <Form.Control type="number" name="abs" placeholder="cm" value={this.state.abs} onChange={(event) => this.handleChange(event)} />
-                </Form.Group>
-
-                <Form.Group controlId="formBasicCuadriceps">
-                    <Form.Label htmlFor="cuadriceps">Cuadriceps</Form.Label>
-                    <Form.Control type="number" name="cuadriceps" placeholder="cm" value={this.state.cuadriceps} onChange={(event) => this.handleChange(event)} />
-                </Form.Group>
-
-                <Button variant="info" type="submit">
-                    confirm
-                </Button>
-
-                {this.state.dataWarningMessage && this.renderWarningMessage()}
-                {this.state.successUpload && this.renderSuccessMessage()}
-
-            </Form>
-        </div>
-    );
-}
+                    {this.state.dataWarningMessage && this.renderWarningMessage()}
+                    {this.state.successUpload && this.renderSuccessMessage()}
+                    
+                    <Button variant="info" type="submit">
+                        confirm
+                    </Button>
+                </Form>
+            </div>
+        );
+    }
 }
 
 export default FormMetrics

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import MetricsService from '../services/MetricsService';
 import Chart from 'chart.js';
-import '../styles/DetailsMetrics.css'
+import '../styles/DetailsChart.css'
 
 
 class DetailsMetrics extends React.Component{
@@ -16,7 +16,6 @@ class DetailsMetrics extends React.Component{
 
   
   componentDidMount(){
-    
     this.service.getAllMetrics(this.props.loggedInUser._id) 
     .then((result)=>{
       this.setState({metricsInfo: result})
@@ -29,41 +28,26 @@ class DetailsMetrics extends React.Component{
 
 
   renderChart(){
-    console.log('RENDER CHART metrics')
-
       const weightData = this.state.metricsInfo.map((element)=>{
         return element.weight
       })
-
       const shouldersData = this.state.metricsInfo.map((element)=>{
         return element.shoulders
       })
-
       const absData = this.state.metricsInfo.map((element)=>{
         return element.abs
       })
-
       const cuadricepsData = this.state.metricsInfo.map((element)=>{
         return element.cuadriceps
       })
-
       const dateData = this.state.metricsInfo.map((element)=>{
         return element.date
       })
 
-      // const sortedData = this.state.metricsInfo.sort((a, b) => {
-      //     a = a.date.split('/').join('');
-      //     b = b.date.split('/').join('');
-      //     return a > b ? 1 : a < b ? -1 : 0;
-        
-      // })
-      //  console.log(`sorted data: ${dateData}`)
-
       const ctx = document.getElementById('myChart').getContext('2d');
-      
+
       const chart = new Chart(ctx, {
           type: 'line',
-          
           data: {
               labels: dateData,
               datasets: [
@@ -90,8 +74,6 @@ class DetailsMetrics extends React.Component{
                 }
               ]
           },
-
-          // Configuration options go here
           options: {
             aspectRatio: 1,
             layout: {
@@ -104,6 +86,7 @@ class DetailsMetrics extends React.Component{
             },
             legend: {
               labels: {
+                fontSize: 17,
                 boxWidth: 25,
                 padding: 20,
                 fontColor: "#D6D6D6"
@@ -111,25 +94,23 @@ class DetailsMetrics extends React.Component{
             }
           }
       });
-
       return chart
   }
 
-  renderLoadingImage = ()=>{
-    // return <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Loading"/> 
+  renderLoadingMessage = ()=>{ 
     return <p>Loading...</p>
   }
 
 
   render(){
     return(
-      <div className="DetailsMetrics">
-        <Button variant="info">
-          <Link to="/add-new-metrics">new entry</Link>
-        </Button>
+      <div className="DetailsMetrics">      
+        <Link to="/add-new-metrics">
+          <Button variant="info">new metrics</Button>
+        </Link>
         <div className="all-exercises-container">
           {this.state.metricsInfo.length === 0 
-            ? this.renderLoadingImage() 
+            ? this.renderLoadingMessage() 
             : <canvas className="metrics-chart" id="myChart"></canvas>}          
         </div>
       </div>
