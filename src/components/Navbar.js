@@ -19,7 +19,7 @@ class NavComp extends React.Component {
         return (
             <div className= "Navbar">
             <Navbar bg="light" expand="lg">
-            <Navbar.Brand><Link to="/">app name </Link></Navbar.Brand>
+            <Navbar.Brand><Link to="/">Trackifit </Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">

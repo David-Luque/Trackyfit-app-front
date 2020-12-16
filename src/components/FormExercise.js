@@ -59,6 +59,12 @@ class FormExercise extends React.Component {
         <div className="FormExercise">
 
             <Form className="form" onSubmit={this.handleFormSubmit}>
+                    
+                    <Form.Group controlId="formBasicDate">
+                        <Form.Label htmlFor="date">Date</Form.Label>
+                        <Form.Control type="date" name="date" value={this.state.date} onChange={(event) => this.handleChange(event)} />
+                    </Form.Group>
+                    
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label htmlFor="pushUps">push ups</Form.Label>
                         <Form.Control type="number" name="pushUps" placeholder="reps" value={this.state.pushUps} onChange={(event) => this.handleChange(event)} />
@@ -79,10 +85,7 @@ class FormExercise extends React.Component {
                         <Form.Control type="number" name="squats" placeholder="reps" value={this.state.squats} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
 
-                    <Form.Group controlId="formBasicDate">
-                        <Form.Label htmlFor="date">Date</Form.Label>
-                        <Form.Control type="date" name="date" value={this.state.date} onChange={(event) => this.handleChange(event)} />
-                    </Form.Group>
+                    
 
                     <Button variant="info" type="submit">
                         confirm
