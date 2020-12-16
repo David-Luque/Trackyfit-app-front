@@ -6,9 +6,9 @@ class ExerciseService {
 
   constructor() {
     let service = axios.create({
-      baseURL: "https://dvdlq99-react-project.herokuapp.com",
+      baseURL: "http://localhost:3000",
+      // "https://dvdlq99-react-project.herokuapp.com",
       
-      // "http://localhost:3000",
     });
 
 

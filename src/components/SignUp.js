@@ -16,7 +16,6 @@ class SignUp extends React.Component {
 
 	handleFormSubmit = (event) => {
 		event.preventDefault();
-
 		this.service
 			.signup(this.state.username, this.state.password)
 			.then((response) => {
@@ -26,7 +25,7 @@ class SignUp extends React.Component {
 					password: '',
 					message: response.errorMessage
 				});
-				this.props.getUser(response.errorMessage);
+				this.props.getUser(response, response.errorMessage);
 			})
 			.catch((err) => console.error(err));
 	};

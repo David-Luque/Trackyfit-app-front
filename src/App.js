@@ -44,12 +44,13 @@ class App extends React.Component {
 	}
 
 	getUser = (userObj, message) => {
+		console.log(message)
 		if(
 			message === 'Provide username and password' ||
 			message === 'Password must be longer' ||
 			message === 'Username already exist' ||
-			message === 'Please, insert valid username and password' ||
-			message === 'User successfully registered'
+			message === 'User successfully registered' ||
+			message === 'Please, insert valid username and password' 
 		) {
 			return
 		}
