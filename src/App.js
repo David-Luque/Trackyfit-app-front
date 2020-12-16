@@ -10,7 +10,7 @@ import UserProfile from './components/UserProfile';
 import DetailsMetrics from './components/DetailsMetrics';
 import NavComp from './components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import UserService from './services/UserService';
 
 

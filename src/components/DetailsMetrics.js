@@ -17,8 +17,7 @@ class DetailsMetrics extends React.Component{
   
   componentDidMount(){
     
-    this.service.
-    getAllMetrics(this.props.loggedInUser._id) 
+    this.service.getAllMetrics(this.props.loggedInUser._id) 
     .then((result)=>{
       this.setState({metricsInfo: result})
       this.renderChart()
