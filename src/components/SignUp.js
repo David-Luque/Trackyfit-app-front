@@ -53,7 +53,7 @@ class SignUp extends React.Component {
 
 					{this.state.message && <Alert variant='dark'> {this.state.message} </Alert>}
 					
-					<Button variant="info" type="submit"> sign up </Button>
+					<Button variant="info" type="submit"> Sign Up </Button>
 				</Form>
 			</div>
 		);

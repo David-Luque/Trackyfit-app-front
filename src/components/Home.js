@@ -14,7 +14,7 @@ const Home = ()=>{
           <h3>Keep your physical metrics under control</h3>
           <hr />
           <p>
-            You can record your weight and also your metrics of the main muscle groups to clearly track your physical progress
+            Record your weight and main muscle groups metrics to clearly track your physical progress
           </p>
         </div>
       </article>

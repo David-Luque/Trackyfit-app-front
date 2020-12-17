@@ -52,7 +52,7 @@ class LogIn extends React.Component {
 
 					{this.state.message && <Alert variant='dark'> {this.state.message} </Alert>}
 
-					<Button variant="info" type="submit"> log in </Button>
+					<Button variant="info" type="submit"> Log In </Button>
 				</Form>
 			</div>
 		);
