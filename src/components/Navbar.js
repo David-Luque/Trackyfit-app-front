@@ -22,7 +22,8 @@ class NavComp extends React.Component {
                 <Navbar collapseOnSelect bg="info" expand="lg" fixed="top">
                     <Navbar.Brand>
                         <Link to="/"> 
-                            <img className="navbar-image" src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Athletics_pictogram.svg" alt="Trackifit" /> 
+                            <img className="navbar-image" src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Athletics_pictogram.svg" alt="Trackifit" />
+                            <p className="logo-text">Trackifit</p> 
                         </Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />

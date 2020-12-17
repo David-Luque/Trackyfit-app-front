@@ -40,7 +40,8 @@
 
 .article-text {
     background-color: rgba(0, 0, 0, 0.45);
-    margin: 1rem 1rem 1.5rem;
+    width: 90%;
+    height: 90%;
     padding: 1rem;
     border-radius: 10px;
     font-weight: 450;
