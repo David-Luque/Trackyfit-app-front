@@ -25,6 +25,7 @@ class DetailsWorkouts extends React.Component {
     .then(()=>{
       this.exerService.getAllExercises(this.props.loggedInUser._id) 
       .then((result)=>{
+        console.log(result)
         this.setState({exercisesData: result})
         this.renderChart()
       })

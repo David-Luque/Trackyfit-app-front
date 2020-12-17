@@ -11,7 +11,8 @@ class DetailsMetrics extends React.Component{
 
   state = {
     userLogged: null,
-    metricsInfo: []
+    metricsInfo: [],
+    dataBaseChecked: false
   }
 
   metricService = new MetricsService()
@@ -26,6 +27,7 @@ class DetailsMetrics extends React.Component{
     .then(()=>{
       this.metricService.getAllMetrics(this.props.loggedInUser._id) 
       .then((result)=>{
+        console.log(result)
         this.setState({metricsInfo: result})
         this.renderChart()
       })
@@ -105,7 +107,11 @@ class DetailsMetrics extends React.Component{
   }
 
   renderLoadingMessage = ()=>{ 
-    return <p>Loading...</p>
+    if (this.state.dataBaseChecked) {
+      return <p className="data-empty-message" > No data yet, try to add the first one </p>
+    } else {
+      return <p>Loading...</p>
+    }
   }
 
 

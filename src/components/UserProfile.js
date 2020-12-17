@@ -17,7 +17,6 @@ class UserProfile extends React.Component{
   componentDidMount(){
     this.service.getUser(this.props.loggedInUser._id)
     .then((response)=>{
-      console.log(response)
       this.setState({userLogged: response})
     })
     .catch((err)=>{

@@ -42,7 +42,6 @@ class App extends React.Component {
 	}
 
 	getUser = (userObj, message) => {
-		console.log(message)
 		if(
 			message === 'Provide username and password' ||
 			message === 'Password must be longer' ||
