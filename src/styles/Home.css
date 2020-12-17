@@ -1,12 +1,58 @@
 
 .Home {
     color: whitesmoke;
-    margin: 1.5rem;
+    margin: 0;
     font-size: small;
     text-align: center;
 }
 
+.header {
+    text-align: center;
+    margin: 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-top: white solid 1px;
+    border-bottom: white solid 1px;
+    padding: 15px;
+}
+
+h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    font-style: oblique;
+}
+
+.article-metrics {
+    background-image: url('https://t4.ftcdn.net/jpg/01/79/81/77/240_F_179817756_QzTocli57q9G6a1Oe7kJtoMS5dNMU8cl.jpg');
+    height: 250px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.article-workout {
+    background-image: url('https://www.gannett-cdn.com/-mm-/14d38e3329c6f1f889b4c48cfb975ddc97bd20bb/c=0-0-3495-1975/local/-/media/2018/06/28/USATODAY/USATODAY/636657854872922413-GettyImages-862317986.jpg');
+    height: 250px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.article-text {
+    background-color: rgba(0, 0, 0, 0.45);
+    margin: 2rem 1rem 3rem 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: 450;
+}
+
 hr {
-    margin: auto 2rem;
     background-color: whitesmoke;
+    width: 20%;
 }
