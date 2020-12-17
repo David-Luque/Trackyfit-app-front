@@ -73,7 +73,9 @@ class App extends React.Component {
 	  }
 
 	render() {
+
 		this.fetchUser()
+		
 		return (
 			<div className="App">
 				
@@ -82,11 +84,6 @@ class App extends React.Component {
 					: <NavComp loggedInUser={this.state.loggedInUser} logOut={this.logOut}/>
 				}
 
-				<Route exact path="/" render={() => <Home loggedInUser={this.state.loggedInUser} logOut={this.logOut} />} />
-				<Route exact path="/details-workout" render={() => <DetailsWorkouts loggedInUser={this.state.loggedInUser} />} />
-				<Route exact path="/details-metrics" render={() => <DetailsMetrics loggedInUser={this.state.loggedInUser} />} />
-				<Route path="/create-exercise" render={()=> <FormExercise loggedInUser={this.state.loggedInUser} />} />
-				<Route path="/add-new-metrics" render={()=> <FormMetrics loggedInUser={this.state.loggedInUser} />} />
 				<Route path="/signup" render={() => (
 					!this.state.loggedInUser 
 					? (
@@ -99,9 +96,15 @@ class App extends React.Component {
 					) : <Redirect to="/" />
 				)} />
 				<Route path="/login" render={() => !this.state.loggedInUser ? <LogIn getUser={this.getUser} /> : <Redirect to="/" />} />
+
+				<Route exact path="/" render={() => <Home loggedInUser={this.state.loggedInUser} />} />
 				
-				{this.state.loggedInUser && <Route path="/user-profile" render={() => <UserProfile loggedInUser={this.state.loggedInUser} />} />}
-			
+				<Route path="/user-profile" render={() => this.state.loggedInUser ? <UserProfile loggedInUser={this.state.loggedInUser} /> : <Redirect to="/"/> } />
+				<Route exact path="/details-workout" render={() => this.state.loggedInUser ? <DetailsWorkouts loggedInUser={this.state.loggedInUser} /> : <Redirect to="/"/>} />
+				<Route exact path="/details-metrics" render={() => this.state.loggedInUser ? <DetailsMetrics loggedInUser={this.state.loggedInUser} /> : <Redirect to="/"/>} />
+				<Route path="/create-exercise" render={()=> this.state.loggedInUser ? <FormExercise loggedInUser={this.state.loggedInUser} /> : <Redirect to="/"/>} />
+				<Route path="/add-new-metrics" render={()=> this.state.loggedInUser ? <FormMetrics loggedInUser={this.state.loggedInUser} /> : <Redirect to="/"/>} />
+				
 			</div>
 		);
 	}

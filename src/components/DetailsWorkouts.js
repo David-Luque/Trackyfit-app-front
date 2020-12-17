@@ -3,28 +3,35 @@ import '../styles/DetailsWorkout.css'
 import { Link } from 'react-router-dom';
 import { Button} from 'react-bootstrap';
 import ExerciseService from '../services/ExerciseService'
+import UserService from '../services/UserService'
 import Chart from 'chart.js';
 
 
 class DetailsWorkouts extends React.Component {
 
   state = {
+    userLogged: null,
     exercisesData: []
   }
 
-  service = new ExerciseService()
+  exerService = new ExerciseService()
+  userService = new UserService()
 
   componentDidMount(){
-    this.service
-    .getAllExercises(this.props.loggedInUser._id) 
-    .then((result)=>{
-      this.setState({exercisesData: result})
-      this.renderChart()
+    this.userService.getUser(this.props.loggedInUser._id)
+    .then((response)=>{
+      this.setState({userLogged: response})
     })
-    .catch((err)=>{
-      console.log(err)
+    .then(()=>{
+      this.exerService.getAllExercises(this.props.loggedInUser._id) 
+      .then((result)=>{
+        this.setState({exercisesData: result})
+        this.renderChart()
+      })
     })
+    .catch(err=>console.log(err))
   }
+
 
   renderChart(){
       const pushUpsData = this.state.exercisesData.map((element)=>{

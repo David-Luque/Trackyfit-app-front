@@ -38,11 +38,9 @@ class FormExercise extends React.Component {
 
         } else {
             event.preventDefault();
-            console.log("enviado!")
             this.setState({dataWarningMessage: false})
             
-            this.service
-            .addExercise (
+            this.service.addExercise (
                 this.state.pushUps,
                 this.state.pullUps,
                 this.state.plank,

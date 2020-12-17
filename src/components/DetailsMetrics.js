@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import MetricsService from '../services/MetricsService';
+import UserService from '../services/UserService'
 import Chart from 'chart.js';
 import '../styles/DetailsChart.css'
 
@@ -9,21 +10,27 @@ import '../styles/DetailsChart.css'
 class DetailsMetrics extends React.Component{
 
   state = {
+    userLogged: null,
     metricsInfo: []
   }
 
-  service = new MetricsService()
+  metricService = new MetricsService()
+  userService = new UserService()
 
   
   componentDidMount(){
-    this.service.getAllMetrics(this.props.loggedInUser._id) 
-    .then((result)=>{
-      this.setState({metricsInfo: result})
-      this.renderChart()
+    this.userService.getUser(this.props.loggedInUser._id)
+    .then((response)=>{
+      this.setState({userLogged: response})
     })
-    .catch((err)=>{
-      console.log(err)
+    .then(()=>{
+      this.metricService.getAllMetrics(this.props.loggedInUser._id) 
+      .then((result)=>{
+        this.setState({metricsInfo: result})
+        this.renderChart()
+      })
     })
+    .catch(err=>console.log(err))
   }
 
 
