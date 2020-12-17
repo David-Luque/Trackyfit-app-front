@@ -1,15 +1,15 @@
 
 .Navbar {
-    margin-bottom: 1rem;
+    margin-bottom: 85px;
 }
 
 a {
-    color: black;
+    color: whitesmoke;
     font-weight: bold;
 }
 
 a:hover {
-    color: #17A2B8;
+    color: #007094;
     text-decoration: none;
 }
 

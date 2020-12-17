@@ -9,7 +9,7 @@
 .header {
     text-align: center;
     margin: 1.5rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     border-top: white solid 1px;
     border-bottom: white solid 1px;
@@ -17,7 +17,7 @@
 }
 
 h3 {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 600;
     font-style: oblique;
 }
@@ -49,6 +49,7 @@ h3 {
     margin: 2rem 1rem 3rem 1rem;
     padding: 1rem;
     border-radius: 10px;
+    font-size: 1.2rem;
     font-weight: 450;
 }
 

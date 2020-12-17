@@ -19,7 +19,7 @@ class NavComp extends React.Component {
     render(){
         return (
             <div className= "Navbar">
-                <Navbar bg="light" expand="lg">
+                <Navbar collapseOnSelect bg="info" expand="lg" fixed="top">
                     <Navbar.Brand>
                         <Link to="/"> 
                             <img className="navbar-image" src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Athletics_pictogram.svg" alt="Trackifit" /> 
@@ -28,12 +28,12 @@ class NavComp extends React.Component {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                            {!this.state.loggedInUser && <Nav.Link><Link to="/signup">Sign Up</Link></Nav.Link>}
-                            {!this.state.loggedInUser && <Nav.Link><Link to="/login">Log in</Link></Nav.Link>}
+                            {!this.state.loggedInUser && <Nav.Link eventKey="1" as={Link} to="/signup">Sign Up</Nav.Link>}
+                            {!this.state.loggedInUser && <Nav.Link eventKey="2" as={Link} to="/login">Log in</Nav.Link>}
 
-                            {this.state.loggedInUser && <Nav.Link><Link to="/user-profile">Profile</Link></Nav.Link>}
+                            {this.state.loggedInUser && <Nav.Link eventKey="3" as={Link} to="/user-profile">Profile</Nav.Link>}
                             <NavDropdown.Divider />
-                            {this.state.loggedInUser && <Nav.Link onClick={()=>this.props.logOut()}>Log out</Nav.Link>}
+                            {this.state.loggedInUser && <Nav.Link eventKey="4" onClick={()=>this.props.logOut()}>Log out</Nav.Link>}
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
