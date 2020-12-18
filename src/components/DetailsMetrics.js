@@ -28,7 +28,7 @@ class DetailsMetrics extends React.Component{
       this.metricService.getAllMetrics(this.props.loggedInUser._id) 
       .then((result)=>{
         console.log(result)
-        this.setState({metricsInfo: result})
+        this.setState({metricsInfo: result, dataBaseChecked: true})
         this.renderChart()
       })
     })
@@ -106,11 +106,13 @@ class DetailsMetrics extends React.Component{
       return chart
   }
 
-  renderLoadingMessage = ()=>{ 
-    if (this.state.dataBaseChecked) {
-      return <p className="data-empty-message" > No data yet, try to add the first one </p>
+
+  renderInfo = ()=>{ 
+    if (!this.state.dataBaseChecked) 
+    {
+      return <p className="data-message"> Loading...</p>
     } else {
-      return <p>Loading...</p>
+      return <p className="data-message"> No data yet, try to add the first one </p>  
     }
   }
 
@@ -119,12 +121,12 @@ class DetailsMetrics extends React.Component{
     return(
       <div className="DetailsMetrics">      
         <Link to="/add-new-metrics">
-          <Button variant="info">new metrics</Button>
+          <Button variant="info">New metrics</Button>
         </Link>
         <div className="all-exercises-container">
           {this.state.metricsInfo.length === 0 
-            ? this.renderLoadingMessage() 
-            : <canvas className="metrics-chart" id="myChart"></canvas>}          
+            ? this.renderInfo() 
+            : <canvas className="metrics-chart" id="myChart"></canvas>}
         </div>
       </div>
     )    

@@ -11,7 +11,8 @@ class DetailsWorkouts extends React.Component {
 
   state = {
     userLogged: null,
-    exercisesData: []
+    exercisesData: [],
+    dataBaseChecked: false
   }
 
   exerService = new ExerciseService()
@@ -26,7 +27,7 @@ class DetailsWorkouts extends React.Component {
       this.exerService.getAllExercises(this.props.loggedInUser._id) 
       .then((result)=>{
         console.log(result)
-        this.setState({exercisesData: result})
+        this.setState({exercisesData: result, dataBaseChecked: true})
         this.renderChart()
       })
     })
@@ -106,8 +107,13 @@ class DetailsWorkouts extends React.Component {
 
 
 
-  renderLoadingMessage = ()=>{
-    return <p>Loading...</p>
+  renderInfo = ()=>{ 
+    if (!this.state.dataBaseChecked) 
+    {
+      return <p className="data-message"> Loading...</p>
+    } else {
+      return <p className="data-message"> No data yet, try to add the first one </p>  
+    }
   }
 
 
@@ -115,11 +121,11 @@ class DetailsWorkouts extends React.Component {
     return(
       <div className="DetailsWorkout">
         <Link to="/create-exercise">
-          <Button variant="info">new workout</Button>
+          <Button variant="info">New workout</Button>
         </Link>
         <div className="all-exercises-container">
           {this.state.exercisesData.length === 0 
-            ? this.renderLoadingMessage() 
+            ? this.renderInfo() 
             : <canvas className="workouts-chart" id="myChart"></canvas>}          
         </div>
       </div>
