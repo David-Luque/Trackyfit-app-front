@@ -8,12 +8,12 @@ import MetricsService from '../services/MetricsService'
 class FormMetrics extends React.Component {
 
     state = {
-        // weight
-        // shoulders
-        // abs
-        // cuadriceps
-        // date
-        // owner
+        weight: null,
+        shoulders: null,
+        abs: null,
+        cuadriceps: null,
+        date: null,
+        owner: null,
         dataWarningMessage: false,
         successUpload: false
     };
@@ -49,7 +49,6 @@ class FormMetrics extends React.Component {
                 this.state.owner,
             )
             .then((response) => {
-                console.log(response)
                 this.setState({successUpload: true, dataWarningMessage: false})
                 setTimeout(()=>{
                     this.setState({successUpload: false})
@@ -107,7 +106,7 @@ class FormMetrics extends React.Component {
                     {this.state.successUpload && this.renderSuccessMessage()}
                     
                     <Button variant="info" type="submit">
-                        confirm
+                        Confirm
                     </Button>
                 </Form>
             </div>

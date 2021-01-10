@@ -27,7 +27,6 @@ class DetailsMetrics extends React.Component{
     .then(()=>{
       this.metricService.getAllMetrics(this.props.loggedInUser._id) 
       .then((result)=>{
-        console.log(result)
         this.setState({metricsInfo: result, dataBaseChecked: true})
         this.renderChart()
       })
@@ -54,7 +53,6 @@ class DetailsMetrics extends React.Component{
       })
 
       const ctx = document.getElementById('myChart').getContext('2d');
-
       const chart = new Chart(ctx, {
           type: 'line',
           data: {
@@ -105,7 +103,6 @@ class DetailsMetrics extends React.Component{
       });
       return chart
   }
-
 
   renderInfo = ()=>{ 
     if (!this.state.dataBaseChecked) 

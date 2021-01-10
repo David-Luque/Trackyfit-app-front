@@ -19,15 +19,15 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			loggedInUser: null,
-			publicProfileId: ''
+			publicProfileId: null
 		};
+
 		this.service = new UserService();
 	}
 
 	fetchUser() {
 		if (this.state.loggedInUser === null) {
-			this.service
-			.loggedin()
+			this.service.loggedin()
 			.then((response) => {
 				this.setState({
 					loggedInUser: response
@@ -64,8 +64,7 @@ class App extends React.Component {
 
 	logOut = ()=>{
 		this.service.logout()
-		.then((result)=>{
-		  console.log(result)
+		.then(()=>{
 		  this.setState({loggedInUser: null})
 		})
 		.catch(err => console.log(err))
@@ -91,8 +90,9 @@ class App extends React.Component {
 							newUser={this.state.newUser}
 							changeHandlerSignUp={this.changeHandlerSignUp}
 							getUser={this.getUser}
-								/>
-					) : <Redirect to="/" />
+						/>
+					)
+					: <Redirect to="/" />
 				)} />
 				<Route path="/login" render={() => !this.state.loggedInUser ? <LogIn getUser={this.getUser} /> : <Redirect to="/" />} />
 

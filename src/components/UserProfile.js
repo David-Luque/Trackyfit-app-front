@@ -13,7 +13,6 @@ class UserProfile extends React.Component{
 
   service = new UserService()
 
-
   componentDidMount(){
     this.service.getUser(this.props.loggedInUser._id)
     .then((response)=>{

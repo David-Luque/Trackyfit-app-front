@@ -8,12 +8,12 @@ import { Button, Form, Alert } from 'react-bootstrap';
 class FormExercise extends React.Component {
 
     state = {
-        // pushUps
-        // pullUps
-        // plank
-        // squats
-        // date
-        // owner
+        pushUps: null,
+        pullUps: null,
+        plank: null,
+        squats: null,
+        date: null,
+        owner: null,
         dataWarningMessage: false,
         successUpload: false
     };
@@ -23,7 +23,6 @@ class FormExercise extends React.Component {
     componentDidMount(){
         this.setState({owner: this.props.loggedInUser._id})
     }
-
 
     handleFormSubmit = (event) => {
         if(
@@ -48,8 +47,7 @@ class FormExercise extends React.Component {
                 this.state.date,
                 this.state.owner,
             )
-            .then((response) => {
-                console.log(response)
+            .then(() => {
                 this.setState({successUpload: true, dataWarningMessage: false})
                 setTimeout(()=>{
                     this.setState({successUpload: false})
@@ -102,7 +100,7 @@ class FormExercise extends React.Component {
                     {this.state.successUpload && this.renderSuccessMessage()}
 
                     <Button variant="info" type="submit">
-                        confirm
+                        Confirm
                     </Button>
                 </Form>
             </div>

@@ -7,9 +7,9 @@ class LogIn extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// username
-			// password
-			// message
+			username: null,
+			password: null,
+			message: null
 		};
 		this.service = new Service();
 	}
@@ -19,7 +19,6 @@ class LogIn extends React.Component {
 		this.service
 			.login(this.state.username, this.state.password)
 			.then((response) => {
-				console.log(response)
 				this.setState({
 					username: '',
 					password: '',

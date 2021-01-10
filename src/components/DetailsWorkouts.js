@@ -26,7 +26,6 @@ class DetailsWorkouts extends React.Component {
     .then(()=>{
       this.exerService.getAllExercises(this.props.loggedInUser._id) 
       .then((result)=>{
-        console.log(result)
         this.setState({exercisesData: result, dataBaseChecked: true})
         this.renderChart()
       })
@@ -53,7 +52,6 @@ class DetailsWorkouts extends React.Component {
       })
 
       const ctx = document.getElementById('myChart').getContext('2d');
-      
       const chart = new Chart(ctx, {
           type: 'line',
           data: {
@@ -104,8 +102,6 @@ class DetailsWorkouts extends React.Component {
       });
       return chart
   }
-
-
 
   renderInfo = ()=>{ 
     if (!this.state.dataBaseChecked) 
