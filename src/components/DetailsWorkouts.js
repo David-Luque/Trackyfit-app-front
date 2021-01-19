@@ -1,11 +1,10 @@
 import React from 'react'
-import '../styles/DetailsWorkout.css'
 import { Link } from 'react-router-dom';
 import { Button} from 'react-bootstrap';
 import ExerciseService from '../services/ExerciseService'
 import UserService from '../services/UserService'
 import Chart from 'chart.js';
-
+import '../styles/DetailsWorkout.css'
 
 class DetailsWorkouts extends React.Component {
 

@@ -2,6 +2,9 @@
   max-width: 600px;
 }
 
+.metrics-chart {
+  height: 350px;
+}
 
 .DetailsMetrics a {
     color: whitesmoke;
