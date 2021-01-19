@@ -1,4 +1,8 @@
 
+.DetailsWorkout {
+    max-width: 600px;
+}
+
 .workouts-chart {
     height: 400px;
 }

@@ -9,6 +9,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+    max-width: 600px;
 }
 
 .user-info-buttons btn {

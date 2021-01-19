@@ -1,7 +1,8 @@
 
 .FormMetrics {
     color: whitesmoke;
-    margin: 2rem
+    margin: 2rem;
+    max-width: 600px;
 }
 
 .form {
