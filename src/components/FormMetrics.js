@@ -39,8 +39,7 @@ class FormMetrics extends React.Component {
             event.preventDefault();
             this.setState({dataWarningMessage: false})
             
-            this.service
-            .addMetrics (
+            this.service.addMetrics (
                 this.state.weight,
                 this.state.shoulders,
                 this.state.abs,

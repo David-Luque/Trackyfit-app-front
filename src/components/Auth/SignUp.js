@@ -1,9 +1,9 @@
 import React from 'react';
-import Service from '../services/UserService';
+import Service from '../../services/UserService';
 import { Button, Form, Alert } from 'react-bootstrap';
 import '../styles/LoginSignUp.css'
 
-class LogIn extends React.Component {
+class SignUp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -17,16 +17,16 @@ class LogIn extends React.Component {
 	handleFormSubmit = (event) => {
 		event.preventDefault();
 		this.service
-			.login(this.state.username, this.state.password)
+			.signup(this.state.username, this.state.password)
 			.then((response) => {
 				this.setState({
 					username: '',
 					password: '',
-					message: response.message
+					message: response.errorMessage
 				});
-        		this.props.getUser(response, response.message);
+				this.props.getUser(response, response.errorMessage);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	};
 
 	handleChange = (event) => {
@@ -37,8 +37,9 @@ class LogIn extends React.Component {
 	
 	render() {
 		return (
-			<div className="LogIn">
+			<div className="SignUp">
 				<Form className="form" onSubmit={this.handleFormSubmit}>
+					
 					<Form.Group controlId="formBasicEmail">
 						<Form.Label htmlFor="username">Username</Form.Label>
 						<Form.Control type="text" name="username" placeholder="Enter username" value={this.state.username} onChange={(event) => this.handleChange(event)} />
@@ -50,12 +51,12 @@ class LogIn extends React.Component {
 					</Form.Group>
 
 					{this.state.message && <Alert variant='dark'> {this.state.message} </Alert>}
-
-					<Button variant="info" type="submit"> Log In </Button>
+					
+					<Button variant="info" type="submit"> Sign Up </Button>
 				</Form>
 			</div>
 		);
 	}
 }
 
-export default LogIn;
+export default SignUp;
