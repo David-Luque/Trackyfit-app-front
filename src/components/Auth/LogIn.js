@@ -2,17 +2,18 @@ import React from 'react';
 import Service from '../../services/UserService';
 import { Button, Form, Alert } from 'react-bootstrap';
 import '../styles/LoginSignUp.css'
+import { withRouter } from 'react-router-dom';
 
 class LogIn extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			username: null,
-			password: null,
-			message: null
-		};
-		this.service = new Service();
-	}
+	
+	state = {
+		username: null,
+		password: null,
+		message: null
+	};
+	
+	service = new Service();
+	
 
 	handleFormSubmit = (event) => {
 		event.preventDefault();
@@ -23,7 +24,8 @@ class LogIn extends React.Component {
 				password: '',
 				message: response.message
 			});
-			this.props.getUser(response, response.message);
+			this.props.getTheUser(response);
+			this.props.history.push("/profile");
 		})
 		.catch((err) => console.log(err));
 	};
@@ -57,4 +59,4 @@ class LogIn extends React.Component {
 	}
 }
 
-export default LogIn;
+export default withRouter(LogIn);

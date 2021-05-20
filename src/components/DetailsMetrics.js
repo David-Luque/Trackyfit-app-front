@@ -10,7 +10,7 @@ import '../styles/DetailsChart.css'
 class DetailsMetrics extends React.Component{
 
   state = {
-    userLogged: null,
+    loggedInUser: null,
     metricsInfo: [],
     dataBaseChecked: false
   }
@@ -20,15 +20,18 @@ class DetailsMetrics extends React.Component{
 
   
   componentDidMount(){
-    this.userService.getUser(this.props.loggedInUser._id)
+    this.userService.loggedin()
     .then((response)=>{
-      this.setState({userLogged: response})
+      this.setState({loggedInUser: response})
     })
     .then(()=>{
-      this.metricService.getAllMetrics(this.props.loggedInUser._id) 
+      this.metricService.getAllMetrics(this.state.loggedInUser._id) 
       .then((result)=>{
-        this.setState({metricsInfo: result, dataBaseChecked: true})
-        this.renderChart()
+        this.setState({
+          metricsInfo: result, 
+          dataBaseChecked: true
+        })
+        this.renderChart();
       })
     })
     .catch(err=>console.log(err))
@@ -104,7 +107,7 @@ class DetailsMetrics extends React.Component{
       return chart
   }
 
-  renderInfo = ()=>{ 
+  renderLoadInfo = ()=>{ 
     if (!this.state.dataBaseChecked) 
     {
       return <p className="data-message"> Loading...</p>
@@ -112,6 +115,12 @@ class DetailsMetrics extends React.Component{
       return <p className="data-message"> No data yet, try to add the first one </p>  
     }
   }
+
+  displayChart = ()=>{
+    return(
+      <canvas className="metrics-chart" id="myChart"></canvas>
+    );
+  };
 
 
   render(){
@@ -122,8 +131,8 @@ class DetailsMetrics extends React.Component{
         </Link>
         <div className="all-exercises-container">
           {this.state.metricsInfo.length === 0 
-            ? this.renderInfo() 
-            : <canvas className="metrics-chart" id="myChart"></canvas>}
+            ? this.renderLoadInfo() 
+            : this.displayChart() }
         </div>
       </div>
     )    

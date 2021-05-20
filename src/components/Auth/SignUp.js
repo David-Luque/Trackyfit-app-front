@@ -2,31 +2,32 @@ import React from 'react';
 import Service from '../../services/UserService';
 import { Button, Form, Alert } from 'react-bootstrap';
 import '../styles/LoginSignUp.css'
+import { withRouter } from 'react-router-dom';
 
 class SignUp extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			username: null,
-			password: null,
-			message: null
-		};
-		this.service = new Service();
-	}
+	
+	state = {
+		username: null,
+		password: null,
+		message: null
+	};
+
+	service = new Service();
+	
 
 	handleFormSubmit = (event) => {
 		event.preventDefault();
-		this.service
-			.signup(this.state.username, this.state.password)
-			.then((response) => {
-				this.setState({
-					username: '',
-					password: '',
-					message: response.errorMessage
-				});
-				this.props.getUser(response, response.errorMessage);
-			})
-			.catch((err) => console.error(err));
+		this.service.signup(this.state.username, this.state.password)
+		.then((response) => {
+			this.setState({
+				username: '',
+				password: '',
+				message: response.message
+			});
+			this.props.getTheUser(response);
+			this.props.history.push("/profile")
+		})
+		.catch((err) => console.error(err));
 	};
 
 	handleChange = (event) => {
@@ -59,4 +60,4 @@ class SignUp extends React.Component {
 	}
 }
 
-export default SignUp;
+export default withRouter(SignUp);

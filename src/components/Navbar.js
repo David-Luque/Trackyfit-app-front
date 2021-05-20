@@ -2,18 +2,43 @@ import React from 'react';
 import '../styles/Navbar.css'
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import UserService from '../services/UserService';
 
 
 
 class NavComp extends React.Component {
 
     state = {
-        loggedInUser: this.props.loggedInUser
+        loggedInUser: null
     }
 
-    UNSAFE_componentWillReceiveProps(nextProps) {
-        this.setState({...this.state, loggedInUser: nextProps["loggedInUser"]})
-      }
+    service = new UserService();
+
+    componentDidMount = (prevProps, PrevState)=>{
+        if(this.props.userInSession !== PrevState.loggedInUser){
+            this.setState({ loggedInUser: this.props.userInSession });
+        }
+    };
+
+
+    renderSignupLogin = ()=>{
+        return (
+            <Nav className="mr-auto">
+                <Nav.Link eventKey="1" as={Link} to="/signup">Sign Up</Nav.Link>
+                <Nav.Link eventKey="2" as={Link} to="/login">Log in</Nav.Link>
+            </Nav>
+        );
+    };
+
+    renderUserOptions = ()=>{
+        return(
+            <Nav className="mr-auto">
+                <Nav.Link eventKey="3" as={Link} to="/profile">Profile</Nav.Link>
+                <NavDropdown.Divider />
+                <Nav.Link eventKey="4" onClick={()=>this.service.logOut()}>Log out</Nav.Link>
+            </Nav>
+        );
+    };
 
     
     render(){
@@ -28,14 +53,7 @@ class NavComp extends React.Component {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            {!this.state.loggedInUser && <Nav.Link eventKey="1" as={Link} to="/signup">Sign Up</Nav.Link>}
-                            {!this.state.loggedInUser && <Nav.Link eventKey="2" as={Link} to="/login">Log in</Nav.Link>}
-
-                            {this.state.loggedInUser && <Nav.Link eventKey="3" as={Link} to="/user-profile">Profile</Nav.Link>}
-                            <NavDropdown.Divider />
-                            {this.state.loggedInUser && <Nav.Link eventKey="4" onClick={()=>this.props.logOut()}>Log out</Nav.Link>}
-                        </Nav>
+                    {this.state.loggedInUser ? this.renderUserOptions() : this.renderSignupLogin() }
                     </Navbar.Collapse>
                 </Navbar>
             </div>
@@ -43,5 +61,6 @@ class NavComp extends React.Component {
     }
     
 }
+import UserService from '../services/UserService';
 
 export default NavComp;

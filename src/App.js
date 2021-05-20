@@ -8,7 +8,7 @@ import LogIn from './components/Auth/LogIn';
 import UserProfile from './components/UserProfile';
 import DetailsMetrics from './components/DetailsMetrics';
 import NavComp from './components/Navbar';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import UserService from './services/UserService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -19,7 +19,6 @@ class App extends React.Component {
 	
 	state = {
 		loggedInUser: null,
-		//publicProfileId: null
 	};
 
 	service = new UserService();
@@ -41,21 +40,7 @@ class App extends React.Component {
 		this.setState({ loggedInUser: userInfo })
 	};
 
-	// getProfilePublicId = (id) => {
-	// 	this.setState({
-	// 		publicProfileId: id
-	// 	});
-	// };
 
-	// logOut = ()=>{
-	// 	this.service.logout()
-	// 	.then(()=>{
-	// 	  this.setState({loggedInUser: null})
-	// 	})
-	// 	.catch(err => console.log(err))
-	//   }
-
-	
 	render() {
 
 		this.fetchUser()

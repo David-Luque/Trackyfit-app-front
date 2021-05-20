@@ -9,7 +9,7 @@ import '../styles/DetailsWorkout.css'
 class DetailsWorkouts extends React.Component {
 
   state = {
-    userLogged: null,
+    loggedInUser: null,
     exercisesData: [],
     dataBaseChecked: false
   }
@@ -18,15 +18,18 @@ class DetailsWorkouts extends React.Component {
   userService = new UserService()
 
   componentDidMount(){
-    this.userService.getUser(this.props.loggedInUser._id)
+    this.userService.loggedin()
     .then((response)=>{
-      this.setState({userLogged: response})
+      this.setState({loggedInUser: response})
     })
     .then(()=>{
-      this.exerService.getAllExercises(this.props.loggedInUser._id) 
+      this.exerService.getAllExercises(this.state.loggedInUser._id) 
       .then((result)=>{
-        this.setState({exercisesData: result, dataBaseChecked: true})
-        this.renderChart()
+        this.setState({
+          exercisesData: result, 
+          dataBaseChecked: true
+        })
+        this.renderChart();
       })
     })
     .catch(err=>console.log(err))
@@ -102,14 +105,20 @@ class DetailsWorkouts extends React.Component {
       return chart
   }
 
-  renderInfo = ()=>{ 
+  renderLoadInfo = ()=>{ 
     if (!this.state.dataBaseChecked) 
     {
       return <p className="data-message"> Loading...</p>
     } else {
       return <p className="data-message"> No data yet, try to add the first one </p>  
     }
-  }
+  };
+
+  displayChart = ()=>{
+    return(
+      <canvas className="workouts-chart" id="myChart"></canvas>
+    );
+  };
 
 
   render(){
@@ -120,12 +129,12 @@ class DetailsWorkouts extends React.Component {
         </Link>
         <div className="all-exercises-container">
           {this.state.exercisesData.length === 0 
-            ? this.renderInfo() 
-            : <canvas className="workouts-chart" id="myChart"></canvas>}          
+            ? this.renderLoadInfo() 
+            : this.displayChart() }          
         </div>
       </div>
     )    
   }
 }
 
-export default DetailsWorkouts
+export default DetailsWorkouts;

@@ -8,20 +8,18 @@ import { Button } from 'react-bootstrap';
 class UserProfile extends React.Component{
 
   state = {
-    userLogged: null
-  }
+    loggedInUser: null
+  };
 
-  service = new UserService()
+  service = new UserService();
 
   componentDidMount(){
-    this.service.getUser(this.props.loggedInUser._id)
+    this.service.loggedin()
     .then((response)=>{
-      this.setState({userLogged: response})
+      this.setState({loggedInUser: response});
     })
-    .catch((err)=>{
-      console.log(err)
-    })
-  }
+    .catch(err => console.log(err))
+  };
 
   render(){
     return(
