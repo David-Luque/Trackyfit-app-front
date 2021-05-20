@@ -1,25 +1,35 @@
-import React from 'react';
+import React, { Component } from 'react';
 import '../styles/Navbar.css'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import UserService from '../services/UserService';
 
 
 
-class NavComp extends React.Component {
+class NavComp extends Component {
 
-    state = {
-        loggedInUser: null
-    }
-
-    service = new UserService();
-
-    componentDidMount = (prevProps, PrevState)=>{
-        if(this.props.userInSession !== PrevState.loggedInUser){
-            this.setState({ loggedInUser: this.props.userInSession });
-        }
+    constructor(props){
+        super(props);
+        this.state = {
+            loggedInUser: null
+        };
+        this.userService = new  UserService();
     };
 
+    componentWillReceiveProps(nextProps){
+        this.setState({ ...this.state, loggedInUser: nextProps["userInSession"] });
+    };
+
+
+    logout = ()=>{
+        this.userService.logout()
+        .then(response =>{
+            console.log(response)
+            this.setState({ loggedInUser: null });
+            this.props.getTheUser(null);
+            this.props.history.push("/");
+        })
+    };
 
     renderSignupLogin = ()=>{
         return (
@@ -35,7 +45,7 @@ class NavComp extends React.Component {
             <Nav className="mr-auto">
                 <Nav.Link eventKey="3" as={Link} to="/profile">Profile</Nav.Link>
                 <NavDropdown.Divider />
-                <Nav.Link eventKey="4" onClick={()=>this.service.logOut()}>Log out</Nav.Link>
+                <Nav.Link eventKey="4" onClick={this.logout}>Log out</Nav.Link>
             </Nav>
         );
     };
@@ -61,6 +71,5 @@ class NavComp extends React.Component {
     }
     
 }
-import UserService from '../services/UserService';
 
-export default NavComp;
+export default withRouter(NavComp);

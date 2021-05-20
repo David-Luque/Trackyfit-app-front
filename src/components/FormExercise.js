@@ -75,23 +75,23 @@ class FormExercise extends React.Component {
         return (
             <div className="FormExercise">
                 <Form className="form" onSubmit={this.handleFormSubmit}>
-                    <Form.Group controlId="formBasicDate">
+                    <Form.Group>
                         <Form.Label htmlFor="date">Date</Form.Label>
                         <Form.Control type="date" name="date" value={this.state.date} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-                    <Form.Group controlId="formBasicEmail">
+                    <Form.Group >
                         <Form.Label htmlFor="pushUps">push ups</Form.Label>
                         <Form.Control type="number" name="pushUps" placeholder="reps" value={this.state.pushUps} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-                    <Form.Group controlId="formBasicEmail">
+                    <Form.Group >
                         <Form.Label htmlFor="pullUps">pull ups</Form.Label>
                         <Form.Control type="number" name="pullUps" placeholder="reps" value={this.state.pullUps} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-                    <Form.Group controlId="formBasicEmail">
+                    <Form.Group >
                         <Form.Label htmlFor="plank">plank</Form.Label>
                         <Form.Control type="number" name="plank" placeholder=" seconds" value={this.state.plank} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>
-                    <Form.Group controlId="formBasicEmail">
+                    <Form.Group >
                         <Form.Label htmlFor="squats">squats</Form.Label>
                         <Form.Control type="number" name="squats" placeholder="reps" value={this.state.squats} onChange={(event) => this.handleChange(event)} />
                     </Form.Group>

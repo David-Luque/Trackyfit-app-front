@@ -14,7 +14,7 @@ class UserProfile extends React.Component{
   service = new UserService();
 
   componentDidMount(){
-    this.service.loggedin()
+    this.service.loggedIn()
     .then((response)=>{
       this.setState({loggedInUser: response});
     })

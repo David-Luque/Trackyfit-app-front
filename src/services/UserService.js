@@ -6,7 +6,8 @@ class UserService {
 
   constructor() {
     let service = axios.create({
-      baseURL: "https://dvdlq99-react-project.herokuapp.com",
+      baseURL: "http://localhost:5000",
+      //process.env.REACT_APP_API_URL,
       withCredentials: true
     });
 
@@ -23,13 +24,8 @@ class UserService {
     .then(response => response.data)
   }
 
-  loggedin = () =>{
+  loggedIn = () =>{
     return this.service.get("/loggedin")
-    .then(response => response.data)
-  }
-
-  getUser = (userID) => {
-    return this.service.get(`/getUser/${userID}`, {userID})
     .then(response => response.data)
   }
 

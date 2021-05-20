@@ -6,7 +6,9 @@ class MetricsService {
 
   constructor() {
     let service = axios.create({
-      baseURL: "https://dvdlq99-react-project.herokuapp.com",
+      baseURL: "http://localhost:5000",
+      //process.env.REACT_APP_API_URL,
+      withCredentials: true
     });
 
     this.service = service;

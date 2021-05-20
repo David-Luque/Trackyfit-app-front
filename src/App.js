@@ -8,7 +8,7 @@ import LogIn from './components/Auth/LogIn';
 import UserProfile from './components/UserProfile';
 import DetailsMetrics from './components/DetailsMetrics';
 import NavComp from './components/Navbar';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import UserService from './services/UserService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -48,8 +48,9 @@ class App extends React.Component {
 		if(this.state.loggedInUser){
 			return (
 				<div className="App">
-					<NavComp userInSession={this.state.loggedInUser}/>
+					<NavComp getTheUser={this.getTheUser} userInSession={this.state.loggedInUser}/>
 					<Switch>
+						<Route exact path="/" component={Home} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/profile" component={UserProfile} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-workout" component={DetailsWorkouts} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-metrics" component={DetailsMetrics} />
@@ -62,7 +63,7 @@ class App extends React.Component {
 		} else {
 			return (
 				<div className="App">
-					<NavComp userInSession={this.state.loggedInUser}/>
+					<NavComp getTheUser={this.getTheUser} userInSession={this.state.loggedInUser}/>
 					<Switch>
 						<Route exact path="/" component={Home} />
 						<Route exact path="/signup" render={()=> <SignUp getTheUser={this.getTheUser} />} />
