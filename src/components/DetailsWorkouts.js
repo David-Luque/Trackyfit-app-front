@@ -18,10 +18,11 @@ class DetailsWorkouts extends React.Component {
   userService = new UserService()
 
   componentDidMount(){
-    this.userService.loggedin()
+    this.userService.loggedIn()
     .then((response)=>{
       this.setState({loggedInUser: response})
     })
+    .catch(err=>console.log(err))
     .then(()=>{
       this.exerService.getAllExercises(this.state.loggedInUser._id) 
       .then((result)=>{
@@ -31,6 +32,7 @@ class DetailsWorkouts extends React.Component {
         })
         this.renderChart();
       })
+      .catch(err=>console.log(err))
     })
     .catch(err=>console.log(err))
   }

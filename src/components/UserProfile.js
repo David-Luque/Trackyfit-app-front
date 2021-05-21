@@ -11,10 +11,10 @@ class UserProfile extends React.Component{
     loggedInUser: null
   };
 
-  service = new UserService();
+  userService = new UserService();
 
-  componentDidMount(){
-    this.service.loggedIn()
+  componentDidMount = ()=>{
+    this.userService.loggedIn()
     .then((response)=>{
       this.setState({loggedInUser: response});
     })

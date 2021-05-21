@@ -10,7 +10,6 @@ class UserService {
       //process.env.REACT_APP_API_URL,
       withCredentials: true
     });
-
     this.service = service;
   }
 

@@ -21,11 +21,11 @@ class App extends React.Component {
 		loggedInUser: null,
 	};
 
-	service = new UserService();
+	userService = new UserService();
 
 	fetchUser() {
 		if (this.state.loggedInUser === null) {
-			this.service.loggedIn()
+			this.userService.loggedIn()
 			.then((response) => {
 				this.setState({ loggedInUser: response });
 			})

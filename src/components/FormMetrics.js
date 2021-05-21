@@ -50,8 +50,9 @@ class FormMetrics extends React.Component {
             .then((response) => {
                 this.setState({successUpload: true, dataWarningMessage: false})
                 setTimeout(()=>{
-                    this.setState({successUpload: false})
-                }, 2000);
+                    this.setState({successUpload: false});
+                    this.props.history.push("/details-metrics")
+                }, 1000);
             })
             .catch((err) => console.error(err));
         }

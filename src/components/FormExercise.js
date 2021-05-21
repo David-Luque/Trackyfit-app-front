@@ -50,8 +50,9 @@ class FormExercise extends React.Component {
             .then(() => {
                 this.setState({successUpload: true, dataWarningMessage: false})
                 setTimeout(()=>{
-                    this.setState({successUpload: false})
-                }, 2000);
+                    this.setState({successUpload: false});
+                    this.props.history.push("/details-workout")
+                }, 1000);
             })
             .catch((err) => console.error(err));
         }        

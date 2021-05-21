@@ -20,10 +20,11 @@ class DetailsMetrics extends React.Component{
 
   
   componentDidMount(){
-    this.userService.loggedin()
+    this.userService.loggedIn()
     .then((response)=>{
       this.setState({loggedInUser: response})
     })
+    .catch(err=>console.log(err))
     .then(()=>{
       this.metricService.getAllMetrics(this.state.loggedInUser._id) 
       .then((result)=>{
@@ -33,6 +34,7 @@ class DetailsMetrics extends React.Component{
         })
         this.renderChart();
       })
+      .catch(err=>console.log(err))
     })
     .catch(err=>console.log(err))
   }
