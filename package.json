@@ -9,6 +9,7 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "chart.js": "^2.9.4",
+    "dotenv": "^8.2.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.2",
@@ -19,6 +20,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "build-dev": "dotenv -e .env.development react-scripts build",
+    "build-prod": "dotenv -e .env.production react-scripts build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
