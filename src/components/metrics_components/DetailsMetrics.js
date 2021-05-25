@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import MetricsService from '../services/MetricsService';
-import UserService from '../services/UserService'
+import MetricsService from '../../services/MetricsService';
+import UserService from '../../services/UserService'
 import Chart from 'chart.js';
-import '../styles/DetailsChart.css'
+// import '../styles/DetailsChart.css'
 
 
 class DetailsMetrics extends React.Component{

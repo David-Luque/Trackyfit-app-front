@@ -13,22 +13,20 @@ class ExerciseService {
     this.service = service;
   }
 
-  getAllExercises = (userID) => {
-    return this.service.get(`/get-all-exercises/${userID}`, {userID})
+  getAllExercises = () => {
+    return this.service.get('/all-exercises')
     .then(response => response.data)
   }
 
-  addExercise = (pushUps, pullUps, plank, squats, date, owner) => {
-    return this.service.post("/create-exercise", {
-      pushUps,
-      pullUps,
-      plank,
-      squats,
-      date,
-      owner
-    })
+  createExercise = (name) => {
+    //console.log(name)
+    return this.service.post('/create-exercise', { name })
     .then(response => response.data)
   }
+
+  editExercise = (id, name)=>{
+    return this.service.put('/edit-exercise', { id, name })
+  };
 }
 
 export default ExerciseService;

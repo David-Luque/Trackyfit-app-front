@@ -1,7 +1,7 @@
 
 import React from 'react'
 import '../styles/FormExercise.css'
-import ExerciseService from '../services/ExerciseService'
+import ExerciseService from '../../services/ExerciseService'
 import { Button, Form, Alert } from 'react-bootstrap';
 
 

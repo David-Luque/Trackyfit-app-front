@@ -58,7 +58,7 @@ class NavComp extends Component {
                     <Navbar.Brand>
                         <Link to="/"> 
                             <img className="navbar-image" src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Athletics_pictogram.svg" alt="Trackifit" />
-                            <p className="logo-text">Trackifit</p> 
+                            <p className="logo-text">Trackifit</p>
                         </Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />

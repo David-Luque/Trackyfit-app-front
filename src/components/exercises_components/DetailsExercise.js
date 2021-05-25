@@ -1,17 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { Button} from 'react-bootstrap';
-import ExerciseService from '../services/ExerciseService'
-import UserService from '../services/UserService'
+import EditExercise from './EditExercise';
+import ExerciseService from '../../services/ExerciseService'
+import UserService from '../../services/UserService'
 import Chart from 'chart.js';
-import '../styles/DetailsWorkout.css'
+// import '../styles/DetailsWorkout.css'
 
 class DetailsWorkouts extends React.Component {
 
   state = {
     loggedInUser: null,
-    exercisesData: [],
-    dataBaseChecked: false
+    exerciseData: null,
+    dataBaseChecked: false,
+    isRenameDisplayed: false
   }
 
   exerService = new ExerciseService()
@@ -27,7 +29,7 @@ class DetailsWorkouts extends React.Component {
       this.exerService.getAllExercises(this.state.loggedInUser._id) 
       .then((result)=>{
         this.setState({
-          exercisesData: result, 
+          exerciseData: result, 
           dataBaseChecked: true
         })
         this.renderChart();
@@ -39,19 +41,19 @@ class DetailsWorkouts extends React.Component {
 
 
   renderChart(){
-      const pushUpsData = this.state.exercisesData.map((element)=>{
+      const pushUpsData = this.state.exerciseData.map((element)=>{
         return element.pushUps
       })
-      const pullUpsData = this.state.exercisesData.map((element)=>{
+      const pullUpsData = this.state.exerciseData.map((element)=>{
         return element.pullUps
       })
-      const plankData = this.state.exercisesData.map((element)=>{
+      const plankData = this.state.exerciseData.map((element)=>{
         return element.plank
       })
-      const squatsData = this.state.exercisesData.map((element)=>{
+      const squatsData = this.state.exerciseData.map((element)=>{
         return element.squats
       })
-      const dateData = this.state.exercisesData.map((element)=>{
+      const dateData = this.state.exerciseData.map((element)=>{
         return element.date
       })
 
@@ -122,18 +124,35 @@ class DetailsWorkouts extends React.Component {
     );
   };
 
+  handleRenameForm = ()=>{
+    this.setState({ isRenameDisplayed: !this.state.isRenameDisplayed });
+  };
+
 
   render(){
     return(
       <div className="DetailsWorkout">
+        <h2>{this.state.exerciseData.name}</h2>
         <Link to="/create-exercise">
           <Button variant="info">New workout</Button>
         </Link>
         <div className="all-exercises-container">
-          {this.state.exercisesData.length === 0 
+          {this.state.exerciseData === null
             ? this.renderLoadInfo() 
             : this.displayChart() }          
         </div>
+
+        <Button onClick={this.handleRenameForm}>
+          {this.state.isRenameDisplayed ? "Cancel" : "Rename"}
+        </Button>
+        <Button>Delete</Button>
+        <hr />
+        {this.state.isRenameDisplayed && 
+          <EditExercise 
+            exerciseId={this.state.exerciseData._id}
+            getAllExer={this.getAllExercises}
+          />
+        }
       </div>
     )    
   }

@@ -26,12 +26,16 @@ class UserProfile extends React.Component{
       <div className="UserProfile">
         <h2>Welcome {this.props.loggedInUser.username}</h2>
         <div className="user-info-buttons">
-          <Link to="/details-workout">
-            <Button variant="info">My performance</Button>
+          <Link to="/all-exercises">
+            <Button variant="info"> My exercises </Button>
           </Link>
           <br />
-          <Link to="/details-metrics">
-            <Button variant="info">My metrics</Button>
+          <Link to="/all-metrics">
+            <Button variant="info"> My metrics </Button>
+          </Link>
+          <br />
+          <Link to="/all-workouts">
+            <Button variant="info"> My workouts </Button>
           </Link>
         </div>
       </div>
