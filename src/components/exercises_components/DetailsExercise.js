@@ -11,7 +11,7 @@ class DetailsWorkouts extends React.Component {
 
   state = {
     loggedInUser: null,
-    exerciseData: null,
+    exerciseData: "",
     dataBaseChecked: false,
     isRenameDisplayed: false
   }
@@ -26,19 +26,22 @@ class DetailsWorkouts extends React.Component {
     })
     .catch(err=>console.log(err))
     .then(()=>{
-      this.exerService.getAllExercises(this.state.loggedInUser._id) 
-      .then((result)=>{
+      this.getExerciseInfo();
+    })
+    .catch(err=>console.log(err))
+  }
+  
+  getExerciseInfo = ()=>{
+    this.exerService.getExerciseInfo(this.props.match.params.id) 
+      .then((resFromApi)=>{
         this.setState({
-          exerciseData: result, 
+          exerciseData: resFromApi, 
           dataBaseChecked: true
         })
         this.renderChart();
       })
       .catch(err=>console.log(err))
-    })
-    .catch(err=>console.log(err))
-  }
-
+  };
 
   renderChart(){
       const pushUpsData = this.state.exerciseData.map((element)=>{
@@ -134,7 +137,7 @@ class DetailsWorkouts extends React.Component {
       <div className="DetailsWorkout">
         <h2>{this.state.exerciseData.name}</h2>
         <Link to="/create-exercise">
-          <Button variant="info">New workout</Button>
+          <Button variant="info">Add new results</Button>
         </Link>
         <div className="all-exercises-container">
           {this.state.exerciseData === null
@@ -150,7 +153,8 @@ class DetailsWorkouts extends React.Component {
         {this.state.isRenameDisplayed && 
           <EditExercise 
             exerciseId={this.state.exerciseData._id}
-            getAllExer={this.getAllExercises}
+            getExerciseInfo={this.getExerciseInfo}
+            handleRenameForm={this.handleRenameForm}
           />
         }
       </div>

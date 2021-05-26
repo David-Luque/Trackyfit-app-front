@@ -18,8 +18,8 @@ class EditExercise extends Component {
         event.preventDefault();
         this.service.editExercise(this.props.exerciseId, this.state.name)
         .then(response => {
-            console.log(response);
-            this.props.getAllExer();
+            this.props.getExerciseInfo();
+            this.props.handleRenameForm();
         })
         .catch(err => console.log(err))
     };
@@ -32,7 +32,7 @@ class EditExercise extends Component {
                     <br />
                     <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
                     <br />
-                    <Button>Edit</Button>
+                    <Button type="submit" >Edit</Button>
                 </form>
             </div>
         );

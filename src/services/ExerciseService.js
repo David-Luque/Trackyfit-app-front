@@ -25,7 +25,13 @@ class ExerciseService {
   }
 
   editExercise = (id, name)=>{
-    return this.service.put('/edit-exercise', { id, name })
+    return this.service.put(`/edit-exercise/${id}`, { name })
+    .then(response => response.data)
+  };
+
+  getExerciseInfo = (id)=>{
+    return this.service.get(`/exercises/${id}`)
+    .then(response => response.data)
   };
 }
 
