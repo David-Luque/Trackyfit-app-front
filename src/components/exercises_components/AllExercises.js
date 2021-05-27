@@ -50,7 +50,7 @@ class AllExercises extends Component {
                     {this.state.isCreateFormDisplayed ? "Cancel" : "Create exercise"}
                 </Button>
                 
-                {this.state.isCreateFormDisplayed && <CreateExercise getAllExer={this.getAllExercises} />}
+                {this.state.isCreateFormDisplayed && <CreateExercise getAllExer={this.getAllExercises} handleCreateForm={this.handleCreateForm} />}
                 
                 <div>
                     {this.state.exercisesInfo && this.renderExercises()}

@@ -20,6 +20,7 @@ class CreateExercise extends Component {
         .then(response => {
             console.log(response)
             this.props.getAllExer();
+            this.props.handleCreateForm();
         })
         .catch(err => console.log(err))
     };

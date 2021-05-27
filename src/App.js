@@ -17,7 +17,7 @@ import AllExercises from './components/exercises_components/AllExercises';
 import DetailsExercise from './components/exercises_components/DetailsExercise';
 import CreateExercise from './components/exercises_components/CreateExercise';
 import UpdateExercise from './components/exercises_components/UpdateExercise';
-// import FormExerciseResults from './components/performance_components/FormExerciseResuls';
+import FormExerciseResults from './components/exercises_components/FormExerciseResults';
 
 import AllWorkouts from './components/workouts_components/AllWorkouts';
 import CreateWorkout from './components/workouts_components/CreateWorkout';
@@ -74,7 +74,7 @@ class App extends React.Component {
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-exercise/:id" component={DetailsExercise} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/create-exercise" component={CreateExercise} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/update-exercise" component={UpdateExercise} />
-						{/* <ProtectedRoute user={this.state.loggedInUser} exact path="/add-exercise-results" component={FormExerciseResults} /> */}
+						<ProtectedRoute user={this.state.loggedInUser} exact path="/form-results" component={FormExerciseResults} />
 
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/all-workouts" component={AllWorkouts} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/create-workout" component={CreateWorkout} />

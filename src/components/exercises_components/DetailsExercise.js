@@ -38,7 +38,7 @@ class DetailsWorkouts extends React.Component {
           exerciseData: resFromApi, 
           dataBaseChecked: true
         })
-        this.renderChart();
+        // this.renderChart();
       })
       .catch(err=>console.log(err))
   };
@@ -131,12 +131,20 @@ class DetailsWorkouts extends React.Component {
     this.setState({ isRenameDisplayed: !this.state.isRenameDisplayed });
   };
 
+  deleteExercise = ()=>{
+    this.exerService.deleteExercise(this.state.exerciseData._id)
+    .then(response => {
+      console.log(response);
+      this.props.history.push("/all-exercises")
+    })
+  };
+
 
   render(){
     return(
       <div className="DetailsWorkout">
         <h2>{this.state.exerciseData.name}</h2>
-        <Link to="/create-exercise">
+        <Link to="/form-results">
           <Button variant="info">Add new results</Button>
         </Link>
         <div className="all-exercises-container">
@@ -148,7 +156,7 @@ class DetailsWorkouts extends React.Component {
         <Button onClick={this.handleRenameForm}>
           {this.state.isRenameDisplayed ? "Cancel" : "Rename"}
         </Button>
-        <Button>Delete</Button>
+        <Button onClick={this.deleteExercise}>Delete</Button>
         <hr />
         {this.state.isRenameDisplayed && 
           <EditExercise 
