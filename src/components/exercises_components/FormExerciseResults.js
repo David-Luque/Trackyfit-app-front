@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import ExerciseService from '../../services/ExerciseService';
+import ResultService from '../../services/ResultsService';
 
 
 class FormExerciseResuls extends Component {
@@ -12,7 +12,7 @@ class FormExerciseResuls extends Component {
         date: ""
     };
 
-    service = new ExerciseService();
+    service = new ResultService();
 
     handleChange = (event)=>{
         const { name, value } = event.target;
@@ -22,8 +22,22 @@ class FormExerciseResuls extends Component {
     handleFormSubmit = (e)=>{
         e.preventDefault();
         const { reps, time, weight, date } = this.state;
-        const results = { reps, time, weight, date };
+        const exercise = this.props.exerciseId;
+        const results = { reps, time, weight, date, exercise };
+        //console.log(results)
         this.service.addResults(results)
+        .then(response => {
+            this.setState({
+                reps: "",
+                time: "",
+                weight: "",
+                date: ""
+            })
+            this.props.getExerciseInfo();
+            this.props.handleResultsForm();
+        })
+        .catch()
+
     };
 
 

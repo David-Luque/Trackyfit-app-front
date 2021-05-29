@@ -1,7 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { Button} from 'react-bootstrap';
 import EditExercise from './EditExercise';
+import FormExerciseResults from './FormExerciseResults';
 import ExerciseService from '../../services/ExerciseService'
 import UserService from '../../services/UserService'
 import Chart from 'chart.js';
@@ -11,9 +12,10 @@ class DetailsWorkouts extends React.Component {
 
   state = {
     loggedInUser: null,
-    exerciseData: "",
+    exerciseData: [],
     dataBaseChecked: false,
-    isRenameDisplayed: false
+    isRenameDisplayed: false,
+    isResultsFormDisplayed: false
   }
 
   exerService = new ExerciseService()
@@ -38,25 +40,65 @@ class DetailsWorkouts extends React.Component {
           exerciseData: resFromApi, 
           dataBaseChecked: true
         })
-        // this.renderChart();
+        this.renderChart();
       })
       .catch(err=>console.log(err))
   };
 
+  renderLoadInfo = ()=>{ 
+    if (!this.state.dataBaseChecked) 
+    {
+      return <p className="data-message"> Loading...</p>
+    } else {
+      return <p className="data-message"> No data yet, try to add the first one </p>  
+    }
+  };
+
+  handleRenameForm = ()=>{
+    this.setState({ isRenameDisplayed: !this.state.isRenameDisplayed });
+  };
+
+  deleteExercise = ()=>{
+    this.exerService.deleteExercise(this.state.exerciseData._id)
+    .then(response => {
+      console.log(response);
+      this.props.history.push("/all-exercises")
+    })
+  };
+
+  handleResultsForm = ()=>{
+    this.setState({ isResultsFormDisplayed: !this.state.isResultsFormDisplayed });
+  };
+
+  displayResultsForm = ()=>{
+    return (
+      <FormExerciseResults 
+        exerciseId={this.state.exerciseData._id} 
+        getExerciseInfo={this.getExerciseInfo}
+        handleResultsForm={this.handleResultsForm}
+      />
+    )
+  };
+
+  displayChart = ()=>{
+    return(
+      <canvas className="workouts-chart" id="myChart"></canvas>
+    );
+  };
+
+
   renderChart(){
-      const pushUpsData = this.state.exerciseData.map((element)=>{
-        return element.pushUps
+      const repsData = this.state.exerciseData.results.map((element)=>{
+        return element.reps
       })
-      const pullUpsData = this.state.exerciseData.map((element)=>{
-        return element.pullUps
+      const weightData = this.state.exerciseData.results.map((element)=>{
+        return element.weight
       })
-      const plankData = this.state.exerciseData.map((element)=>{
-        return element.plank
+      const timeData = this.state.exerciseData.results.map((element)=>{
+        return element.time
       })
-      const squatsData = this.state.exerciseData.map((element)=>{
-        return element.squats
-      })
-      const dateData = this.state.exerciseData.map((element)=>{
+
+      const datesData = this.state.exerciseData.results.map((element)=>{
         return element.date
       })
 
@@ -64,28 +106,23 @@ class DetailsWorkouts extends React.Component {
       const chart = new Chart(ctx, {
           type: 'line',
           data: {
-              labels: dateData,
+              labels: datesData,
               datasets: [
                 {
-                  label: 'pushUps',
+                  label: 'Reps',
                   backgroundColor: 'rgba(219, 132, 28, 0.2)',
                   borderColor: 'rgb(219, 132, 28)',
-                  data: pushUpsData
+                  data: repsData
                 },{
-                  label: 'pullUps',
+                  label: 'Weight',
                   backgroundColor: 'rgba(166, 0, 243, 0.2)',
                   borderColor: 'rgb(166, 0, 243)',
-                  data: pullUpsData
+                  data: weightData
                 },{
-                  label: 'plank',
+                  label: 'Time',
                   backgroundColor: 'rgba(1, 189, 160, 0.2)',
                   borderColor: 'rgb(1, 189, 160)',
-                  data: plankData
-                },{
-                  label: 'squats',
-                  backgroundColor: 'rgba(161, 213, 0, 0.2)',
-                  borderColor: 'rgb(161, 213, 0)',
-                  data: squatsData
+                  data: timeData
                 }
               ]
           },
@@ -112,52 +149,28 @@ class DetailsWorkouts extends React.Component {
       return chart
   }
 
-  renderLoadInfo = ()=>{ 
-    if (!this.state.dataBaseChecked) 
-    {
-      return <p className="data-message"> Loading...</p>
-    } else {
-      return <p className="data-message"> No data yet, try to add the first one </p>  
-    }
-  };
-
-  displayChart = ()=>{
-    return(
-      <canvas className="workouts-chart" id="myChart"></canvas>
-    );
-  };
-
-  handleRenameForm = ()=>{
-    this.setState({ isRenameDisplayed: !this.state.isRenameDisplayed });
-  };
-
-  deleteExercise = ()=>{
-    this.exerService.deleteExercise(this.state.exerciseData._id)
-    .then(response => {
-      console.log(response);
-      this.props.history.push("/all-exercises")
-    })
-  };
-
 
   render(){
     return(
       <div className="DetailsWorkout">
         <h2>{this.state.exerciseData.name}</h2>
-        <Link to="/form-results">
-          <Button variant="info">Add new results</Button>
-        </Link>
+        
+        <Button variant="info" onClick={this.handleResultsForm}>
+          {this.state.isResultsFormDisplayed ? "Cancel" : "Add results"}
+        </Button>
+
+        {this.state.isResultsFormDisplayed && this.displayResultsForm()}
+        
         <div className="all-exercises-container">
-          {this.state.exerciseData === null
+          {this.state.exerciseData === []
             ? this.renderLoadInfo() 
-            : this.displayChart() }          
+            : this.displayChart() }
         </div>
 
         <Button onClick={this.handleRenameForm}>
           {this.state.isRenameDisplayed ? "Cancel" : "Rename"}
         </Button>
-        <Button onClick={this.deleteExercise}>Delete</Button>
-        <hr />
+        <br />    
         {this.state.isRenameDisplayed && 
           <EditExercise 
             exerciseId={this.state.exerciseData._id}
@@ -165,6 +178,11 @@ class DetailsWorkouts extends React.Component {
             handleRenameForm={this.handleRenameForm}
           />
         }
+
+        <br />
+        <hr />
+        <Button onClick={this.deleteExercise}>Delete</Button>
+      
       </div>
     )    
   }

@@ -10,7 +10,7 @@ class ResultServices {
     };
 
     addResults = (results)=>{
-        return this.service.post('/create-results', {results})
+        return this.service.post('/create-results', results)
         .then(response => response.data)
     };
 };
