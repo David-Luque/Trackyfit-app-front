@@ -8,11 +8,13 @@ import UserService from '../../services/UserService'
 import Chart from 'chart.js';
 // import '../styles/DetailsWorkout.css'
 
+//TODO: fix empty chart and alert message with no data
+
 class DetailsWorkouts extends React.Component {
 
   state = {
     loggedInUser: null,
-    exerciseData: [],
+    exerciseData: "",
     dataBaseChecked: false,
     isRenameDisplayed: false,
     isResultsFormDisplayed: false
@@ -99,7 +101,13 @@ class DetailsWorkouts extends React.Component {
       })
 
       const datesData = this.state.exerciseData.results.map((element)=>{
-        return element.date
+        const stringDate = element.date.toString();
+        const day = stringDate.substr(8, 2);
+        const month = stringDate.substr(5, 2);
+        const year = stringDate.substr(2, 2);
+        const shortDate = `${month}/${day}/${year}`
+        
+        return shortDate;
       })
 
       const ctx = document.getElementById('myChart').getContext('2d');
@@ -162,7 +170,7 @@ class DetailsWorkouts extends React.Component {
         {this.state.isResultsFormDisplayed && this.displayResultsForm()}
         
         <div className="all-exercises-container">
-          {this.state.exerciseData === []
+          {this.state.exerciseData === "" || this.state.exerciseData.results === []
             ? this.renderLoadInfo() 
             : this.displayChart() }
         </div>

@@ -21,8 +21,10 @@ class FormExerciseResuls extends Component {
 
     handleFormSubmit = (e)=>{
         e.preventDefault();
+
         const { reps, time, weight, date } = this.state;
         const exercise = this.props.exerciseId;
+
         const results = { reps, time, weight, date, exercise };
         //console.log(results)
         this.service.addResults(results)
