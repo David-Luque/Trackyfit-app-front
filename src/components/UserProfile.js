@@ -34,7 +34,7 @@ class UserProfile extends React.Component{
             <Button variant="info"> My metrics </Button>
           </Link>
           <br />
-          <Link to="/all-workouts">
+          <Link to="/workouts">
             <Button variant="info"> My workouts </Button>
           </Link>
         </div>

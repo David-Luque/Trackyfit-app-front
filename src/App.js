@@ -76,9 +76,9 @@ class App extends React.Component {
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/update-exercise" component={UpdateExercise} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/form-results" component={FormExerciseResults} />
 
-						<ProtectedRoute user={this.state.loggedInUser} exact path="/all-workouts" component={AllWorkouts} />
+						<ProtectedRoute user={this.state.loggedInUser} exact path="/workouts" component={AllWorkouts} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/create-workout" component={CreateWorkout} />
-						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-workout" component={DetailsWorkout} />
+						<ProtectedRoute user={this.state.loggedInUser} exact path="/workouts/:id" component={DetailsWorkout} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/update-workout" component={UpdateWorkout} />
 
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/all-metrics" component={AllMetrics} />
