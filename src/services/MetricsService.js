@@ -13,22 +13,20 @@ class MetricsService {
     this.service = service;
   }
 
-  getAllMetrics = (userID) => {
-    return this.service.get(`/get-all-metrics/${userID}`, {userID})
+  getAllMetrics = () => {
+    return this.service.get('/all-metrics')
     .then(response => response.data)
   }
 
-  addMetrics = (weight, shoulders, abs, cuadriceps, date, owner) => {
-    return this.service.post("/add-metrics", {
-      weight, 
-      shoulders, 
-      abs, 
-      cuadriceps, 
-      date, 
-      owner
-    })
+  createMetric = (name)=>{
+    return this.service.post('/create-metric', { name })
     .then(response => response.data)
-  }
+  };
+
+  getMetricInfo = (metricId)=>{
+    return this.service.get(`/metrics/${metricId}`)
+    .then(response => response.data)
+  };
 }
 
 export default MetricsService;
