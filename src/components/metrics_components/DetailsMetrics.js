@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap';
-import FormMetricMeasurement from './FormMetricMeasurement';
+import FormMetricMeasure from './FormMetricMeasure';
 import MetricsService from '../../services/MetricsService';
 import UserService from '../../services/UserService'
 import Chart from 'chart.js';
@@ -134,18 +134,31 @@ class DetailsMetrics extends React.Component{
 
   renderMeasureForm = ()=>{
     return(
-      <FormMetricMeasurement 
+      <FormMetricMeasure 
         getMetricData={this.getMetricData}
         handleMeasureForm={this.handleMeasureForm}
         metricId={this.state.metricsData._id}
+        metricUnit={this.state.metricsData.unit}
       />
     )
   };
 
+  deleteMetric = ()=>{
+    this.metricService.deleteMetric(this.state.metricsData._id)
+    .then(response => {
+      console.log(response)
+      this.props.history.push('/all-metrics')
+    })
+    .catch(err => console.log(err))
+  };
+
+
+  //Next TODO: fix message rendered without data or chart with data
 
   render(){
     return(
-      <div className="DetailsMetrics">      
+      <div className="DetailsMetrics">
+          <h2>{this.state.metricsData.name}</h2>   
           <Button variant="info" onClick={this.handleMeasureForm}>
             Add measure
           </Button>
@@ -153,10 +166,13 @@ class DetailsMetrics extends React.Component{
           {this.state.isMeasureFormDisplayed && this.renderMeasureForm()}
 
         <div className="all-exercises-container">
-          {this.state.metricsData === "" || this.state.metricsData.measurements === []
+          {this.state.metricsData === "" || this.state.metricsData.measures === []
             ? this.renderLoadInfo() 
             : this.displayChart() }
         </div>
+
+        <Button onClick={this.deleteMetric}>Delete Metric</Button>
+
       </div>
     )    
   }

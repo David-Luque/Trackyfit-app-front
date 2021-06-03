@@ -6,17 +6,20 @@ class CreateMetric extends Component {
 
     state = {
         name: "",
+        unit: ""
     };
 
     service = new MetricService();
 
     handleChange = (event)=>{
-        this.setState({ name: event.target.value });
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
     };
 
     handleFormSubmit = (event)=>{
         event.preventDefault();
-        this.service.createMetric(this.state.name)
+        const { name, unit } = this.state;
+        this.service.createMetric(name, unit)
         .then(response => {
             //console.log(response)
             this.props.getAllMetrics();
@@ -29,7 +32,13 @@ class CreateMetric extends Component {
         return(
             <div>
                 <form onSubmit={this.handleFormSubmit} >
+                    <label>Metric name</label>
+                    <br/>
                     <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
+                    <br /><br />
+                    <label>Units</label>
+                    <br />
+                    <input type="text" name="unit" value={this.state.unit} onChange={(e)=>{this.handleChange(e)}}/>
                     <br /><br />
                     <Button type="submit">Create</Button>
                 </form>

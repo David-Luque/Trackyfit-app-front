@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import MetricsService from '../../services/MetricsService';
 
 
-class FormMetricMeasurement extends Component {
+class FormMetricMeasure extends Component {
 
     state = {
         quantity: "",
@@ -23,19 +23,16 @@ class FormMetricMeasurement extends Component {
 
         const { quantity, unit, date } = this.state;
         const metric = this.props.metricId;
-
         const results = { quantity, unit, date, metric };
-        //console.log(results)
         this.service.addMeasure(results)
         .then(response => {
             this.setState({
-                reps: "",
-                time: "",
-                weight: "",
+                quantity: "",
+                unit: "",
                 date: ""
             })
-            this.props.getExerciseInfo();
-            this.props.handleResultsForm();
+            this.props.getMetricData();
+            this.props.handleMeasureForm();
         })
         .catch()
     };
@@ -45,13 +42,9 @@ class FormMetricMeasurement extends Component {
         return(
             <div>
                 <form onSubmit={this.handleFormSubmit}>
-                    <label>Quantity</label>
+                    <label>{`Quantity (in ${this.props.metricUnit})`}</label>
                     <br />
                     <input type="Number" name="quantity" value={this.state.quantity} onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <label>Unit</label>
-                    <br />
-                    <input type="text" name="unit" value={this.state.unit} onChange={(e)=>{this.handleChange(e)}}/>
                     <br /><br />
                     <label>Date</label>
                     <br />
@@ -64,4 +57,4 @@ class FormMetricMeasurement extends Component {
     };
 };
 
-export default FormMetricMeasurement;
+export default FormMetricMeasure;

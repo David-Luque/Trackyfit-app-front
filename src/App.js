@@ -28,7 +28,7 @@ import AllMetrics from './components/metrics_components/AllMetrics';
 import CreateMetrics from './components/metrics_components/CreateMetric';
 import DetailsMetric from './components/metrics_components/DetailsMetrics';
 import UpdateMetrics from './components/metrics_components/UpdateMetrics';
-import FormMetricMeasurement from './components/metrics_components/FormMetricMeasurement';
+import FormMetricMeasure from './components/metrics_components/FormMetricMeasure';
 
 
 
@@ -85,7 +85,7 @@ class App extends React.Component {
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/create-metric" component={CreateMetrics} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-metric/:id" component={DetailsMetric} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/update-metric" component={UpdateMetrics} />
-						<ProtectedRoute user={this.state.loggedInUser} exact path="/add-measurement" component={FormMetricMeasurement} />
+						<ProtectedRoute user={this.state.loggedInUser} exact path="/add-measure" component={FormMetricMeasure} />
 					</Switch>
 					
 				</div>
@@ -100,7 +100,7 @@ class App extends React.Component {
 						<Route exact path="/login" render={()=> <LogIn getTheUser={this.getTheUser} />} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/profile" component={UserProfile} />
 						
-						<ProtectedRoute user={this.state.loggedInUser} exact path="all-exercises" component={AllExercises} />
+						<ProtectedRoute user={this.state.loggedInUser} exact path="/all-exercises" component={AllExercises} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-exercise" component={DetailsExercise} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/create-exercise" component={CreateExercise} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/update-exercise" component={UpdateExercise} />
@@ -111,11 +111,11 @@ class App extends React.Component {
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-workout" component={DetailsWorkout} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/update-workout" component={UpdateWorkout} />
 
-						<ProtectedRoute user={this.state.loggedInUser} exact path="all-metrics" component={AllMetrics} />
+						<ProtectedRoute user={this.state.loggedInUser} exact path="/all-metrics" component={AllMetrics} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/create-metric" component={CreateMetrics} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/details-metric" component={DetailsMetric} />
 						<ProtectedRoute user={this.state.loggedInUser} exact path="/update-metric" component={UpdateMetrics} />
-						<ProtectedRoute user={this.state.loggedInUser} exact path="/add-measurement" component={FormMetricMeasurement} />
+						<ProtectedRoute user={this.state.loggedInUser} exact path="/add-measure" component={FormMetricMeasure} />
 					</Switch>
 				</div>
 			)

@@ -18,8 +18,8 @@ class MetricsService {
     .then(response => response.data)
   }
 
-  createMetric = (name)=>{
-    return this.service.post('/create-metric', { name })
+  createMetric = (name, unit)=>{
+    return this.service.post('/create-metric', { name, unit })
     .then(response => response.data)
   };
 
@@ -27,6 +27,12 @@ class MetricsService {
     return this.service.get(`/metrics/${metricId}`)
     .then(response => response.data)
   };
+
+  deleteMetric = (metricId)=>{
+    return this.service.delete(`/metrics/${metricId}`)
+    .then(response => response.data)
+  };
+
 }
 
 export default MetricsService;
