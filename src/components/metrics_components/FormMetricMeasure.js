@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import MetricsService from '../../services/MetricsService';
+import MeasureService from '../../services/MeasureService';
 
 
 class FormMetricMeasure extends Component {
 
     state = {
         quantity: "",
-        unit: "",
         date: ""
     };
 
-    service = new MetricsService();
+    service = new MeasureService();
 
     handleChange = (event)=>{
         const { name, value } = event.target;
@@ -20,15 +19,14 @@ class FormMetricMeasure extends Component {
 
     handleFormSubmit = (e)=>{
         e.preventDefault();
-
-        const { quantity, unit, date } = this.state;
+        const { quantity, date } = this.state;
         const metric = this.props.metricId;
-        const results = { quantity, unit, date, metric };
-        this.service.addMeasure(results)
+        const theMeasure = { quantity, date, metric };
+        //console.log(theMeasure)
+        this.service.addMeasure(theMeasure)
         .then(response => {
             this.setState({
                 quantity: "",
-                unit: "",
                 date: ""
             })
             this.props.getMetricData();
@@ -44,11 +42,11 @@ class FormMetricMeasure extends Component {
                 <form onSubmit={this.handleFormSubmit}>
                     <label>{`Quantity (in ${this.props.metricUnit})`}</label>
                     <br />
-                    <input type="Number" name="quantity" value={this.state.quantity} onChange={(e)=>{this.handleChange(e)}}/>
+                    <input type="Number" name="quantity" value={this.state.quantity} required onChange={(e)=>{this.handleChange(e)}}/>
                     <br /><br />
                     <label>Date</label>
                     <br />
-                    <input type="Date" name="date" value={this.state.date} onChange={(e)=>{this.handleChange(e)}}/>
+                    <input type="Date" name="date" value={this.state.date} required onChange={(e)=>{this.handleChange(e)}}/>
                     <br /><br />
                     <Button type="submit">Confirm</Button>
                 </form>
