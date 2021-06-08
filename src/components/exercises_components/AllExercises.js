@@ -7,7 +7,7 @@ import CreateExercise from './CreateExercise';
 class AllExercises extends Component {
 
     state = {
-        exercisesInfo: null,
+        exercisesInfo: [],
         isCreateFormDisplayed: false
     };
 
@@ -18,7 +18,7 @@ class AllExercises extends Component {
     };
 
     getAllExercises = ()=>{
-        this.service.getAllExercises(this.props.loggedInUser._id)
+        this.service.getAllExercises()
         .then(resFromApi => {
             this.setState({ exercisesInfo: resFromApi });
         })
@@ -53,7 +53,7 @@ class AllExercises extends Component {
                 {this.state.isCreateFormDisplayed && <CreateExercise getAllExer={this.getAllExercises} handleCreateForm={this.handleCreateForm} />}
                 
                 <div>
-                    {this.state.exercisesInfo && this.renderExercises()}
+                    {this.state.exercisesInfo.length > 0 && this.renderExercises()}
                 </div>
             </div>
         );

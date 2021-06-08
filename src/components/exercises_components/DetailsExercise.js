@@ -24,16 +24,17 @@ class DetailsWorkouts extends React.Component {
   userService = new UserService()
 
   componentDidMount(){
+    this.fetchUser()
+    this.getExerciseInfo();
+  };
+
+  fetchUser = ()=>{
     this.userService.loggedIn()
     .then((response)=>{
       this.setState({loggedInUser: response})
     })
     .catch(err=>console.log(err))
-    .then(()=>{
-      this.getExerciseInfo();
-    })
-    .catch(err=>console.log(err))
-  }
+  };
   
   getExerciseInfo = ()=>{
     this.exerService.getExerciseInfo(this.props.match.params.id) 
@@ -87,7 +88,6 @@ class DetailsWorkouts extends React.Component {
       <canvas className="workouts-chart" id="myChart"></canvas>
     );
   };
-
 
   renderChart(){
       const repsData = this.state.exerciseData.results.map((element)=>{
@@ -155,7 +155,34 @@ class DetailsWorkouts extends React.Component {
           }
       });
       return chart
-  }
+  };
+
+  ownerCheck = ()=>{
+    if(this.props.loggedInUser && this.props.loggedInUser._id === this.state.exerciseData.owner){
+      return(
+        <div>
+          <Button onClick={this.handleRenameForm}>
+                {this.state.isRenameDisplayed ? "Cancel" : "Rename"}
+              </Button>
+              <br />    
+              
+              {this.state.isRenameDisplayed && 
+                <EditExercise 
+                  exerciseId={this.state.exerciseData._id}
+                  getExerciseInfo={this.getExerciseInfo}
+                  handleRenameForm={this.handleRenameForm}
+                  exerciseName={this.state.exerciseData.name}
+                />
+              }
+
+              <br />
+              <hr />
+          <Button onClick={this.deleteExercise}>Delete</Button>
+        </div>
+      )
+    }
+    
+  };
 
 
   render(){
@@ -168,28 +195,14 @@ class DetailsWorkouts extends React.Component {
         </Button>
 
         {this.state.isResultsFormDisplayed && this.displayResultsForm()}
-        
+          
         <div className="all-exercises-container">
-          {this.state.exerciseData === "" || this.state.exerciseData.results === []
+          {this.state.exerciseData === "" || this.state.exerciseData.results.length === 0
             ? this.renderLoadInfo() 
             : this.displayChart() }
         </div>
 
-        <Button onClick={this.handleRenameForm}>
-          {this.state.isRenameDisplayed ? "Cancel" : "Rename"}
-        </Button>
-        <br />    
-        {this.state.isRenameDisplayed && 
-          <EditExercise 
-            exerciseId={this.state.exerciseData._id}
-            getExerciseInfo={this.getExerciseInfo}
-            handleRenameForm={this.handleRenameForm}
-          />
-        }
-
-        <br />
-        <hr />
-        <Button onClick={this.deleteExercise}>Delete</Button>
+        {this.ownerCheck()}
       
       </div>
     )    

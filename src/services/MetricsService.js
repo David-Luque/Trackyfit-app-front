@@ -12,17 +12,22 @@ class MetricsService {
   }
 
   getAllMetrics = () => {
-    return this.service.get('/all-metrics')
+    return this.service.get('/metrics')
     .then(response => response.data)
   }
 
   createMetric = (name, unit)=>{
-    return this.service.post('/create-metric', { name, unit })
+    return this.service.post('/metrics', { name, unit })
     .then(response => response.data)
   };
 
   getMetricInfo = (metricId)=>{
     return this.service.get(`/metrics/${metricId}`)
+    .then(response => response.data)
+  };
+
+  editMetric = (metricId, name, unit)=>{
+    return this.service.put(`/metrics/${metricId}`, { name, unit })
     .then(response => response.data)
   };
 

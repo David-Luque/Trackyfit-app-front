@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import MetricService from '../../services/MetricsService';
 
-class CreateMetric extends Component {
+class EditMetric extends Component {
 
     state = {
-        name: "",
-        unit: ""
+        name: this.props.metricInfo.name,
+        unit: this.props.metricInfo.unit
     };
 
     service = new MetricService();
@@ -19,11 +19,10 @@ class CreateMetric extends Component {
     handleFormSubmit = (event)=>{
         event.preventDefault();
         const { name, unit } = this.state;
-        this.service.createMetric(name, unit)
+        this.service.editMetric(this.props.metricId, name, unit)
         .then(response => {
-            console.log(response)
-            this.props.getAllMetrics();
-            this.props.handleCreateForm();
+            this.props.getMetricData();
+            this.props.handleEditForm();
         })
         .catch(err => console.log(err))
     };
@@ -32,20 +31,19 @@ class CreateMetric extends Component {
         return(
             <div>
                 <form onSubmit={this.handleFormSubmit} >
-                    <label>Metric name</label>
-                    <br/>
-                    <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
-                    <br /><br />
-                    <label>Units</label>
+                    <label>New metric name:</label>
                     <br />
-                    <input type="text" name="unit" value={this.state.unit} onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <Button type="submit">Create</Button>
+                    <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
+                    <br />
+                    <label>New metric units:</label>
+                    <br />
+                    <input type="text" name="unit" value={this.state.unit} onChange={(e)=>{this.handleChange(e)}} />
+                    <br />
+                    <Button type="submit">Edit</Button>
                 </form>
-                
             </div>
         );
     };
 };
 
-export default CreateMetric;
+export default EditMetric;

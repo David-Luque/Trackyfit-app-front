@@ -5,7 +5,7 @@ import ExerciseService from '../../services/ExerciseService';
 class EditExercise extends Component {
 
     state = {
-        name: "",
+        name: this.props.exerciseName,
     };
 
     service = new ExerciseService();

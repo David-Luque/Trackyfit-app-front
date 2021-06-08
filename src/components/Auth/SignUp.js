@@ -20,8 +20,8 @@ class SignUp extends React.Component {
 		this.service.signup(this.state.username, this.state.password)
 		.then((response) => {
 			this.setState({
-				username: '',
-				password: '',
+				username: "",
+				password: "",
 				message: response.message
 			});
 			this.props.getTheUser(response);

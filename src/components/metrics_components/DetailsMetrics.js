@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap';
+import EditMetric from './EditMetric';
 import FormMetricMeasure from './FormMetricMeasure';
 import MetricsService from '../../services/MetricsService';
 import UserService from '../../services/UserService'
@@ -13,7 +14,8 @@ class DetailsMetrics extends React.Component{
     loggedInUser: null,
     metricsData: "",
     dataBaseChecked: false,
-    isMeasureFormDisplayed: false
+    isMeasureFormDisplayed: false,
+    isEditFormDisplayed: false
   }
 
   metricService = new MetricsService()
@@ -21,16 +23,17 @@ class DetailsMetrics extends React.Component{
 
   
   componentDidMount(){
+    this.fetchUser();
+    this.getMetricData();
+  };
+
+  fetchUser = ()=>{
     this.userService.loggedIn()
     .then((response)=>{
       this.setState({loggedInUser: response})
     })
     .catch(err=>console.log(err))
-    .then(()=>{
-      this.getMetricData();
-    })
-    .catch(err=>console.log(err))
-  }
+  };
 
   getMetricData = ()=>{
     this.metricService.getMetricInfo(this.props.match.params.id)
@@ -42,6 +45,22 @@ class DetailsMetrics extends React.Component{
         this.renderChart();
       })
       .catch(err=>console.log(err))
+  };
+
+  renderInfo = ()=>{
+    if(this.state.metricsData === ""){
+      //console.log("emty string")
+      return this.displayLoad();
+    }
+
+    if(this.state.metricsData.measures.length === 0){
+      //console.log("empty array")
+      return this.displayLoad();
+    }
+
+    // console.log("displayChart")
+    // console.log(this.state.metricsData.measures)
+    return this.displayChart();
   };
 
   renderChart(){
@@ -95,15 +114,15 @@ class DetailsMetrics extends React.Component{
       return chart
   }
 
-  renderLoadInfo = ()=>{ 
+  displayLoad = ()=>{ 
     if (!this.state.dataBaseChecked) 
     {
       return <p className="data-message"> Loading...</p>
     } else {
       return <p className="data-message"> No data yet, try to add the first one </p>  
     }
-  }
-
+  };
+  
   displayChart = ()=>{
     return(
       <canvas className="metrics-chart" id="myChart"></canvas>
@@ -112,6 +131,23 @@ class DetailsMetrics extends React.Component{
 
   handleMeasureForm = ()=>{
     this.setState({ isMeasureFormDisplayed: !this.state.isMeasureFormDisplayed })
+  };
+
+  handleEditForm = ()=>{
+    this.setState({
+      isEditFormDisplayed: !this.state.isEditFormDisplayed
+    });
+  };
+
+  renderEditForm = ()=>{
+    return (
+      <EditMetric 
+        metricId={this.state.metricsData._id}
+        getMetricData={this.getMetricData}
+        handleEditForm={this.handleEditForm}
+        metricInfo={{ name: this.state.metricsData.name, unit: this.state.metricsData.unit }}
+      />
+    )
   };
 
   renderMeasureForm = ()=>{
@@ -134,26 +170,38 @@ class DetailsMetrics extends React.Component{
     .catch(err => console.log(err))
   };
 
+  ownerCheck = ()=>{
+    if(this.props.loggedInUser && this.props.loggedInUser._id === this.state.metricsData.owner) {
+      return (
+        <div>
+          <Button onClick={this.handleEditForm}>
+          {this.state.isEditFormDisplayed ? "Cancel" : "Edit metric"}
+          </Button>
+          {this.state.isEditFormDisplayed && this.renderEditForm()}
 
-  //Next TODO: fix message rendered without data or chart with data
+          <hr/>
+          <Button onClick={this.deleteMetric}>Delete Metric</Button>
+        </div>
+      )
+    }
+  }
+  
 
   render(){
     return(
       <div className="DetailsMetrics">
-          <h2>{this.state.metricsData.name}</h2>   
-          <Button variant="info" onClick={this.handleMeasureForm}>
-            {this.state.isMeasureFormDisplayed ? "Cancel" : "Add measure"}
-          </Button>
+        <h2>{this.state.metricsData.name}</h2>   
+        <Button variant="info" onClick={this.handleMeasureForm}>
+          {this.state.isMeasureFormDisplayed ? "Cancel" : "Add measure"}
+        </Button>
 
-          {this.state.isMeasureFormDisplayed && this.renderMeasureForm()}
+        {this.state.isMeasureFormDisplayed && this.renderMeasureForm()}
 
         <div className="all-exercises-container">
-          {this.state.metricsData === "" || this.state.metricsData.measures === []
-            ? this.renderLoadInfo() 
-            : this.displayChart() }
+          {this.renderInfo()}
         </div>
 
-        <Button onClick={this.deleteMetric}>Delete Metric</Button>
+        {this.ownerCheck()}
 
       </div>
     )    

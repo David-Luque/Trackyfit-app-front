@@ -16,6 +16,7 @@ class NavComp extends Component {
         this.userService = new  UserService();
     };
 
+    //TODO: change componentWillReceiveProps method
     componentWillReceiveProps(nextProps){
         this.setState({ ...this.state, loggedInUser: nextProps["userInSession"] });
     };
@@ -58,7 +59,7 @@ class NavComp extends Component {
                     <Navbar.Brand>
                         <Link to="/"> 
                             <img className="navbar-image" src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Athletics_pictogram.svg" alt="Trackifit" />
-                            <p className="logo-text">Trackifit</p>
+                            <p className="logo-text">Trackyfit</p>
                         </Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
