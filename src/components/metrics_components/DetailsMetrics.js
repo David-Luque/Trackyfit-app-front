@@ -164,8 +164,9 @@ class DetailsMetrics extends React.Component{
   deleteMetric = ()=>{
     this.metricService.deleteMetric(this.state.metricsData._id)
     .then(response => {
-      console.log(response)
-      this.props.history.push('/all-metrics')
+      console.log(response);
+      this.props.history.replace('/profile')
+      this.props.history.push('/all-metrics');
     })
     .catch(err => console.log(err))
   };

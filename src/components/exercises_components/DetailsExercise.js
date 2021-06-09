@@ -65,6 +65,7 @@ class DetailsWorkouts extends React.Component {
     this.exerService.deleteExercise(this.state.exerciseData._id)
     .then(response => {
       console.log(response);
+      this.props.history.replace("/profile")
       this.props.history.push("/all-exercises")
     })
   };
