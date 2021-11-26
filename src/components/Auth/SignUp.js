@@ -1,63 +1,65 @@
-import React from 'react';
-import Service from '../../services/UserService';
+import React, { useState } from 'react';
+import UserService from '../../services/UserService';
 import { Button, Form, Alert } from 'react-bootstrap';
 import '../../styles/LoginSignUp.css'
 import { withRouter } from 'react-router-dom';
 
-class SignUp extends React.Component {
+const SignUp = ({ getTheUser, history }) => {
 	
-	state = {
+	const [ state, setState ] = useState({
 		username: "",
 		password: "",
 		message: null
-	};
-
-	service = new Service();
+	});
 	
 
-	handleFormSubmit = (event) => {
+	const userService = new UserService();
+	
+
+	const handleFormSubmit = (event) => {
 		event.preventDefault();
-		this.service.signup(this.state.username, this.state.password)
+		userService.signup(state.username, state.password)
 		.then((response) => {
-			this.setState({
+			setState({
 				username: "",
 				password: "",
 				message: response.message
 			});
-			this.props.getTheUser(response);
-			this.props.history.push("/profile")
+			getTheUser(response);
+			history.push("/profile")
 		})
 		.catch((err) => console.error(err));
 	};
 
-	handleChange = (event) => {
+	const handleChange = (event) => {
 		const { name, value } = event.target;
-		this.setState({ [name]: value });
+		setState({
+			...state,
+			[name]: value
+		});
 	};
 
 	
-	render() {
-		return (
-			<div className="SignUp">
-				<Form className="form" onSubmit={this.handleFormSubmit}>
-					
-					<Form.Group>
-						<Form.Label htmlFor="username">Username</Form.Label>
-						<Form.Control type="text" name="username" placeholder="Enter username" value={this.state.username} onChange={(event) => this.handleChange(event)} />
-					</Form.Group>
+	return (
+		<div className="SignUp">
+			<Form className="form" onSubmit={handleFormSubmit}>
+				
+				<Form.Group>
+					<Form.Label htmlFor="username">Username</Form.Label>
+					<Form.Control type="text" name="username" placeholder="Enter username" value={state.username} onChange={(e) => handleChange(e)} />
+				</Form.Group>
 
-					<Form.Group>
-						<Form.Label>Password</Form.Label>
-						<Form.Control type="password" name="password" placeholder="Password" value={this.state.password} onChange={(event) => this.handleChange(event)} />
-					</Form.Group>
+				<Form.Group>
+					<Form.Label>Password</Form.Label>
+					<Form.Control type="password" name="password" placeholder="Password" value={state.password} onChange={(e) => handleChange(e)} />
+				</Form.Group>
 
-					{this.state.message && <Alert variant='dark'> {this.state.message} </Alert>}
-					
-					<Button variant="info" type="submit"> Sign Up </Button>
-				</Form>
-			</div>
-		);
-	}
+				{state.message && <Alert variant='dark'> {state.message} </Alert>}
+				
+				<Button variant="info" type="submit"> Sign Up </Button>
+			</Form>
+		</div>
+	);
 }
 
 export default withRouter(SignUp);
