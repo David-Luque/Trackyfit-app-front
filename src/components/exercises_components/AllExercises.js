@@ -1,32 +1,35 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import ExerciseService from '../../services/ExerciseService';
 import CreateExercise from './CreateExercise';
 
-class AllExercises extends Component {
+const AllExercises = () => {
 
-    state = {
+    const [ state, setState ] = useState({
         exercisesInfo: [],
         isCreateFormDisplayed: false
-    };
+    });
 
-    service = new ExerciseService();
+    const exerciseService = new ExerciseService();
 
-    componentDidMount = ()=>{
-        this.getAllExercises();
-    };
+    useEffect(()=>{
+        getAllExercises();
+    }, []);
 
-    getAllExercises = ()=>{
-        this.service.getAllExercises()
+    const getAllExercises = ()=>{
+        exerciseService.getAllExercises()
         .then(resFromApi => {
-            this.setState({ exercisesInfo: resFromApi });
+            setState({
+                ...state,
+                exercisesInfo: resFromApi
+            });
         })
         .catch(err => console.log(err))
     };
 
-    renderExercises = ()=>{
-        return this.state.exercisesInfo.map((element, index) => {
+    const renderExercises = ()=>{
+        return state.exercisesInfo.map((element, index) => {
             return(
                 <div key={index}>
                     <Link to={`/details-exercise/${element._id}`}>
@@ -37,27 +40,30 @@ class AllExercises extends Component {
         });
     };
 
-    handleCreateForm = ()=>{
-        this.setState({ isCreateFormDisplayed: !this.state.isCreateFormDisplayed });
+    const handleCreateForm = ()=>{
+        setState({
+            ...state,
+            isCreateFormDisplayed: !state.isCreateFormDisplayed
+        });
     };
 
 
-    render(){
-        return(
-            <div className="allExercises">
-                <h2>All Exercises</h2>
-                <Button variant="info" onClick={()=>{this.handleCreateForm()}}>
-                    {this.state.isCreateFormDisplayed ? "Cancel" : "Create exercise"}
-                </Button>
-                
-                {this.state.isCreateFormDisplayed && <CreateExercise getAllExer={this.getAllExercises} handleCreateForm={this.handleCreateForm} />}
-                
-                <div>
-                    {this.state.exercisesInfo.length > 0 && this.renderExercises()}
-                </div>
+    
+    return(
+        <div className="allExercises">
+            <h2>All Exercises</h2>
+            <Button variant="info" onClick={()=>{handleCreateForm()}}>
+                {state.isCreateFormDisplayed ? "Cancel" : "Create exercise"}
+            </Button>
+            
+            {state.isCreateFormDisplayed && <CreateExercise getAllExer={getAllExercises} handleCreateForm={handleCreateForm} />}
+            
+            <div>
+                {state.exercisesInfo.length > 0 && renderExercises()}
             </div>
-        );
-    };
+        </div>
+    );
+    
 }
 
 export default AllExercises;

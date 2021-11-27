@@ -1,73 +1,72 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ResultService from '../../services/ResultsService';
 
 
-class FormExerciseResuls extends Component {
+const FormExerciseResuls = ({ exerciseId, getExerciseInfo, handleResultsForm }) => {
 
-    state = {
+    const [ state, setState ] = useState({
         reps: "",
         time: "",
         weight: "",
         date: ""
-    };
+    });
 
-    service = new ResultService();
+    const resultService = new ResultService();
 
-    handleChange = (event)=>{
+    const handleChange = (event)=>{
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+        setState({
+            ...state,
+            [name]: value
+        });
     };
 
-    handleFormSubmit = (e)=>{
+    const handleFormSubmit = (e)=>{
         e.preventDefault();
-
-        const { reps, time, weight, date } = this.state;
-        const exercise = this.props.exerciseId;
+        const { reps, time, weight, date } = state;
+        const exercise = exerciseId;
 
         const results = { reps, time, weight, date, exercise };
-        //console.log(results)
-        this.service.addResults(results)
-        .then(response => {
-            this.setState({
+        resultService.addResults(results)
+        .then(() => {
+            setState({
                 reps: "",
                 time: "",
                 weight: "",
                 date: ""
             })
-            this.props.getExerciseInfo();
-            this.props.handleResultsForm();
+            getExerciseInfo();
+            handleResultsForm();
         })
         .catch()
 
     };
 
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleFormSubmit}>
-                    <label>Reps</label>
-                    <br />
-                    <input type="Number" name="reps" value={this.state.reps} onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <label>Weight</label>
-                    <br />
-                    <input type="Number" name="weight" value={this.state.weight} onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <label>Time</label>
-                    <br />
-                    <input type="Number" name="time" value={this.state.time} onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <label>Date</label>
-                    <br />
-                    <input type="Date" name="date" value={this.state.date} onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <Button type="submit">Confirm</Button>
-                </form>
-            </div>
-        );
-    };
+    return(
+        <div>
+            <form onSubmit={handleFormSubmit}>
+                <label>Reps</label>
+                <br />
+                <input type="Number" name="reps" value={state.reps} onChange={(e)=>{handleChange(e)}}/>
+                <br /><br />
+                <label>Weight</label>
+                <br />
+                <input type="Number" name="weight" value={state.weight} onChange={(e)=>{handleChange(e)}}/>
+                <br /><br />
+                <label>Time</label>
+                <br />
+                <input type="Number" name="time" value={state.time} onChange={(e)=>{handleChange(e)}}/>
+                <br /><br />
+                <label>Date</label>
+                <br />
+                <input type="Date" name="date" value={state.date} onChange={(e)=>{handleChange(e)}}/>
+                <br /><br />
+                <Button type="submit">Confirm</Button>
+            </form>
+        </div>
+    );
 };
 
 export default FormExerciseResuls;

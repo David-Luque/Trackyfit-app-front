@@ -1,42 +1,38 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ExerciseService from '../../services/ExerciseService';
 
-class CreateExercise extends Component {
+const CreateExercise = ({ getAllExer, handleCreateForm }) => {
 
-    state = {
-        name: "",
+    const [ name, setName ] = useState("");
+
+    const exerciseService = new ExerciseService();
+
+    const handleChange = (event)=>{
+        setName(event.target.value);
     };
 
-    service = new ExerciseService();
-
-    handleChange = (event)=>{
-        this.setState({ name: event.target.value });
-    };
-
-    handleFormSubmit = (event)=>{
+    const handleFormSubmit = (event)=>{
         event.preventDefault();
-        this.service.createExercise(this.state.name)
+        exerciseService.createExercise(name)
         .then(response => {
             console.log(response)
-            this.props.getAllExer();
-            this.props.handleCreateForm();
+            getAllExer();
+            handleCreateForm();
         })
         .catch(err => console.log(err))
     };
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleFormSubmit} >
-                    <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
-                    <br /><br />
-                    <Button type="submit">Create</Button>
-                </form>
-                
-            </div>
-        );
-    };
+    return(
+        <div>
+            <form onSubmit={handleFormSubmit} >
+                <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />
+                <br /><br />
+                <Button type="submit">Create</Button>
+            </form>
+            
+        </div>
+    );
 };
 
 export default CreateExercise;

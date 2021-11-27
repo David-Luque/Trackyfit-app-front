@@ -1,42 +1,38 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import ExerciseService from '../../services/ExerciseService';
 
-class EditExercise extends Component {
+const EditExercise = ({ exerciseName, exerciseId, getExerciseInfo, handleRenameForm }) => {
 
-    state = {
-        name: this.props.exerciseName,
+    const [ name, setName ] = useState(exerciseName);
+
+    const exerciseService = new ExerciseService();
+
+    const handleChange = (event)=>{
+        setName(event.target.value);
     };
 
-    service = new ExerciseService();
-
-    handleChange = (event)=>{
-        this.setState({ name: event.target.value });
-    };
-
-    handleFormSubmit = (event)=>{
+    const handleFormSubmit = (event)=>{
         event.preventDefault();
-        this.service.editExercise(this.props.exerciseId, this.state.name)
-        .then(response => {
-            this.props.getExerciseInfo();
-            this.props.handleRenameForm();
+        exerciseService.editExercise(exerciseId, name)
+        .then(() => {
+            getExerciseInfo();
+            handleRenameForm();
         })
         .catch(err => console.log(err))
     };
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleFormSubmit} >
-                    <label>Set new exercise name:</label>
-                    <br />
-                    <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
-                    <br />
-                    <Button type="submit" >Edit</Button>
-                </form>
-            </div>
-        );
-    };
+    return(
+        <div>
+            <form onSubmit={handleFormSubmit} >
+                <label>Set new exercise name:</label>
+                <br />
+                <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />
+                <br />
+                <Button type="submit" >Edit</Button>
+            </form>
+        </div>
+    );
 };
 
 export default EditExercise;
