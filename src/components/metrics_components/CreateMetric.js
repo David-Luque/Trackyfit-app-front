@@ -1,51 +1,51 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import MetricService from '../../services/MetricsService';
 
-class CreateMetric extends Component {
+const CreateMetric = ({ getAllMetrics, handleCreateForm }) => {
 
-    state = {
+    const [ state, setState ] = useState({
         name: "",
         unit: ""
-    };
+    });
 
-    service = new MetricService();
+    const metricService = new MetricService();
 
-    handleChange = (event)=>{
+    const handleChange = (event)=>{
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+        setState({
+            ...state,
+            [name]: value
+        });
     };
 
-    handleFormSubmit = (event)=>{
+    const handleFormSubmit = (event)=>{
         event.preventDefault();
-        const { name, unit } = this.state;
-        this.service.createMetric(name, unit)
+        const { name, unit } = state;
+        metricService.createMetric(name, unit)
         .then(response => {
-            console.log(response)
-            this.props.getAllMetrics();
-            this.props.handleCreateForm();
+            getAllMetrics();
+            handleCreateForm();
         })
         .catch(err => console.log(err))
     };
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleFormSubmit} >
-                    <label>Metric name</label>
-                    <br/>
-                    <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
-                    <br /><br />
-                    <label>Units</label>
-                    <br />
-                    <input type="text" name="unit" value={this.state.unit} onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <Button type="submit">Create</Button>
-                </form>
-                
-            </div>
-        );
-    };
+    return(
+        <div>
+            <form onSubmit={handleFormSubmit} >
+                <label>Metric name</label>
+                <br/>
+                <input type="text" name="name" value={state.name} onChange={(e)=>{handleChange(e)}} />
+                <br /><br />
+                <label>Units</label>
+                <br />
+                <input type="text" name="unit" value={state.unit} onChange={(e)=>{handleChange(e)}}/>
+                <br /><br />
+                <Button type="submit">Create</Button>
+            </form>
+            
+        </div>
+    );
 };
 
 export default CreateMetric;

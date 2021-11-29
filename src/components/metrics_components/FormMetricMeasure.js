@@ -1,58 +1,59 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import MeasureService from '../../services/MeasureService';
 
 
-class FormMetricMeasure extends Component {
+const FormMetricMeasure = ({ metricId, getMetricData, handleMeasureForm, metricUnit }) => {
 
-    state = {
+    const [ state, setState ] = useState({
         quantity: "",
         date: ""
-    };
+    });
+    
 
-    service = new MeasureService();
+    const measureService = new MeasureService();
 
-    handleChange = (event)=>{
+    const handleChange = (event)=>{
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+        setState({
+            ...state,
+            [name]: value
+        });
     };
 
-    handleFormSubmit = (e)=>{
+    const handleFormSubmit = (e)=>{
         e.preventDefault();
-        const { quantity, date } = this.state;
-        const metric = this.props.metricId;
+        const { quantity, date } = state;
+        const metric = metricId;
         const theMeasure = { quantity, date, metric };
-        //console.log(theMeasure)
-        this.service.addMeasure(theMeasure)
+        measureService.addMeasure(theMeasure)
         .then(response => {
-            this.setState({
+            setState({
                 quantity: "",
                 date: ""
             })
-            this.props.getMetricData();
-            this.props.handleMeasureForm();
+            getMetricData();
+            handleMeasureForm();
         })
-        .catch()
+        .catch(err => console.log(err)) 
     };
 
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleFormSubmit}>
-                    <label>{`Quantity (in ${this.props.metricUnit})`}</label>
-                    <br />
-                    <input type="Number" name="quantity" value={this.state.quantity} required onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <label>Date</label>
-                    <br />
-                    <input type="Date" name="date" value={this.state.date} required onChange={(e)=>{this.handleChange(e)}}/>
-                    <br /><br />
-                    <Button type="submit">Confirm</Button>
-                </form>
-            </div>
-        );
-    };
+    return(
+        <div>
+            <form onSubmit={handleFormSubmit}>
+                <label>{`Quantity (in ${metricUnit})`}</label>
+                <br />
+                <input type="Number" name="quantity" value={state.quantity} required onChange={(e)=>{handleChange(e)}}/>
+                <br /><br />
+                <label>Date</label>
+                <br />
+                <input type="Date" name="date" value={state.date} required onChange={(e)=>{handleChange(e)}}/>
+                <br /><br />
+                <Button type="submit">Confirm</Button>
+            </form>
+        </div>
+    );
 };
 
 export default FormMetricMeasure;

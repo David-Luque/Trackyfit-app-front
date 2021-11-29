@@ -1,49 +1,50 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import MetricService from '../../services/MetricsService';
 
-class EditMetric extends Component {
+const EditMetric = ({ metricInfo, metricId, getMetricData, handleEditForm }) => {
 
-    state = {
-        name: this.props.metricInfo.name,
-        unit: this.props.metricInfo.unit
-    };
+    const [ state, setState ] = useState({
+        name: metricInfo.name,
+        unit: metricInfo.unit
+    });
 
-    service = new MetricService();
+    const metricService = new MetricService();
 
-    handleChange = (event)=>{
+    const handleChange = (event)=>{
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+        setState({
+            ...state,
+            [name]: value
+        });
     };
 
-    handleFormSubmit = (event)=>{
+    const handleFormSubmit = (event)=>{
         event.preventDefault();
-        const { name, unit } = this.state;
-        this.service.editMetric(this.props.metricId, name, unit)
+        const { name, unit } = state;
+        metricService.editMetric(metricId, name, unit)
         .then(response => {
-            this.props.getMetricData();
-            this.props.handleEditForm();
+            getMetricData();
+            handleEditForm();
         })
         .catch(err => console.log(err))
     };
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleFormSubmit} >
-                    <label>New metric name:</label>
-                    <br />
-                    <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
-                    <br />
-                    <label>New metric units:</label>
-                    <br />
-                    <input type="text" name="unit" value={this.state.unit} onChange={(e)=>{this.handleChange(e)}} />
-                    <br />
-                    <Button type="submit">Edit</Button>
-                </form>
-            </div>
-        );
-    };
+    return(
+        <div>
+            <form onSubmit={handleFormSubmit} >
+                <label>New metric name:</label>
+                <br />
+                <input type="text" name="name" value={state.name} onChange={(e)=>{handleChange(e)}} />
+                <br />
+                <label>New metric units:</label>
+                <br />
+                <input type="text" name="unit" value={state.unit} onChange={(e)=>{handleChange(e)}} />
+                <br />
+                <Button type="submit">Edit</Button>
+            </form>
+        </div>
+    );
 };
 
 export default EditMetric;

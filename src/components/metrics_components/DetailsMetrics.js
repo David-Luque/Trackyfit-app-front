@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from 'react-bootstrap';
 import EditMetric from './EditMetric';
 import FormMetricMeasure from './FormMetricMeasure';
@@ -8,66 +8,62 @@ import Chart from 'chart.js';
 import '../../styles/DetailsChart.css'
 
 
-class DetailsMetrics extends React.Component{
+const DetailsMetrics = ({ match, history, loggedInUser }) => {
 
-  state = {
+  const [ state, setState ] = useState({
     loggedInUser: null,
     metricsData: "",
     dataBaseChecked: false,
     isMeasureFormDisplayed: false,
     isEditFormDisplayed: false
-  }
+  });
 
-  metricService = new MetricsService()
-  userService = new UserService()
+  const metricService = new MetricsService()
+  const userService = new UserService()
 
+  useEffect(()=>{
+    fetchUser();
+    getMetricData();
+  }, []);
   
-  componentDidMount(){
-    this.fetchUser();
-    this.getMetricData();
-  };
 
-  fetchUser = ()=>{
-    this.userService.loggedIn()
+  const fetchUser = ()=>{
+    userService.loggedIn()
     .then((response)=>{
-      this.setState({loggedInUser: response})
+      setState({
+        ...state,
+        loggedInUser: response
+      })
     })
     .catch(err=>console.log(err))
   };
 
-  getMetricData = ()=>{
-    this.metricService.getMetricInfo(this.props.match.params.id)
+  const getMetricData = ()=>{
+    metricService.getMetricInfo(match.params.id)
       .then(result => {
-        this.setState({
+        setState({
+          ...state,
           metricsData: result, 
           dataBaseChecked: true
         })
-        this.renderChart();
+        renderChart();
       })
       .catch(err=>console.log(err))
   };
 
-  renderInfo = ()=>{
-    if(this.state.metricsData === ""){
-      //console.log("emty string")
-      return this.displayLoad();
+  const renderInfo = ()=>{
+    if(state.metricsData === "" || state.metricsData.measures.length === 0){
+      return displayLoad();
     }
-
-    if(this.state.metricsData.measures.length === 0){
-      //console.log("empty array")
-      return this.displayLoad();
-    }
-
-    // console.log("displayChart")
-    // console.log(this.state.metricsData.measures)
-    return this.displayChart();
+    
+    return displayChart();
   };
 
-  renderChart(){
-      const quantityData = this.state.metricsData.measures.map((element)=>{
+  function renderChart(){
+      const quantityData = state.metricsData.measures.map((element)=>{
         return element.quantity
       })
-      const dateData = this.state.metricsData.measures.map((element)=>{
+      const dateData = state.metricsData.measures.map((element)=>{
         const stringDate = element.date.toString();
         const day = stringDate.substr(8, 2);
         const month = stringDate.substr(5, 2);
@@ -114,8 +110,8 @@ class DetailsMetrics extends React.Component{
       return chart
   }
 
-  displayLoad = ()=>{ 
-    if (!this.state.dataBaseChecked) 
+  const displayLoad = ()=>{ 
+    if (!state.dataBaseChecked) 
     {
       return <p className="data-message"> Loading...</p>
     } else {
@@ -123,90 +119,92 @@ class DetailsMetrics extends React.Component{
     }
   };
   
-  displayChart = ()=>{
+  const displayChart = ()=>{
     return(
       <canvas className="metrics-chart" id="myChart"></canvas>
     );
   };
 
-  handleMeasureForm = ()=>{
-    this.setState({ isMeasureFormDisplayed: !this.state.isMeasureFormDisplayed })
+  const handleMeasureForm = ()=>{
+    setState({
+      ...state,
+      isMeasureFormDisplayed: !state.isMeasureFormDisplayed
+    })
   };
 
-  handleEditForm = ()=>{
-    this.setState({
-      isEditFormDisplayed: !this.state.isEditFormDisplayed
+  const handleEditForm = ()=>{
+    setState({
+      ...state,
+      isEditFormDisplayed: !state.isEditFormDisplayed
     });
   };
 
-  renderEditForm = ()=>{
+  const renderEditForm = ()=>{
     return (
       <EditMetric 
-        metricId={this.state.metricsData._id}
-        getMetricData={this.getMetricData}
-        handleEditForm={this.handleEditForm}
-        metricInfo={{ name: this.state.metricsData.name, unit: this.state.metricsData.unit }}
+        metricId={state.metricsData._id}
+        getMetricData={getMetricData}
+        handleEditForm={handleEditForm}
+        metricInfo={{ name: state.metricsData.name, unit: state.metricsData.unit }}
       />
     )
   };
 
-  renderMeasureForm = ()=>{
+  const renderMeasureForm = ()=>{
     return(
       <FormMetricMeasure 
-        getMetricData={this.getMetricData}
-        handleMeasureForm={this.handleMeasureForm}
-        metricId={this.state.metricsData._id}
-        metricUnit={this.state.metricsData.unit}
+        getMetricData={getMetricData}
+        handleMeasureForm={handleMeasureForm}
+        metricId={state.metricsData._id}
+        metricUnit={state.metricsData.unit}
       />
     )
   };
 
-  deleteMetric = ()=>{
-    this.metricService.deleteMetric(this.state.metricsData._id)
+  const deleteMetric = ()=>{
+    metricService.deleteMetric(state.metricsData._id)
     .then(response => {
       console.log(response);
-      this.props.history.replace('/profile')
-      this.props.history.push('/all-metrics');
+      history.replace('/profile')
+      history.push('/all-metrics');
     })
     .catch(err => console.log(err))
   };
 
-  ownerCheck = ()=>{
-    if(this.props.loggedInUser && this.props.loggedInUser._id === this.state.metricsData.owner) {
+  const ownerCheck = ()=>{
+    if(loggedInUser && loggedInUser._id === state.metricsData.owner) {
       return (
         <div>
-          <Button onClick={this.handleEditForm}>
-          {this.state.isEditFormDisplayed ? "Cancel" : "Edit metric"}
+          <Button onClick={handleEditForm}>
+          {state.isEditFormDisplayed ? "Cancel" : "Edit metric"}
           </Button>
-          {this.state.isEditFormDisplayed && this.renderEditForm()}
+          {state.isEditFormDisplayed && renderEditForm()}
 
           <hr/>
-          <Button onClick={this.deleteMetric}>Delete Metric</Button>
+          <Button onClick={deleteMetric}>Delete Metric</Button>
         </div>
       )
     }
   }
   
 
-  render(){
-    return(
-      <div className="DetailsMetrics">
-        <h2>{this.state.metricsData.name}</h2>   
-        <Button variant="info" onClick={this.handleMeasureForm}>
-          {this.state.isMeasureFormDisplayed ? "Cancel" : "Add measure"}
-        </Button>
+  return(
+    <div className="DetailsMetrics">
+      <h2>{state.metricsData.name}</h2>   
+      <Button variant="info" onClick={handleMeasureForm}>
+        {state.isMeasureFormDisplayed ? "Cancel" : "Add measure"}
+      </Button>
 
-        {this.state.isMeasureFormDisplayed && this.renderMeasureForm()}
+      {state.isMeasureFormDisplayed && renderMeasureForm()}
 
-        <div className="all-exercises-container">
-          {this.renderInfo()}
-        </div>
-
-        {this.ownerCheck()}
-
+      <div className="all-exercises-container">
+        {renderInfo()}
       </div>
-    )    
-  }
+
+      {ownerCheck()}
+
+    </div>
+  )    
 }
 
 export default DetailsMetrics

@@ -1,33 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import MetricsService from '../../services/MetricsService';
 import CreateMetric from './CreateMetric';
 
-class AllMetrics extends Component {
+const AllMetrics = () => {
 
-    state = {
+    const [ state, setState ] = useState({
         metricsInfo: [],
         isCreateFormDisplayed: false
-    };
+    });
 
-    service = new MetricsService();
+    const metricService = new MetricsService();
 
-    componentDidMount = ()=>{
+    useEffect(()=>{
         this.getAllMetrics();
-    };
+    }, []);
+    
 
-    getAllMetrics = ()=>{
-        this.service.getAllMetrics()
+    const getAllMetrics = ()=>{
+        metricService.getAllMetrics()
         .then(response => {
-            //console.log(response)
-            this.setState({ metricsInfo: response });
+            setState({
+                ...state,
+                metricsInfo: response
+            });
         })
         .catch(err => console.log(err))
     };
 
-    renderMetrics = ()=>{
-        return this.state.metricsInfo.map((element, index) => {
+    const renderMetrics = ()=>{
+        return state.metricsInfo.map((element, index) => {
             return(
                 <div key={index}>
                     <Link to={`/details-metric/${element._id}`}>
@@ -38,27 +41,28 @@ class AllMetrics extends Component {
         });
     };
 
-    handleCreateForm = ()=>{
-        this.setState({ isCreateFormDisplayed: !this.state.isCreateFormDisplayed });
+    const handleCreateForm = ()=>{
+        setState({
+            ...state,
+            isCreateFormDisplayed: !this.state.isCreateFormDisplayed
+        });
     };
 
 
-    render(){
-        return(
-            <div className="allMetrics">
-                <h2>My metrics</h2>
-                <Button variant="info" onClick={()=>{this.handleCreateForm()}}>
-                    {this.state.isCreateFormDisplayed ? "Cancel" : "Create metric"}
-                </Button>
-                
-                {this.state.isCreateFormDisplayed && <CreateMetric getAllMetrics={this.getAllMetrics} handleCreateForm={this.handleCreateForm} />}
-                
-                <div>
-                    {this.state.metricsInfo.length > 0 && this.renderMetrics()}
-                </div>
+    return(
+        <div className="allMetrics">
+            <h2>My metrics</h2>
+            <Button variant="info" onClick={()=>handleCreateForm()}>
+                {state.isCreateFormDisplayed ? "Cancel" : "Create metric"}
+            </Button>
+            
+            {state.isCreateFormDisplayed && <CreateMetric getAllMetrics={getAllMetrics} handleCreateForm={handleCreateForm} />}
+            
+            <div>
+                {state.metricsInfo.length > 0 && renderMetrics()}
             </div>
-        );
-    };
+        </div>
+    );
 }
 
 export default AllMetrics;
