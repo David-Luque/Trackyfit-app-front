@@ -1,33 +1,30 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import WorkoutService from '../../services/WorkoutService';
 import CreateWorkout from './CreateWorkout';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-class AllWorkouts extends Component {
+const AllWorkouts = () => {
     
-    state = {
-        workouts: null
-    };
+    const [ workouts, setWorkouts ] = useState(null);
+    const [ isCreateWorkoutDisplayed, setIsCreateWorkoutDisplayed ] = useState(false);
 
-    service = new WorkoutService();
+    const workoutService = new WorkoutService();
 
-    // componentDidMount = ()=>{
-    //     this.getAllWorkouts();
-    // };
-
-    getAllWorkouts = ()=>{
-        this.service.getWorkouts()
+    const getAllWorkouts = ()=>{
+        workoutService.getWorkouts()
         .then(response => {
-            this.setState({
-                workouts: response
-            });
+            setWorkouts(response);
         })
         .catch(err => console.log(err))
     };
 
-    displayWorkouts = ()=>{
-        return this.state.workouts.map(element => {
+    useEffect(()=>{
+        getAllWorkouts();
+    }, []);
+
+    const displayWorkouts = ()=>{
+        return workouts.map(element => {
             return(
                 <Link to={`/workouts/${element._id}`}>
                     <div>
@@ -39,22 +36,20 @@ class AllWorkouts extends Component {
         });
     };
 
-    handleCreateForm = ()=>{
-        this.setState({ isCreateWorkoutDisplayed: !this.state.isCreateWorkoutDisplayed });
+    const handleCreateForm = ()=>{
+        setIsCreateWorkoutDisplayed(!isCreateWorkoutDisplayed);
     };
     
-    render(){
-        return(
-            <div>
-                <h2>Workouts history</h2>
-                {this.state.workouts && this.displayWorkouts()}
-                <Button onClick={this.handleCreateForm}>
-                    {this.state.isCreateWorkoutDisplayed ? "Cancel" : "Create Workout"}
-                </Button>
-                {this.state.isCreateWorkoutDisplayed && <CreateWorkout/>}
-            </div>
-        )
-    };
+    return(
+        <div>
+            <h2>Workouts history</h2>
+            {workouts && displayWorkouts()}
+            <Button onClick={handleCreateForm}>
+                {isCreateWorkoutDisplayed ? "Cancel" : "Create Workout"}
+            </Button>
+            {isCreateWorkoutDisplayed && <CreateWorkout/>}
+        </div>
+    )
 };
 
 export default AllWorkouts;

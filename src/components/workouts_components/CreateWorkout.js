@@ -1,50 +1,51 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import WorkoutService from '../../services/WorkoutService';
 
-class CreateExercise extends Component {
+const CreateExercise = ({ getAllExer, handleCreateForm }) => {
 
-    state = {
+    const [ state, setState ] = useState({
         name: "",
         date: ""
-    };
+    });
 
-    //service = new ExerciseService();
+    const workoutService = new WorkoutService();
 
-    handleChange = (event)=>{
+    const handleChange = (event)=>{
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+        setState({
+            ...state,
+            [name]: value
+        });
     };
 
-    handleFormSubmit = (event)=>{
+    const handleFormSubmit = (event)=>{
         event.preventDefault();
         const newWorkout = {
-            name: this.state.name,
-            date: this.state.date
+            name: state.name,
+            date: state.date
         };
-        this.service.createWorkout(newWorkout)
-        .then(response => {
-            // console.log(response)
-            // this.props.getAllExer();
-            // this.props.handleCreateForm();
+        workoutService.createWorkout(newWorkout)
+        .then(() => {
+            getAllExer();
+            handleCreateForm();
         })
         .catch(err => console.log(err))
     };
 
-    render(){
-        return(
-            <div>
-                <form onSubmit={this.handleFormSubmit} >
-                    <label>Name</label>
-                    <input type="text" name="name" value={this.state.name} onChange={(e)=>{this.handleChange(e)}} />
-                    <label>Date</label>
-                    <input type="date" name="date" value={this.state.date} onChange={(e)=>{this.handleChange(e)}} />
-                    <br /><br />
-                    <Button type="submit">Create</Button>
-                </form>
-                
-            </div>
-        );
-    };
+    return(
+        <div>
+            <form onSubmit={handleFormSubmit} >
+                <label>Name</label>
+                <input type="text" name="name" value={state.name} onChange={(e)=>{handleChange(e)}} />
+                <label>Date</label>
+                <input type="date" name="date" value={state.date} onChange={(e)=>{handleChange(e)}} />
+                <br /><br />
+                <Button type="submit">Create</Button>
+            </form>
+            
+        </div>
+    );
 };
 
 export default CreateExercise;
