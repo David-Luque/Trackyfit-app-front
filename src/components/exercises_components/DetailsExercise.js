@@ -72,7 +72,7 @@ const DetailsWorkouts = ({ match, history, loggedInUser }) => {
   const deleteExercise = ()=>{
     exerService.deleteExercise(state.exerciseData._id)
     .then(response => {
-      console.log(response);
+      //console.log(response);
       history.replace("/profile")
       history.push("/all-exercises")
     })

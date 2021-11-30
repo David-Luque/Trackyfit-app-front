@@ -15,8 +15,7 @@ const CreateExercise = ({ getAllExer, handleCreateForm }) => {
     const handleFormSubmit = (event)=>{
         event.preventDefault();
         exerciseService.createExercise(name)
-        .then(response => {
-            console.log(response)
+        .then(() => {
             getAllExer();
             handleCreateForm();
         })

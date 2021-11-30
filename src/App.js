@@ -51,7 +51,7 @@ const App = () => {
 	}
 
 	const getTheUser = (userInfo) => {
-		loggedInUser(userInfo)
+		setLoggedInUser(userInfo)
 	};
 
 

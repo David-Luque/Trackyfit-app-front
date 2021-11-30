@@ -3,7 +3,7 @@ import axios from "axios";
 class ExerciseService {
   constructor() {
     let service = axios.create({
-      baseURL: `${process.env.TRACKYFIT_API_URL}`,
+      baseURL: `${process.env.REACT_APP_API_URL}`,
       withCredentials: true
     });
 
@@ -16,7 +16,6 @@ class ExerciseService {
   }
 
   createExercise = (name) => {
-    //console.log(name)
     return this.service.post('/create-exercise', { name })
     .then(response => response.data)
   }
