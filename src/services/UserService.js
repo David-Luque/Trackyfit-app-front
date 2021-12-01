@@ -5,7 +5,6 @@ import axios from "axios";
 class UserService {
 
   constructor() {
-    console.log(process.env.REACT_APP_API_URL)
     let service = axios.create({
       baseURL: `${process.env.REACT_APP_API_URL}`,
       withCredentials: true

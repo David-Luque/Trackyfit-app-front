@@ -16,6 +16,7 @@ class ExerciseService {
   }
 
   createExercise = (name) => {
+    console.log(name)
     return this.service.post('/create-exercise', { name })
     .then(response => response.data)
   }
