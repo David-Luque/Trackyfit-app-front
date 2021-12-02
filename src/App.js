@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import AuthState from './context/auth/authState';
+import AuthContext from './context/auth/authContext';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
-import UserService from './services/UserService';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -33,83 +34,71 @@ import FormMetricMeasure from './components/metrics_components/FormMetricMeasure
 
 const App = () => {
 	
-	const [loggedInUser, setLoggedInUser] = useState(null);
+	//const [loggedInUser, setLoggedInUser] = useState(null);
 
-	const userService = new UserService();
-
-	const fetchUser = () => {
-		if (loggedInUser === null) {
-			userService.loggedIn()
-			.then((response) => {
-				setLoggedInUser(response);
-			})
-			.catch((err) => {
-				console.log(err)
-				setLoggedInUser(false);
-			});
-		}
-	}
-
-	const getTheUser = (userInfo) => {
-		setLoggedInUser(userInfo)
-	};
+	const authContext = useContext(AuthContext);
+	const { user, loggedIn } = authContext;
 
 
-	fetchUser();
+	loggedIn();
 	
-	if(loggedInUser){
+	if(user){
 		return (
-			<div className="App">
-				<NavComp getTheUser={getTheUser} userInSession={loggedInUser}/>
-				<Switch>
-					<Route exact path="/" component={Home} />
-					<ProtectedRoute user={loggedInUser} exact path="/profile" component={UserProfile} />
+			<AuthState>
+				<div className="App">
+					<NavComp userInSession={user}/>
+					<Switch>
+						<Route exact path="/" component={Home} />
+						<ProtectedRoute user={user} exact path="/profile" component={UserProfile} />
 
-					<ProtectedRoute user={loggedInUser} exact path="/all-exercises" component={AllExercises} />
-					<ProtectedRoute user={loggedInUser} exact path="/details-exercise/:id" component={DetailsExercise} />
-					<ProtectedRoute user={loggedInUser} exact path="/create-exercise" component={CreateExercise} />
-					<ProtectedRoute user={loggedInUser} exact path="/form-results" component={FormExerciseResults} />
+						<ProtectedRoute user={user} exact path="/all-exercises" component={AllExercises} />
+						<ProtectedRoute user={user} exact path="/details-exercise/:id" component={DetailsExercise} />
+						<ProtectedRoute user={user} exact path="/create-exercise" component={CreateExercise} />
+						<ProtectedRoute user={user} exact path="/form-results" component={FormExerciseResults} />
 
-					<ProtectedRoute user={loggedInUser} exact path="/workouts" component={AllWorkouts} />
-					<ProtectedRoute user={loggedInUser} exact path="/create-workout" component={CreateWorkout} />
-					<ProtectedRoute user={loggedInUser} exact path="/workouts/:id" component={DetailsWorkout} />
-					<ProtectedRoute user={loggedInUser} exact path="/update-workout" component={UpdateWorkout} />
+						<ProtectedRoute user={user} exact path="/workouts" component={AllWorkouts} />
+						<ProtectedRoute user={user} exact path="/create-workout" component={CreateWorkout} />
+						<ProtectedRoute user={user} exact path="/workouts/:id" component={DetailsWorkout} />
+						<ProtectedRoute user={user} exact path="/update-workout" component={UpdateWorkout} />
 
-					<ProtectedRoute user={loggedInUser} exact path="/all-metrics" component={AllMetrics} />
-					<ProtectedRoute user={loggedInUser} exact path="/create-metric" component={CreateMetrics} />
-					<ProtectedRoute user={loggedInUser} exact path="/details-metric/:id" component={DetailsMetric} />
-					<ProtectedRoute user={loggedInUser} exact path="/update-metric" component={UpdateMetrics} />
-					<ProtectedRoute user={loggedInUser} exact path="/add-measure" component={FormMetricMeasure} />
-				</Switch>
-			</div>
+						<ProtectedRoute user={user} exact path="/all-metrics" component={AllMetrics} />
+						<ProtectedRoute user={user} exact path="/create-metric" component={CreateMetrics} />
+						<ProtectedRoute user={user} exact path="/details-metric/:id" component={DetailsMetric} />
+						<ProtectedRoute user={user} exact path="/update-metric" component={UpdateMetrics} />
+						<ProtectedRoute user={user} exact path="/add-measure" component={FormMetricMeasure} />
+					</Switch>
+				</div>
+			</AuthState>
 		);
 	} else {
 		return (
-			<div className="App">
-				<NavComp getTheUser={getTheUser} userInSession={loggedInUser}/>
-				<Switch>
-					<Route exact path="/" component={Home} />
-					<Route exact path="/signup" render={()=> <SignUp getTheUser={getTheUser} />} />
-					<Route exact path="/login" render={()=> <LogIn getTheUser={getTheUser} />} />
-					<ProtectedRoute user={loggedInUser} exact path="/profile" component={UserProfile} />
-					
-					<ProtectedRoute user={loggedInUser} exact path="/all-exercises" component={AllExercises} />
-					<ProtectedRoute user={loggedInUser} exact path="/details-exercise" component={DetailsExercise} />
-					<ProtectedRoute user={loggedInUser} exact path="/create-exercise" component={CreateExercise} />
-					<ProtectedRoute user={loggedInUser} exact path="/form-results" component={FormExerciseResults} />
+			<AuthState>
+				<div className="App">
+					<NavComp userInSession={user}/>
+					<Switch>
+						<Route exact path="/" component={Home} />
+						<Route exact path="/signup" render={()=> <SignUp />} />
+						<Route exact path="/login" render={()=> <LogIn />} />
+						<ProtectedRoute user={user} exact path="/profile" component={UserProfile} />
+						
+						<ProtectedRoute user={user} exact path="/all-exercises" component={AllExercises} />
+						<ProtectedRoute user={user} exact path="/details-exercise" component={DetailsExercise} />
+						<ProtectedRoute user={user} exact path="/create-exercise" component={CreateExercise} />
+						<ProtectedRoute user={user} exact path="/form-results" component={FormExerciseResults} />
 
-					<ProtectedRoute  user={loggedInUser} exact path="/all-workouts" component={AllWorkouts} />
-					<ProtectedRoute user={loggedInUser} exact path="/create-workout" component={CreateWorkout} />
-					<ProtectedRoute user={loggedInUser} exact path="/details-workout" component={DetailsWorkout} />
-					<ProtectedRoute user={loggedInUser} exact path="/update-workout" component={UpdateWorkout} />
+						<ProtectedRoute  user={user} exact path="/all-workouts" component={AllWorkouts} />
+						<ProtectedRoute user={user} exact path="/create-workout" component={CreateWorkout} />
+						<ProtectedRoute user={user} exact path="/details-workout" component={DetailsWorkout} />
+						<ProtectedRoute user={user} exact path="/update-workout" component={UpdateWorkout} />
 
-					<ProtectedRoute user={loggedInUser} exact path="/all-metrics" component={AllMetrics} />
-					<ProtectedRoute user={loggedInUser} exact path="/create-metric" component={CreateMetrics} />
-					<ProtectedRoute user={loggedInUser} exact path="/details-metric" component={DetailsMetric} />
-					<ProtectedRoute user={loggedInUser} exact path="/update-metric" component={UpdateMetrics} />
-					<ProtectedRoute user={loggedInUser} exact path="/add-measure" component={FormMetricMeasure} />
-				</Switch>
-			</div>
+						<ProtectedRoute user={user} exact path="/all-metrics" component={AllMetrics} />
+						<ProtectedRoute user={user} exact path="/create-metric" component={CreateMetrics} />
+						<ProtectedRoute user={user} exact path="/details-metric" component={DetailsMetric} />
+						<ProtectedRoute user={user} exact path="/update-metric" component={UpdateMetrics} />
+						<ProtectedRoute user={user} exact path="/add-measure" component={FormMetricMeasure} />
+					</Switch>
+				</div>
+			</AuthState>
 		)
 	}
 }
