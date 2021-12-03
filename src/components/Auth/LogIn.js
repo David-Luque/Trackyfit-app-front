@@ -1,40 +1,49 @@
-import React, { useState } from 'react';
-import UserService from '../../services/UserService';
+import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Form, Alert } from 'react-bootstrap';
-import '../../styles/LoginSignUp.css'
-import { withRouter } from 'react-router-dom';
+import AuthContext from '../../context/auth/authContext';
+import AlertsContext from '../../context/alerts/alertsContext';
 
-const LogIn = ({ getTheUser, history }) => {
+const LogIn = (props) => {
 	
-	const [ state, setState ] = useState({
-		username: "",
-		password: "",
-		message: null
+	const authContext = useContext(AuthContext);
+	const { isAuthenticated, userLogin, message } = authContext;
+
+	const alertsContext = useContext(AlertsContext);
+	const { alert, showAlert } = alertsContext;
+	
+	useEffect(()=>{
+		if(isAuthenticated) {
+			props.onSubmithistory.push('/profile')
+		};
+		if(message) {
+			showAlert(message.msg, message.category)
+		}
+	}, [ isAuthenticated, message ]);
+
+
+	const [ user, setUser ] = useState({
+		email: "",
+		password: ""
 	});
+	const { email, password } = user;
 	
-	
-	const userService = new UserService();
 	
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
-		userService.login(state.username, state.password)
-		.then((response) => {
-			setState({
-				username: '',
-				password: '',
-				message: response.message
-			});
-			getTheUser(response);
-			history.push("/profile");
-		})
-		.catch((err) => console.log(err));
+		
+		if(email.trim() === '' || password.trim() === '') {
+			return showAlert('All fields are required', 'alert-error')
+		}
+
+		userLogin({email, password});
 	};
 
 	const handleChange = (event) => {
 		const { name, value } = event.target;
-		setState({
-			...state,
+		setUser({
+			...user,
 			[name]: value
 		});
 	};
@@ -44,21 +53,25 @@ const LogIn = ({ getTheUser, history }) => {
 		<div className="LogIn">
 			<Form className="form" onSubmit={handleFormSubmit}>
 				<Form.Group>
-					<Form.Label htmlFor="username">Username</Form.Label>
-					<Form.Control type="text" name="username" placeholder="Enter username" value={state.username} onChange={(e) => handleChange(e)} />
+					<Form.Label htmlFor="email">Email</Form.Label>
+					<Form.Control type="email" name="email" placeholder="Enter your email" value={email} onChange={(e) => handleChange(e)} />
 				</Form.Group>
 
 				<Form.Group>
 					<Form.Label>Password</Form.Label>
-					<Form.Control type="password" name="password" placeholder="Password" value={state.password} onChange={(e) => handleChange(e)} />
+					<Form.Control type="password" name="password" placeholder="Your password" value={password} onChange={(e) => handleChange(e)} />
 				</Form.Group>
 
-				{state.message && <Alert variant='dark'> {state.message} </Alert>}
+				{alert && <Alert alert={alert} variant='dark' />}
 
 				<Button variant="info" type="submit"> Log In </Button>
 			</Form>
+			<p> 
+				Do not have an account yet?
+				<Link to={'/signup'}>Sign up here</Link>
+			</p>
 		</div>
 	);
 }
 
-export default withRouter(LogIn);
+export default LogIn;

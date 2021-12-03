@@ -1,40 +1,60 @@
-import React, { useState } from 'react';
-import UserService from '../../services/UserService';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, Alert } from 'react-bootstrap';
-import '../../styles/LoginSignUp.css'
-import { withRouter } from 'react-router-dom';
+import AuthContext from '../../context/auth/authContext';
+import AlertsContext from '../../context/alerts/alertsContext';
 
-const SignUp = ({ getTheUser, history }) => {
-	
-	const [ state, setState ] = useState({
+const SignUp = (props) => {
+
+	const authContext = useContext(AuthContext);
+	const { isAuthenticated, signup, message } = authContext;
+
+	const alertsContext = useContext(AlertsContext);
+	const { alert, showAlert } = alertsContext;
+
+	useEffect(() => {
+		if(isAuthenticated) {
+			props.history.push('/profile');
+		}
+		if(message) {
+			showAlert(message.msg, message.category);
+		}
+	}, [ isAuthenticated, message ])
+
+	const [ user, setUser ] = useState({
 		username: "",
+		email: "",
 		password: "",
-		message: null
+		secondPassword: ""
 	});
+	const { username, email, password, secondPassword } = user;
 	
-
-	const userService = new UserService();
 	
-
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
-		userService.signup(state.username, state.password)
-		.then((response) => {
-			setState({
-				username: "",
-				password: "",
-				message: response.message
-			});
-			getTheUser(response);
-			history.push("/profile")
-		})
-		.catch((err) => console.error(err));
+		if(
+			username.trim() === '' ||
+			email.trim() === ''||
+			password.trim() === '' ||
+			secondPassword.trim() === ''
+		) {
+			return showAlert('All fields are required', 'alert-error');
+		}
+
+		if(password.length < 6) {
+			return showAlert('Password must be at least 6 characters long', 'alert-warning')
+		}
+
+		if(password !== secondPassword) {
+			return showAlert('Both password must be identical', 'alert-error');
+		}
+
+		signup({ username, email, password })
 	};
 
 	const handleChange = (event) => {
 		const { name, value } = event.target;
-		setState({
-			...state,
+		setUser({
+			...user,
 			[name]: value
 		});
 	};
@@ -46,15 +66,25 @@ const SignUp = ({ getTheUser, history }) => {
 				
 				<Form.Group>
 					<Form.Label htmlFor="username">Username</Form.Label>
-					<Form.Control type="text" name="username" placeholder="Enter username" value={state.username} onChange={(e) => handleChange(e)} />
+					<Form.Control type="text" name="username" placeholder="Enter your username" value={username} onChange={(e) => handleChange(e)} />
 				</Form.Group>
 
 				<Form.Group>
-					<Form.Label>Password</Form.Label>
-					<Form.Control type="password" name="password" placeholder="Password" value={state.password} onChange={(e) => handleChange(e)} />
+					<Form.Label htmlFor="email">Email</Form.Label>
+					<Form.Control type="email" name="email" placeholder="Your email" value={email} onChange={(e) => handleChange(e)} />
 				</Form.Group>
 
-				{state.message && <Alert variant='dark'> {state.message} </Alert>}
+				<Form.Group>
+					<Form.Label htmlFor="password">Password</Form.Label>
+					<Form.Control type="password" name="password" placeholder="Set password" value={password} onChange={(e) => handleChange(e)} />
+				</Form.Group>
+
+				<Form.Group>
+					<Form.Label>Confirm Password</Form.Label>
+					<Form.Control type="password" name="secondPassword" placeholder="Repeat your password" value={secondPassword} onChange={(e) => handleChange(e)} />
+				</Form.Group>
+
+				{alert && <Alert alert={alert} variant='dark' />}
 				
 				<Button variant="info" type="submit"> Sign Up </Button>
 			</Form>
@@ -62,4 +92,4 @@ const SignUp = ({ getTheUser, history }) => {
 	);
 }
 
-export default withRouter(SignUp);
+export default SignUp;
