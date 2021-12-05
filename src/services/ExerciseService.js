@@ -26,14 +26,14 @@ class ExerciseService {
   //   .then(response => response.data)
   // };
 
-  getExerciseInfo = (id)=>{
-    return this.service.get(`/exercises/${id}`)
-    .then(response => response.data)
-  };
+  // getExerciseInfo = (id)=>{
+  //   return this.service.get(`/exercises/${id}`)
+  //   .then(response => response.data)
+  // };
 
-  deleteExercise = (id)=>{
-    return this.service.delete(`/exercises/${id}`)
-  };
+  // deleteExercise = (id)=>{
+  //   return this.service.delete(`/exercises/${id}`)
+  // };
 };
 
 export default ExerciseService;

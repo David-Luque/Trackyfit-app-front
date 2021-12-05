@@ -5,13 +5,17 @@ import ExerciseReducer from './exerciseReducer';
 import {
     GET_EXERCISES,
     ADD_EXERCISE,
-    EDIT_EXERCISE
+    EDIT_EXERCISE,
+    GET_EXERCISE_INFO,
+    DELETE_EXERCISE
 } from '../../types';
 
 const ExerciseState = ({ children })=>{
 
     const initialState = {
-        exercises: null
+        exercises: null,
+        exerciseData: null,
+        databaseChecked: false
     };
 
     const [ state, dispatch ] = useReducer(ExerciseReducer, initialState);
@@ -58,13 +62,41 @@ const ExerciseState = ({ children })=>{
         }
     };
 
+    const getExerciseInfo = async (id) => {
+        try {
+            const response = await axiosClient.get(`/exercises/${id}`);
+            console.log(response)
+            dispatch({
+                type: GET_EXERCISE_INFO,
+                payloda: response
+            });
+        } catch (err) {
+            console.log(err)
+        }
+    };
+
+    const deleteExercise = async (id) => {
+        try {
+            const response = await axiosClient.delete(`/exercises/${id}`);
+            console.log(response)
+            dispatch({
+                type: DELETE_EXERCISE
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    };
+
+
     return(
         <Exercisecontext.Provider
             value={{
                 exercises: state.exercises,
                 getAllExercises,
                 createExercise,
-                editExercise
+                editExercise,
+                getExerciseInfo,
+                deleteExercise
             }}
         >
             {children}
