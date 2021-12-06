@@ -15,3 +15,7 @@ export const HANDLE_METRIC_FORM = 'HANDLE_METRIC_FORM';
 export const GET_METRIC_INFO = 'GET_METRIC_INFO';
 export const EDIT_METRIC = 'EDIT_METRIC';
 export const DELETE_METRIC = 'DELETE_METRIC';
+
+export const ADD_RESULT = 'ADD_RESULT';
+
+export const ADD_MEASURE = 'ADD_MEASURE';

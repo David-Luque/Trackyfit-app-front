@@ -1,14 +1,14 @@
 import axios from "axios";
 
 class ExerciseService {
-  constructor() {
-    let service = axios.create({
-      baseURL: `${process.env.REACT_APP_API_URL}`,
-      withCredentials: true
-    });
+  // constructor() {
+  //   let service = axios.create({
+  //     baseURL: `${process.env.REACT_APP_API_URL}`,
+  //     withCredentials: true
+  //   });
 
-    this.service = service;
-  }
+  //   this.service = service;
+  // }
 
   // getAllExercises = () => {
   //   return this.service.get('/all-exercises')

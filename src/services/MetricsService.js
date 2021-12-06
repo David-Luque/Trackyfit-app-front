@@ -2,14 +2,14 @@ import axios from "axios";
 
 class MetricsService {
 
-  constructor() {
-    let service = axios.create({
-      baseURL: `${process.env.REACT_APP_API_URL}`,
-      withCredentials: true
-    });
+  // constructor() {
+  //   let service = axios.create({
+  //     baseURL: `${process.env.REACT_APP_API_URL}`,
+  //     withCredentials: true
+  //   });
 
-    this.service = service;
-  }
+  //   this.service = service;
+  // }
 
   // getAllMetrics = () => {
   //   return this.service.get('/metrics')

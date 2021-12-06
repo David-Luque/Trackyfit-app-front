@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import React, { useReducer } from "react";
 import axiosClient from "../../config/axios";
 import MetricsContext from "./metricsContext";
 import MetricsReducer from "./metricsReducer";
