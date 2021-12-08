@@ -14,7 +14,7 @@ const LogIn = (props) => {
 	
 	useEffect(()=>{
 		if(isAuthenticated) {
-			props.onSubmithistory.push('/profile')
+			props.history.push('/profile')
 		};
 		if(message) {
 			showAlert(message.msg, message.category)

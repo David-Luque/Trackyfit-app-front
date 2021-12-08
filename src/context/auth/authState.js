@@ -1,11 +1,12 @@
 import React, { useReducer } from 'react';
+import authToken from '../../config/authToken';
 import axiosClient from '../../config/axios';
 import AuthContext from './authContext';
 import AuthReducer from './authReducer';
 import {
     SIGNUP_USER,
     LOGIN_USER,
-    LOGGEDIN_USER,
+    AUTH_USER,
     LOGOUT_USER
 } from '../../types';
 
@@ -13,7 +14,7 @@ const AuthState = ({ children })=>{
 
     const initialState = {
         user: null,
-        authenticated: null,
+        authenticated: false,
         token: null,
         message: null
     };
@@ -46,11 +47,16 @@ const AuthState = ({ children })=>{
         }
     };
 
-    const loggedIn = async ()=>{
+    const authenticateUser = async ()=>{
+        const token = localStorage.getItem('token');
+        if(token) {
+            authToken(token)
+        }
+        
         try {
             const response = await axiosClient.get('/loggedin');
             dispatch({
-                type: LOGGEDIN_USER,
+                type: AUTH_USER,
                 payload: response
             });
         } catch(err) {
@@ -78,7 +84,7 @@ const AuthState = ({ children })=>{
                     authenticated: state.authenticated,
                     signup,
                     login,
-                    loggedIn,
+                    authenticateUser,
                     logout
                 }}
             >

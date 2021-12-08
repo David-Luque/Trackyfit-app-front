@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import ProtectedRoute from './components/Auth/ProtectedRoute';
+import PrivateRoute from './components/Auth/PrivateRoute';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -54,23 +54,23 @@ const App = () => {
 					<Route exact path="/" component={Home} />
 					<Route exact path="/signup" render={()=> <SignUp />} />
 					<Route exact path="/login" render={()=> <LogIn />} />
-					<ProtectedRoute exact path="/profile" component={UserProfile} />
+					<PrivateRoute exact path="/profile" component={UserProfile} />
 					
-					<ProtectedRoute exact path="/all-exercises" component={AllExercises} />
-					<ProtectedRoute exact path="/details-exercise" component={DetailsExercise} />
-					<ProtectedRoute exact path="/create-exercise" component={CreateExercise} />
-					<ProtectedRoute exact path="/form-results" component={FormExerciseResults} />
+					<PrivateRoute exact path="/all-exercises" component={AllExercises} />
+					<PrivateRoute exact path="/details-exercise" component={DetailsExercise} />
+					<PrivateRoute exact path="/create-exercise" component={CreateExercise} />
+					<PrivateRoute exact path="/form-results" component={FormExerciseResults} />
 
-					<ProtectedRoute exact path="/all-workouts" component={AllWorkouts} />
-					<ProtectedRoute exact path="/create-workout" component={CreateWorkout} />
-					<ProtectedRoute exact path="/details-workout" component={DetailsWorkout} />
-					<ProtectedRoute exact path="/update-workout" component={UpdateWorkout} />
+					<PrivateRoute exact path="/all-workouts" component={AllWorkouts} />
+					<PrivateRoute exact path="/create-workout" component={CreateWorkout} />
+					<PrivateRoute exact path="/details-workout" component={DetailsWorkout} />
+					<PrivateRoute exact path="/update-workout" component={UpdateWorkout} />
 
-					<ProtectedRoute exact path="/all-metrics" component={AllMetrics} />
-					<ProtectedRoute exact path="/create-metric" component={CreateMetrics} />
-					<ProtectedRoute exact path="/details-metric" component={DetailsMetric} />
-					<ProtectedRoute exact path="/update-metric" component={UpdateMetrics} />
-					<ProtectedRoute exact path="/add-measure" component={FormMetricMeasure} />
+					<PrivateRoute exact path="/all-metrics" component={AllMetrics} />
+					<PrivateRoute exact path="/create-metric" component={CreateMetrics} />
+					<PrivateRoute exact path="/details-metric" component={DetailsMetric} />
+					<PrivateRoute exact path="/update-metric" component={UpdateMetrics} />
+					<PrivateRoute exact path="/add-measure" component={FormMetricMeasure} />
 				</Switch>
 		</Router>
 		</AlertState>

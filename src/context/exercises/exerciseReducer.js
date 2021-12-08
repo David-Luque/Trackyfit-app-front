@@ -3,7 +3,8 @@ import {
     ADD_EXERCISE,
     EDIT_EXERCISE,
     GET_EXERCISE_INFO,
-    DELETE_EXERCISE
+    DELETE_EXERCISE,
+    HANDLE_EX_FORM
 } from '../../types';
 
 const ExerciseReducer = (state, action)=>{
@@ -26,6 +27,11 @@ const ExerciseReducer = (state, action)=>{
             return {
                 ...state,
                 exerciseData: null
+            }
+        case HANDLE_EX_FORM: 
+            return {
+                ...state,
+                isCreateFormDisplayed: !state.isCreateFormDisplayed
             }
         default:
             return state;

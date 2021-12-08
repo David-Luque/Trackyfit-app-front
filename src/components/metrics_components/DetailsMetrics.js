@@ -55,7 +55,6 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
     if(state.metricsData === "" || state.metricsData.measures.length === 0){
       return displayLoad();
     }
-    
     return displayChart();
   };
 

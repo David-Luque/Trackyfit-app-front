@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button } from 'react-bootstrap';
-import ExerciseService from '../../services/ExerciseService';
+import ExerciseContext from '../../context/exercises/exerciseContext';
 
-const CreateExercise = ({ getAllExer, handleCreateForm }) => {
+const CreateExercise = () => {
 
-    const [ name, setName ] = useState("");
+    const exerciseContext = useContext(ExerciseContext);
+    const { createExercise } = exerciseContext;
 
-    const exerciseService = new ExerciseService();
+    const [ name, setName ] = useState('');
 
     const handleChange = (event)=>{
         setName(event.target.value);
@@ -14,12 +15,8 @@ const CreateExercise = ({ getAllExer, handleCreateForm }) => {
 
     const handleFormSubmit = (event)=>{
         event.preventDefault();
-        exerciseService.createExercise(name)
-        .then(() => {
-            getAllExer();
-            handleCreateForm();
-        })
-        .catch(err => console.log(err.response))
+        createExercise(name)
+        setName('');
     };
 
     return(

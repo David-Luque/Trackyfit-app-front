@@ -7,7 +7,8 @@ import {
     ADD_EXERCISE,
     EDIT_EXERCISE,
     GET_EXERCISE_INFO,
-    DELETE_EXERCISE
+    DELETE_EXERCISE,
+    HANDLE_EX_FORM
 } from '../../types';
 
 const ExerciseState = ({ children })=>{
@@ -15,6 +16,7 @@ const ExerciseState = ({ children })=>{
     const initialState = {
         exercises: null,
         exerciseData: null,
+        isCreateFormDisplayed: false,
         databaseChecked: false
     };
 
@@ -41,7 +43,7 @@ const ExerciseState = ({ children })=>{
                 payload: response
             })
             getAllExercises();
-            //handleCreateForm();
+            handleCreateForm();
         } catch (err) {
             console.log(err);
         }
@@ -87,6 +89,12 @@ const ExerciseState = ({ children })=>{
         }
     };
 
+    const handleCreateForm = ()=>{
+        dispatch({
+            type: HANDLE_EX_FORM
+        })
+    };
+
 
     return(
         <Exercisecontext.Provider
@@ -96,7 +104,8 @@ const ExerciseState = ({ children })=>{
                 createExercise,
                 editExercise,
                 getExerciseInfo,
-                deleteExercise
+                deleteExercise,
+                handleCreateForm
             }}
         >
             {children}

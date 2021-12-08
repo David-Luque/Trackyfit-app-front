@@ -1,7 +1,7 @@
 import {
     SIGNUP_USER,
     LOGIN_USER,
-    LOGGEDIN_USER,
+    AUTH_USER,
     LOGOUT_USER
 } from '../../types';
 
@@ -14,7 +14,7 @@ const AuthReducer = (action, state)=>{
             }
         case LOGIN_USER:
             return state
-        case LOGGEDIN_USER:
+        case AUTH_USER:
             return {
                 ...state,
                 user: action.payload,
@@ -23,7 +23,9 @@ const AuthReducer = (action, state)=>{
         case LOGOUT_USER:
             return {
                 ...state,
-                message: action.payload
+                user: null,
+                authenticated: false,
+                token: null
             }
         
         default:

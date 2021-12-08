@@ -1,29 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import '../styles/Navbar.css'
 import { Link, withRouter } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import UserService from '../services/UserService';
+import AuthContext from '../context/auth/authContext';
+//import { useHistory } from 'react-router-dom';
 
 
 
-const NavComp = ({ getTheUser, userInSession, history }) => {
+const NavComp = (props) => {
 
-    const [ loggedInUser, setLoggedInUser ] = useState(null);
-
-    const userService = new UserService();
+    const authContext = useContext(AuthContext);
+    const { user, authenticated, authenticateUser, logout } = authContext;
 
     useEffect(()=>{
-        setLoggedInUser(userInSession);
-    }, [ userInSession ]);
+        authenticateUser();
+    }, []);
 
 
-    const logout = ()=>{
-        userService.logout()
-        .then(response =>{
-            setLoggedInUser(null);
-            getTheUser(null);
-            history.push("/");
-        })
+    const logoutSession = ()=>{
+        logout()
+        props.history.push("/");
     };
 
     const renderSignupLogin = ()=>{
@@ -38,9 +34,9 @@ const NavComp = ({ getTheUser, userInSession, history }) => {
     const renderUserOptions = ()=>{
         return(
             <Nav className="mr-auto">
-                <Nav.Link eventKey="3" as={Link} to="/profile">Profile</Nav.Link>
+                <Nav.Link eventKey="3" as={Link} to="/profile">{`${user.username} profile`}</Nav.Link>
                 <NavDropdown.Divider />
-                <Nav.Link eventKey="4" onClick={logout}>Log out</Nav.Link>
+                <Nav.Link eventKey="4" onClick={logoutSession}>Log out</Nav.Link>
             </Nav>
         );
     };
@@ -57,7 +53,7 @@ const NavComp = ({ getTheUser, userInSession, history }) => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                {loggedInUser ? renderUserOptions() : renderSignupLogin() }
+                {authenticated ? renderUserOptions() : renderSignupLogin() }
                 </Navbar.Collapse>
             </Navbar>
         </div>

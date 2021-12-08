@@ -1,39 +1,35 @@
-import React, { useState, useEffect } from 'react'
-import UserService from '../services/UserService'
+import React, { useContext, useEffect } from 'react'
+import AuthContext from '../context/auth/authContext';
 import '../styles/UserProfile.css'
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 
-const UserProfile = ({ loggedInUser }) => {
+const UserProfile = () => {
 
-  const [ _loggedInUser, set_LoggedInUser ] = useState(null);
+  const authContext = useContext(AuthContext);
+  const { user, authenticateUser } = authContext;
 
-  const userService = new UserService();
 
   useEffect(()=>{
-    userService.loggedIn()
-    .then((response)=>{
-      set_LoggedInUser(response);
-    })
-    .catch(err => console.log(err))
+    authenticateUser();
   }, []);
 
 
   return(
     <div className="UserProfile">
-      <h2>Welcome {loggedInUser.username}</h2>
+      <h2>Welcome {user.username}</h2>
       <div className="user-info-buttons">
         <Link to="/all-exercises">
-          <Button variant="info"> My exercises </Button>
+          <Button variant="info"> Exercises </Button>
         </Link>
         <br />
         <Link to="/all-metrics">
-          <Button variant="info"> My metrics </Button>
+          <Button variant="info"> Metrics </Button>
         </Link>
         <br />
         <Link to="/workouts">
-          <Button variant="info"> My workouts </Button>
+          <Button variant="info"> Workouts </Button>
         </Link>
       </div>
     </div>

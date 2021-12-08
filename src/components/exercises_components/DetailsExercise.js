@@ -48,7 +48,7 @@ const DetailsWorkouts = ({ match, history, loggedInUser }) => {
           exerciseData: resFromApi, 
           dataBaseChecked: true
         })
-        this.renderChart();
+        renderChart();
       })
       .catch(err=>console.log(err))
   };
