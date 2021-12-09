@@ -1,33 +1,25 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import MetricService from '../../services/MetricsService';
 
-const CreateMetric = ({ getAllMetrics, handleCreateForm }) => {
+const CreateMetric = ({ createMetric }) => {
 
-    const [ state, setState ] = useState({
+    const [ metric, setMetric ] = useState({
         name: "",
         unit: ""
     });
-
-    const metricService = new MetricService();
+    const { name, unit } = metric;
 
     const handleChange = (event)=>{
         const { name, value } = event.target;
-        setState({
-            ...state,
+        setMetric({
+            ...metric,
             [name]: value
         });
     };
 
     const handleFormSubmit = (event)=>{
         event.preventDefault();
-        const { name, unit } = state;
-        metricService.createMetric(name, unit)
-        .then(response => {
-            getAllMetrics();
-            handleCreateForm();
-        })
-        .catch(err => console.log(err))
+        createMetric(metric)
     };
 
     return(
@@ -35,11 +27,11 @@ const CreateMetric = ({ getAllMetrics, handleCreateForm }) => {
             <form onSubmit={handleFormSubmit} >
                 <label>Metric name</label>
                 <br/>
-                <input type="text" name="name" value={state.name} onChange={(e)=>{handleChange(e)}} />
+                <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />
                 <br /><br />
                 <label>Units</label>
                 <br />
-                <input type="text" name="unit" value={state.unit} onChange={(e)=>{handleChange(e)}}/>
+                <input type="text" name="unit" value={unit} onChange={(e)=>{handleChange(e)}}/>
                 <br /><br />
                 <Button type="submit">Create</Button>
             </form>

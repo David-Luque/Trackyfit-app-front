@@ -1,68 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
+import MetricContext from '../../context/metrics/metricsContext';
+import AuthContext from '../../context/auth/authContext';
 import { Button } from 'react-bootstrap';
 import EditMetric from './EditMetric';
 import FormMetricMeasure from './FormMetricMeasure';
-import MetricsService from '../../services/MetricsService';
-import UserService from '../../services/UserService'
 import Chart from 'chart.js';
-import '../../styles/DetailsChart.css'
+//import '../../styles/DetailsChart.css'
 
 
 const DetailsMetrics = ({ match, history, loggedInUser }) => {
 
-  const [ state, setState ] = useState({
-    loggedInUser: null,
-    metricsData: "",
-    dataBaseChecked: false,
-    isMeasureFormDisplayed: false,
-    isEditFormDisplayed: false
-  });
+  const authContext = useContext(AuthContext);
+  const  { user, authenticateUser } = authContext;
 
-  const metricService = new MetricsService()
-  const userService = new UserService()
+  const metricContext = useContext(MetricContext);
+  const  { metricInfo, isDBrequestDone, getMetricInfo } = metricContext;
+
 
   useEffect(()=>{
-    fetchUser();
-    getMetricData();
+    authenticateUser();
+    getMetricInfo();
   }, []);
   
 
-  const fetchUser = ()=>{
-    userService.loggedIn()
-    .then((response)=>{
-      setState({
-        ...state,
-        loggedInUser: response
-      })
-    })
-    .catch(err=>console.log(err))
-  };
-
-  const getMetricData = ()=>{
-    metricService.getMetricInfo(match.params.id)
-      .then(result => {
-        setState({
-          ...state,
-          metricsData: result, 
-          dataBaseChecked: true
-        })
-        renderChart();
-      })
-      .catch(err=>console.log(err))
-  };
-
   const renderInfo = ()=>{
-    if(state.metricsData === "" || state.metricsData.measures.length === 0){
+    if(metricInfo === null || metricInfo.measures.length === 0){
       return displayLoad();
     }
     return displayChart();
   };
 
   function renderChart(){
-      const quantityData = state.metricsData.measures.map((element)=>{
+      const quantityData = metricInfo.measures.map((element)=>{
         return element.quantity
       })
-      const dateData = state.metricsData.measures.map((element)=>{
+      const dateData = metricInfo.measures.map((element)=>{
         const stringDate = element.date.toString();
         const day = stringDate.substr(8, 2);
         const month = stringDate.substr(5, 2);
@@ -110,7 +82,7 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
   }
 
   const displayLoad = ()=>{ 
-    if (!state.dataBaseChecked) 
+    if (!isDBrequestDone) 
     {
       return <p className="data-message"> Loading...</p>
     } else {
@@ -127,24 +99,24 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
   const handleMeasureForm = ()=>{
     setState({
       ...state,
-      isMeasureFormDisplayed: !state.isMeasureFormDisplayed
+      isMeasureFormDisplayed: !isMeasureFormDisplayed
     })
   };
 
   const handleEditForm = ()=>{
     setState({
       ...state,
-      isEditFormDisplayed: !state.isEditFormDisplayed
+      isEditFormDisplayed: !isEditFormDisplayed
     });
   };
 
   const renderEditForm = ()=>{
     return (
       <EditMetric 
-        metricId={state.metricsData._id}
+        metricId={metricsData._id}
         getMetricData={getMetricData}
         handleEditForm={handleEditForm}
-        metricInfo={{ name: state.metricsData.name, unit: state.metricsData.unit }}
+        metricInfo={{ name: metricsData.name, unit: metricsData.unit }}
       />
     )
   };
@@ -154,14 +126,14 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
       <FormMetricMeasure 
         getMetricData={getMetricData}
         handleMeasureForm={handleMeasureForm}
-        metricId={state.metricsData._id}
-        metricUnit={state.metricsData.unit}
+        metricId={metricsData._id}
+        metricUnit={metricsData.unit}
       />
     )
   };
 
   const deleteMetric = ()=>{
-    metricService.deleteMetric(state.metricsData._id)
+    metricService.deleteMetric(metricsData._id)
     .then(response => {
       console.log(response);
       history.replace('/profile')
@@ -171,13 +143,13 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
   };
 
   const ownerCheck = ()=>{
-    if(loggedInUser && loggedInUser._id === state.metricsData.owner) {
+    if(loggedInUser && loggedInUser._id === metricsData.owner) {
       return (
         <div>
           <Button onClick={handleEditForm}>
-          {state.isEditFormDisplayed ? "Cancel" : "Edit metric"}
+          {isEditFormDisplayed ? "Cancel" : "Edit metric"}
           </Button>
-          {state.isEditFormDisplayed && renderEditForm()}
+          {isEditFormDisplayed && renderEditForm()}
 
           <hr/>
           <Button onClick={deleteMetric}>Delete Metric</Button>
@@ -189,12 +161,12 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
 
   return(
     <div className="DetailsMetrics">
-      <h2>{state.metricsData.name}</h2>   
+      <h2>{metricsData.name}</h2>   
       <Button variant="info" onClick={handleMeasureForm}>
-        {state.isMeasureFormDisplayed ? "Cancel" : "Add measure"}
+        {isMeasureFormDisplayed ? "Cancel" : "Add measure"}
       </Button>
 
-      {state.isMeasureFormDisplayed && renderMeasureForm()}
+      {isMeasureFormDisplayed && renderMeasureForm()}
 
       <div className="all-exercises-container">
         {renderInfo()}

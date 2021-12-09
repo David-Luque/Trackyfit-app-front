@@ -21,11 +21,13 @@ const MetricsReducer = (state, action) => {
             }
         case CREATE_METRIC:
             return console.log(action.payload)
+            //request to get all metrics again or push to local state?
         case GET_METRIC_INFO:
             console.log(action.payload)
             return {
                 ...state,
-                metricInfo: action.payload
+                metricInfo: action.payload,
+                isDBrequestDone: true
             }
         case EDIT_METRIC:
             return console.log(action.payload)

@@ -16,7 +16,9 @@ const MetricsState = ({ children })=>{
     const initialState = {
         metrics: null,
         metricInfo: null,
-        isCreateFormDisplayed: false
+        isDBrequestDone: false,
+        isCreateMeasureFormDisplayed: false,
+        isEditMeasureFormDisplayed: false
     };
 
     const [ state, dispatch ] = useReducer(MetricsReducer, initialState);
@@ -34,7 +36,7 @@ const MetricsState = ({ children })=>{
         }
     }
 
-    const handleCreateForm = () => {
+    const handleCreateMetricForm = () => {
         dispatch({
             type: HANDLE_METRIC_FORM
         });
@@ -48,7 +50,7 @@ const MetricsState = ({ children })=>{
                 payload: response
             });
             getAllMetrics();
-            handleCreateForm();
+            handleCreateMetricForm();
         } catch(err) {
             console.log(err)
         }
@@ -98,11 +100,14 @@ const MetricsState = ({ children })=>{
         <MetricsContext.Provider
             value={{
                 metrics: state.metrics,
+                metricInfo: state.metricInfo,
+                isDBrequestDone: state.isDBrequestDone,
                 getAllMetrics,
                 createMetric,
                 getMetricInfo,
                 editMetric,
-                deleteMetric
+                deleteMetric,
+                handleCreateMetricForm
             }}
         >
             {children}
