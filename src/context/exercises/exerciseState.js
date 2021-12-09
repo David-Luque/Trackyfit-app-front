@@ -8,7 +8,8 @@ import {
     EDIT_EXERCISE,
     GET_EXERCISE_INFO,
     DELETE_EXERCISE,
-    HANDLE_EX_FORM
+    HANDLE_CREATE_EX_FORM,
+    HANDLE_RENAME_EX_FORM
 } from '../../types';
 
 const ExerciseState = ({ children })=>{
@@ -17,7 +18,8 @@ const ExerciseState = ({ children })=>{
         exercises: null,
         exerciseData: null,
         isCreateFormDisplayed: false,
-        databaseChecked: false
+        isRenameFormDisplayed: false,
+        isDBrequestDone: false
     };
 
     const [ state, dispatch ] = useReducer(ExerciseReducer, initialState);
@@ -57,8 +59,8 @@ const ExerciseState = ({ children })=>{
                 type: EDIT_EXERCISE,
                 payload: response
             });
-            // getExerciseInfo();
-            // handleRenameForm();
+            getExerciseInfo();
+            handleRenameForm();
         } catch (err) {
             console.log(err);
         }
@@ -91,7 +93,13 @@ const ExerciseState = ({ children })=>{
 
     const handleCreateForm = ()=>{
         dispatch({
-            type: HANDLE_EX_FORM
+            type: HANDLE_CREATE_EX_FORM
+        })
+    };
+
+    const handleRenameForm = ()=>{
+        dispatch({
+            type: HANDLE_RENAME_EX_FORM
         })
     };
 
@@ -100,12 +108,16 @@ const ExerciseState = ({ children })=>{
         <Exercisecontext.Provider
             value={{
                 exercises: state.exercises,
+                exerciseData: state.exerciseData,
+                isCreateFormDisplayed: state.isCreateFormDisplayed,
+                isRenameFormDisplayed: state.isRenameFormDisplayed,
                 getAllExercises,
                 createExercise,
                 editExercise,
                 getExerciseInfo,
                 deleteExercise,
-                handleCreateForm
+                handleCreateForm,
+                handleRenameForm
             }}
         >
             {children}

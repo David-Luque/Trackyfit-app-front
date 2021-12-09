@@ -1,5 +1,6 @@
 import {
-    ADD_RESULT
+    ADD_RESULT,
+    HANDLE_RESULTS_FORM
 } from '../../types';
 
 const ResultsReducer = (state, action) => {
@@ -8,6 +9,11 @@ const ResultsReducer = (state, action) => {
             return {
                 ...state,
                 results: [...state.result, action.payload] //this or request to server for new data?
+            }
+        case HANDLE_RESULTS_FORM:
+            return {
+                ...state,
+                isResultsFormDisplayed: !state.isResultsFormDisplayed
             }
         default:
             return state;

@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import ExerciseService from '../../services/ExerciseService';
 
-const EditExercise = ({ exerciseName, exerciseId, getExerciseInfo, handleRenameForm }) => {
+const EditExercise = ({ exerciseData, editExercise }) => {
 
-    const [ name, setName ] = useState(exerciseName);
-
-    const exerciseService = new ExerciseService();
+    const [ name, setName ] = useState(exerciseData.name);
 
     const handleChange = (event)=>{
         setName(event.target.value);
@@ -14,18 +11,17 @@ const EditExercise = ({ exerciseName, exerciseId, getExerciseInfo, handleRenameF
 
     const handleFormSubmit = (event)=>{
         event.preventDefault();
-        exerciseService.editExercise(exerciseId, name)
-        .then(() => {
-            getExerciseInfo();
-            handleRenameForm();
-        })
-        .catch(err => console.log(err))
+        const newExercise = {
+            ...exerciseData,
+            name
+        }
+        editExercise(exerciseData._id, newExercise);
     };
 
     return(
         <div>
             <form onSubmit={handleFormSubmit} >
-                <label>Set new exercise name:</label>
+                <label>New exercise name:</label>
                 <br />
                 <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />
                 <br />

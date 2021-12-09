@@ -4,7 +4,8 @@ import {
     EDIT_EXERCISE,
     GET_EXERCISE_INFO,
     DELETE_EXERCISE,
-    HANDLE_EX_FORM
+    HANDLE_CREATE_EX_FORM,
+    HANDLE_RENAME_EX_FORM
 } from '../../types';
 
 const ExerciseReducer = (state, action)=>{
@@ -21,17 +22,23 @@ const ExerciseReducer = (state, action)=>{
         case GET_EXERCISE_INFO:
             return {
                 ...state,
-                exerciseData: action.payload
+                exerciseData: action.payload,
+                isDBrequestDone: true
             }
         case DELETE_EXERCISE:
             return {
                 ...state,
                 exerciseData: null
             }
-        case HANDLE_EX_FORM: 
+        case HANDLE_CREATE_EX_FORM: 
             return {
                 ...state,
                 isCreateFormDisplayed: !state.isCreateFormDisplayed
+            }
+        case HANDLE_RENAME_EX_FORM:
+            return {
+                ...state,
+                isRenameFormDisplayed: !state.isRenameFormDisplayed
             }
         default:
             return state;

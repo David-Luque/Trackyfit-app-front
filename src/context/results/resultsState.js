@@ -3,13 +3,15 @@ import axiosClient from '../../config/axios';
 import ResultsContext from './resultsContext';
 import ResultsReducer from './resultsReducer';
 import {
-    ADD_RESULT
+    ADD_RESULT,
+    HANDLE_RESULTS_FORM
 } from '../../types';
 
 const ResultsState = ({ children }) => {
 
     const initialState = {
-        results: null
+        results: null,
+        isResultsFormDisplayed: false
     }
 
     const [ state, dispatch ] = useReducer(ResultsReducer, initialState);
@@ -21,17 +23,28 @@ const ResultsState = ({ children }) => {
                 type: ADD_RESULT,
                 payload: response
             });
+            handleResultsForm();
+            //getExerciseInfo(); //this or push directly the new result in local state?
         } catch (err) {
             console.log(err)
         }
     };
+
+    const handleResultsForm = ()=>{
+        dispatch({
+            type: HANDLE_RESULTS_FORM
+        });
+    };
+
 
 
     return (
         <ResultsContext.Provider
             value={{
                 results: state.results,
-                addResult
+                isResultsFormDisplayed: state.isResultsFormDisplayed,
+                addResult,
+                handleResultsForm
             }}
         >
             {children}

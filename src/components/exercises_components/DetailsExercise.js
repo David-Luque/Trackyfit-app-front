@@ -1,60 +1,35 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
+import Exercisecontext from '../../context/exercises/exerciseContext';
+import ResultsContext from '../../context/results/resultsContext';
+import AuthContext from '../../context/auth/authContext';
 //import { Link } from 'react-router-dom';
 import { Button} from 'react-bootstrap';
 import EditExercise from './EditExercise';
 import FormExerciseResults from './FormExerciseResults';
-import ExerciseService from '../../services/ExerciseService'
-import UserService from '../../services/UserService'
 import Chart from 'chart.js';
 // import '../styles/DetailsWorkout.css'
 
-//TODO: fix empty chart and alert message with no data
 
-const DetailsWorkouts = ({ match, history, loggedInUser }) => {
+const DetailsWorkouts = (props) => {
 
-  const [ state, setState ] = useState({
-    loggedInUser: null,
-    exerciseData: "",
-    dataBaseChecked: false,
-    isRenameDisplayed: false,
-    isResultsFormDisplayed: false
-  });
+  const authContext = useContext(AuthContext);
+  const { authenticated, user } = authContext;
 
-  const exerService = new ExerciseService()
-  const userService = new UserService()
+  const exerciseContext = useContext(Exercisecontext);
+  const { exerciseData, isRenameFormDisplayed, isDBrequestDone, getExerciseInfo, handleRenameForm, editExercise, deleteExercise } = exerciseContext;
 
-  useEffect(()=>{
-    fetchUser()
-    getExerciseInfo();
-  }, []);
- 
+  const resultContext = useContext(ResultsContext);
+  const { isResultsFormDisplayed, handleResultsForm, addResult } = resultContext;
 
-  const fetchUser = ()=>{
-    userService.loggedIn()
-    .then((response)=>{
-      setState({
-        ...state,
-        loggedInUser: response
-      })
-    })
-    .catch(err=>console.log(err))
-  };
   
-  const getExerciseInfo = ()=>{
-    exerService.getExerciseInfo(match.params.id) 
-      .then((resFromApi)=>{
-        setState({
-          ...state,
-          exerciseData: resFromApi, 
-          dataBaseChecked: true
-        })
-        renderChart();
-      })
-      .catch(err=>console.log(err))
-  };
+  useEffect(()=>{
+    getExerciseInfo(props.match.params.id);
+    renderChart();
+  }, []);
+  
 
   const renderLoadInfo = ()=>{ 
-    if (!state.dataBaseChecked) 
+    if (!isDBrequestDone) 
     {
       return <p className="data-message"> Loading...</p>
     } else {
@@ -62,35 +37,17 @@ const DetailsWorkouts = ({ match, history, loggedInUser }) => {
     }
   };
 
-  const handleRenameForm = ()=>{
-    setState({ 
-      ...state,
-      isRenameDisplayed: !state.isRenameDisplayed
-    });
-  };
-
-  const deleteExercise = ()=>{
-    exerService.deleteExercise(state.exerciseData._id)
-    .then(response => {
-      //console.log(response);
-      history.replace("/profile")
-      history.push("/all-exercises")
-    })
-  };
-
-  const handleResultsForm = ()=>{
-    setState({
-      ...state,
-      isResultsFormDisplayed: !state.isResultsFormDisplayed
-    });
+  const deleteTheExercise = ()=>{
+    deleteExercise(exerciseData._id);
+    props.history.replace("/profile")
+    props.history.push("/all-exercises")
   };
 
   const displayResultsForm = ()=>{
     return (
       <FormExerciseResults 
-        exerciseId={state.exerciseData._id} 
-        getExerciseInfo={getExerciseInfo}
-        handleResultsForm={handleResultsForm}
+        exerciseId={exerciseData._id} 
+        addResults={addResult}
       />
     )
   };
@@ -102,17 +59,17 @@ const DetailsWorkouts = ({ match, history, loggedInUser }) => {
   };
 
   const renderChart = ()=>{
-      const repsData = state.exerciseData.results.map((element)=>{
+      const repsData = exerciseData.results.map((element)=>{
         return element.reps
       })
-      const weightData = state.exerciseData.results.map((element)=>{
+      const weightData = exerciseData.results.map((element)=>{
         return element.weight
       })
-      const timeData = state.exerciseData.results.map((element)=>{
+      const timeData = exerciseData.results.map((element)=>{
         return element.time
       })
 
-      const datesData = state.exerciseData.results.map((element)=>{
+      const datesData = exerciseData.results.map((element)=>{
         const stringDate = element.date.toString();
         const day = stringDate.substr(8, 2);
         const month = stringDate.substr(5, 2);
@@ -170,26 +127,24 @@ const DetailsWorkouts = ({ match, history, loggedInUser }) => {
   };
 
   const ownerCheck = ()=>{
-    if(loggedInUser && loggedInUser._id === state.exerciseData.owner){
+    if(authenticated && user._id === exerciseData.owner){
       return(
         <div>
           <Button onClick={handleRenameForm}>
-                {state.isRenameDisplayed ? "Cancel" : "Rename"}
+                {isRenameFormDisplayed ? "Cancel" : "Rename"}
               </Button>
               <br />    
               
-              {state.isRenameDisplayed && 
+              {isRenameFormDisplayed && 
                 <EditExercise 
-                  exerciseId={state.exerciseData._id}
-                  getExerciseInfo={getExerciseInfo}
-                  handleRenameForm={handleRenameForm}
-                  exerciseName={state.exerciseData.name}
+                  exerciseData={exerciseData}
+                  editExercise={editExercise}
                 />
               }
 
               <br />
               <hr />
-          <Button onClick={deleteExercise}>Delete</Button>
+          <Button onClick={deleteTheExercise}>Delete</Button>
         </div>
       )
     }
@@ -200,16 +155,16 @@ const DetailsWorkouts = ({ match, history, loggedInUser }) => {
 
   return(
     <div className="DetailsWorkout">
-      <h2>{state.exerciseData.name}</h2>
+      <h2>{exerciseData.name}</h2>
       
       <Button variant="info" onClick={handleResultsForm}>
-        {state.isResultsFormDisplayed ? "Cancel" : "Add results"}
+        {isResultsFormDisplayed ? "Cancel" : "Add results"}
       </Button>
 
-      {state.isResultsFormDisplayed && displayResultsForm()}
+      {isResultsFormDisplayed && displayResultsForm()}
         
       <div className="all-exercises-container">
-        {state.exerciseData === "" || state.exerciseData.results.length === 0
+        {exerciseData === null || exerciseData.results.length === 0
           ? renderLoadInfo() 
           : displayChart() }
       </div>
