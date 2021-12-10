@@ -1,54 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import MeasureContext from '../../context/measures/measureContext';
 import { Button } from 'react-bootstrap';
-import MeasureService from '../../services/MeasureService';
 
 
-const FormMetricMeasure = ({ metricId, getMetricData, handleMeasureForm, metricUnit }) => {
+const FormMetricMeasure = ({ metricInfo }) => {
 
-    const [ state, setState ] = useState({
+    const measureContext= useContext(MeasureContext);
+    const { addMeasure } = measureContext;
+
+    const [ measure, setMeasure ] = useState({
         quantity: "",
         date: ""
     });
-    
-
-    const measureService = new MeasureService();
+    const { quantity, date } = measure;
 
     const handleChange = (event)=>{
         const { name, value } = event.target;
-        setState({
-            ...state,
+        setMeasure({
+            ...measure,
             [name]: value
         });
     };
 
     const handleFormSubmit = (e)=>{
         e.preventDefault();
-        const { quantity, date } = state;
-        const metric = metricId;
-        const theMeasure = { quantity, date, metric };
-        measureService.addMeasure(theMeasure)
-        .then(response => {
-            setState({
-                quantity: "",
-                date: ""
-            })
-            getMetricData();
-            handleMeasureForm();
+        addMeasure(metricInfo._id, measure)
+        //getMetricInfo(); this or push directly new measure into local metric state?
+        setMeasure({
+            quantity: "",
+            date: ""
         })
-        .catch(err => console.log(err)) 
     };
 
 
     return(
         <div>
             <form onSubmit={handleFormSubmit}>
-                <label>{`Quantity (in ${metricUnit})`}</label>
+                <label>{`Quantity (in ${metricInfo.metricUnit})`}</label>
                 <br />
-                <input type="Number" name="quantity" value={state.quantity} required onChange={(e)=>{handleChange(e)}}/>
+                <input type="Number" name="quantity" value={quantity} required onChange={(e)=>{handleChange(e)}}/>
                 <br /><br />
                 <label>Date</label>
                 <br />
-                <input type="Date" name="date" value={state.date} required onChange={(e)=>{handleChange(e)}}/>
+                <input type="Date" name="date" value={date} required onChange={(e)=>{handleChange(e)}}/>
                 <br /><br />
                 <Button type="submit">Confirm</Button>
             </form>

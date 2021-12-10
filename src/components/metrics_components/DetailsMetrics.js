@@ -1,6 +1,7 @@
-import React, { useContext, useEffect } from 'react'
-import MetricContext from '../../context/metrics/metricsContext';
+import React, { useContext, useEffect } from 'react';
 import AuthContext from '../../context/auth/authContext';
+import MetricContext from '../../context/metrics/metricsContext';
+import MeasureContext from '../../context/measures/measureContext';
 import { Button } from 'react-bootstrap';
 import EditMetric from './EditMetric';
 import FormMetricMeasure from './FormMetricMeasure';
@@ -8,18 +9,21 @@ import Chart from 'chart.js';
 //import '../../styles/DetailsChart.css'
 
 
-const DetailsMetrics = ({ match, history, loggedInUser }) => {
+const DetailsMetrics = (props) => {
 
   const authContext = useContext(AuthContext);
-  const  { user, authenticateUser } = authContext;
+  const  { user, authenticated } = authContext;
 
   const metricContext = useContext(MetricContext);
-  const  { metricInfo, isDBrequestDone, getMetricInfo } = metricContext;
+  const  { metricInfo, isDBrequestDone, isEditMetricFormDisplayed, getMetricInfo, handleEditMetricForm, deleteMetric } = metricContext;
+
+  const measureContext = useContext(MeasureContext);
+  const { isMeasureFormDisplayed, handleMeasureForm } = measureContext;
 
 
   useEffect(()=>{
-    authenticateUser();
-    getMetricInfo();
+    getMetricInfo(props.match.params.id);
+    renderChart()
   }, []);
   
 
@@ -96,27 +100,10 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
     );
   };
 
-  const handleMeasureForm = ()=>{
-    setState({
-      ...state,
-      isMeasureFormDisplayed: !isMeasureFormDisplayed
-    })
-  };
-
-  const handleEditForm = ()=>{
-    setState({
-      ...state,
-      isEditFormDisplayed: !isEditFormDisplayed
-    });
-  };
-
   const renderEditForm = ()=>{
     return (
       <EditMetric 
-        metricId={metricsData._id}
-        getMetricData={getMetricData}
-        handleEditForm={handleEditForm}
-        metricInfo={{ name: metricsData.name, unit: metricsData.unit }}
+        metricInfo={metricInfo}
       />
     )
   };
@@ -124,35 +111,29 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
   const renderMeasureForm = ()=>{
     return(
       <FormMetricMeasure 
-        getMetricData={getMetricData}
-        handleMeasureForm={handleMeasureForm}
-        metricId={metricsData._id}
-        metricUnit={metricsData.unit}
+        metricInfo={metricInfo}
+        //getMetricInfo={getMetricInfo}
       />
     )
   };
 
-  const deleteMetric = ()=>{
-    metricService.deleteMetric(metricsData._id)
-    .then(response => {
-      console.log(response);
-      history.replace('/profile')
-      history.push('/all-metrics');
-    })
-    .catch(err => console.log(err))
+  const deleteTheMetric = ()=>{
+    deleteMetric(metricInfo._id)
+    props.history.replace('/profile')
+    props.history.push('/all-metrics');
   };
 
   const ownerCheck = ()=>{
-    if(loggedInUser && loggedInUser._id === metricsData.owner) {
+    if(authenticated && user._id === metricInfo.owner) {
       return (
         <div>
-          <Button onClick={handleEditForm}>
-          {isEditFormDisplayed ? "Cancel" : "Edit metric"}
+          <Button onClick={handleEditMetricForm}>
+          {isEditMetricFormDisplayed ? "Cancel" : "Edit metric"}
           </Button>
-          {isEditFormDisplayed && renderEditForm()}
+          {isEditMetricFormDisplayed && renderEditForm()}
 
           <hr/>
-          <Button onClick={deleteMetric}>Delete Metric</Button>
+          <Button onClick={deleteTheMetric}>Delete Metric</Button>
         </div>
       )
     }
@@ -161,7 +142,7 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
 
   return(
     <div className="DetailsMetrics">
-      <h2>{metricsData.name}</h2>   
+      <h2>{metricInfo.name}</h2>   
       <Button variant="info" onClick={handleMeasureForm}>
         {isMeasureFormDisplayed ? "Cancel" : "Add measure"}
       </Button>
@@ -178,4 +159,4 @@ const DetailsMetrics = ({ match, history, loggedInUser }) => {
   )    
 }
 
-export default DetailsMetrics
+export default DetailsMetrics;

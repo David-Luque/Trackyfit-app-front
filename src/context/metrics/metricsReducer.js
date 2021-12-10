@@ -1,7 +1,8 @@
 import {
     GET_ALL_METRICS,
     CREATE_METRIC,
-    HANDLE_METRIC_FORM,
+    HANDLE_CREATE_METRIC_FORM,
+    HANDLE_EDIT_METRIC_FORM,
     GET_METRIC_INFO,
     EDIT_METRIC,
     DELETE_METRIC
@@ -14,7 +15,7 @@ const MetricsReducer = (state, action) => {
                 ...state,
                 metrics: action.payload
             }
-        case HANDLE_METRIC_FORM:
+        case HANDLE_CREATE_METRIC_FORM:
             return {
                 ...state,
                 isCreateFormDisplayed: !state.isCreateFormDisplayed
@@ -28,6 +29,11 @@ const MetricsReducer = (state, action) => {
                 ...state,
                 metricInfo: action.payload,
                 isDBrequestDone: true
+            }
+        case HANDLE_EDIT_METRIC_FORM:
+            return {
+                ...state,
+                isEditMeasureFormDisplayed: !state.isEditMeasureFormDisplayed
             }
         case EDIT_METRIC:
             return console.log(action.payload)

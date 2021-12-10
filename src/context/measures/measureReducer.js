@@ -1,5 +1,6 @@
 import {
-    ADD_MEASURE
+    ADD_MEASURE,
+    HANDLE_MEASURE_FORM
 } from '../../types';
 
 const MeasureReducer = (state, action) => {
@@ -8,6 +9,11 @@ const MeasureReducer = (state, action) => {
             return {
                 ...state,
                 measures: [...state.measures, action.payload]
+            }
+        case HANDLE_MEASURE_FORM:
+            return {
+                ...state,
+                isMeasureFormDisplayed: !state.isMeasureFormDisplayed
             }
         default:
             return state;

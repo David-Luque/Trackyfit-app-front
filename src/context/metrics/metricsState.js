@@ -5,7 +5,8 @@ import MetricsReducer from "./metricsReducer";
 import {
     GET_ALL_METRICS,
     CREATE_METRIC,
-    HANDLE_METRIC_FORM,
+    HANDLE_CREATE_METRIC_FORM,
+    HANDLE_EDIT_METRIC_FORM,
     GET_METRIC_INFO,
     EDIT_METRIC,
     DELETE_METRIC
@@ -17,8 +18,8 @@ const MetricsState = ({ children })=>{
         metrics: null,
         metricInfo: null,
         isDBrequestDone: false,
-        isCreateMeasureFormDisplayed: false,
-        isEditMeasureFormDisplayed: false
+        isCreateMetricFormDisplayed: false,
+        isEditMetricFormDisplayed: false
     };
 
     const [ state, dispatch ] = useReducer(MetricsReducer, initialState);
@@ -38,7 +39,7 @@ const MetricsState = ({ children })=>{
 
     const handleCreateMetricForm = () => {
         dispatch({
-            type: HANDLE_METRIC_FORM
+            type: HANDLE_CREATE_METRIC_FORM
         });
     };
     
@@ -68,6 +69,12 @@ const MetricsState = ({ children })=>{
         }
     };
 
+    const handleEditMetricForm = ()=>{
+        dispatch({
+            type: HANDLE_EDIT_METRIC_FORM
+        })
+    };
+
     const editMetric = async (id, metric)=>{
         try {
             const response = await axiosClient.put(`/metrics/${id}`, metric);
@@ -76,6 +83,8 @@ const MetricsState = ({ children })=>{
                 payload: response
             });
             //getMetricInfo();
+            handleEditMetricForm();
+
         } catch(err) {
             console.log(err)
         }
@@ -102,12 +111,15 @@ const MetricsState = ({ children })=>{
                 metrics: state.metrics,
                 metricInfo: state.metricInfo,
                 isDBrequestDone: state.isDBrequestDone,
+                isCreateMetricFormDisplayed: state.isCreateMetricFormDisplayed,
+                isEditMetricFormDisplayed: state.isEditMetricFormDisplayed,
                 getAllMetrics,
                 createMetric,
                 getMetricInfo,
                 editMetric,
                 deleteMetric,
-                handleCreateMetricForm
+                handleCreateMetricForm,
+                handleEditMetricForm
             }}
         >
             {children}
