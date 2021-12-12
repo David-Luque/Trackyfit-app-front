@@ -25,7 +25,6 @@ import FormExerciseResults from './components/exercises_components/FormExerciseR
 import AllWorkouts from './components/workouts_components/AllWorkouts';
 import CreateWorkout from './components/workouts_components/CreateWorkout';
 import DetailsWorkout from './components/workouts_components/DetailsWorkout';
-import UpdateWorkout from './components/workouts_components/UpdateWorkout';
 
 import AllMetrics from './components/metrics_components/AllMetrics';
 import CreateMetrics from './components/metrics_components/CreateMetric';
@@ -64,7 +63,6 @@ const App = () => {
 					<PrivateRoute exact path="/all-workouts" component={AllWorkouts} />
 					<PrivateRoute exact path="/create-workout" component={CreateWorkout} />
 					<PrivateRoute exact path="/details-workout" component={DetailsWorkout} />
-					<PrivateRoute exact path="/update-workout" component={UpdateWorkout} />
 
 					<PrivateRoute exact path="/all-metrics" component={AllMetrics} />
 					<PrivateRoute exact path="/create-metric" component={CreateMetrics} />

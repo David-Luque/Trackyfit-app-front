@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import WorkoutService from '../../services/WorkoutService';
+import React, { useContext, useEffect } from 'react';
+import WorkoutContext from '../../context/workouts/workoutContext';
 import CreateWorkout from './CreateWorkout';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 const AllWorkouts = () => {
-    
-    const [ workouts, setWorkouts ] = useState(null);
-    const [ isCreateWorkoutDisplayed, setIsCreateWorkoutDisplayed ] = useState(false);
 
-    const workoutService = new WorkoutService();
-
-    const getAllWorkouts = ()=>{
-        workoutService.getWorkouts()
-        .then(response => {
-            setWorkouts(response);
-        })
-        .catch(err => console.log(err))
-    };
+    const workoutContext = useContext(WorkoutContext);
+    const { workouts, isCreateWorkoutFormDisplayed, getWorkouts, handleCreateWorkoutForm, createWorkout } = workoutContext;
 
     useEffect(()=>{
-        getAllWorkouts();
+        getWorkouts();
     }, []);
 
     const displayWorkouts = ()=>{
@@ -35,19 +25,17 @@ const AllWorkouts = () => {
             );
         });
     };
-
-    const handleCreateForm = ()=>{
-        setIsCreateWorkoutDisplayed(!isCreateWorkoutDisplayed);
-    };
     
     return(
         <div>
             <h2>Workouts history</h2>
             {workouts && displayWorkouts()}
-            <Button onClick={handleCreateForm}>
-                {isCreateWorkoutDisplayed ? "Cancel" : "Create Workout"}
+            <Button onClick={handleCreateWorkoutForm}>
+                {isCreateWorkoutFormDisplayed ? "Cancel" : "Create Workout"}
             </Button>
-            {isCreateWorkoutDisplayed && <CreateWorkout/>}
+            {isCreateWorkoutFormDisplayed && 
+                <CreateWorkout createWorkout={createWorkout}/>
+            }
         </div>
     )
 };

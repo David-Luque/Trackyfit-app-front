@@ -1,45 +1,40 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import WorkoutService from '../../services/WorkoutService';
 
-const CreateExercise = ({ getAllExer, handleCreateForm }) => {
+const CreateWorkout = ({ createWorkout }) => {
 
-    const [ state, setState ] = useState({
+    const [ workout, setWorkout ] = useState({
         name: "",
         date: ""
     });
-
-    const workoutService = new WorkoutService();
+    const { name, date } = workout;
 
     const handleChange = (event)=>{
         const { name, value } = event.target;
-        setState({
-            ...state,
+        setWorkout({
+            ...workout,
             [name]: value
         });
     };
 
     const handleFormSubmit = (event)=>{
         event.preventDefault();
-        const newWorkout = {
-            name: state.name,
-            date: state.date
-        };
-        workoutService.createWorkout(newWorkout)
-        .then(() => {
-            getAllExer();
-            handleCreateForm();
-        })
-        .catch(err => console.log(err))
+        if(
+            name.trim() === '' ||
+            date.trim() === ''
+        ) {
+            return 'Error message' //include AlertContext here
+        }
+        createWorkout(workout);
     };
 
     return(
         <div>
             <form onSubmit={handleFormSubmit} >
                 <label>Name</label>
-                <input type="text" name="name" value={state.name} onChange={(e)=>{handleChange(e)}} />
+                <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />
                 <label>Date</label>
-                <input type="date" name="date" value={state.date} onChange={(e)=>{handleChange(e)}} />
+                <input type="date" name="date" value={date} onChange={(e)=>{handleChange(e)}} />
                 <br /><br />
                 <Button type="submit">Create</Button>
             </form>
@@ -48,4 +43,4 @@ const CreateExercise = ({ getAllExer, handleCreateForm }) => {
     );
 };
 
-export default CreateExercise;
+export default CreateWorkout;

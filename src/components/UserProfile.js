@@ -28,7 +28,7 @@ const UserProfile = () => {
           <Button variant="info"> Metrics </Button>
         </Link>
         <br />
-        <Link to="/workouts">
+        <Link to="/all-workouts">
           <Button variant="info"> Workouts </Button>
         </Link>
       </div>
