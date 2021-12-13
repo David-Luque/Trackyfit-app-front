@@ -53,7 +53,7 @@ const NavComp = (props) => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                {authenticated ? renderUserOptions() : renderSignupLogin() }
+                    {authenticated ? renderUserOptions() : renderSignupLogin() }
                 </Navbar.Collapse>
             </Navbar>
         </div>

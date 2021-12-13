@@ -6,7 +6,7 @@ import AlertsContext from '../../context/alerts/alertsContext';
 const SignUp = (props) => {
 
 	const authContext = useContext(AuthContext);
-	const { isAuthenticated, signup, message } = authContext;
+	const { isAuthenticated, userSignup, message } = authContext;
 
 	const alertsContext = useContext(AlertsContext);
 	const { alert, showAlert } = alertsContext;
@@ -48,7 +48,7 @@ const SignUp = (props) => {
 			return showAlert('Both password must be identical', 'alert-error');
 		}
 
-		signup({ username, email, password })
+		userSignup({ username, email, password })
 	};
 
 	const handleChange = (event) => {

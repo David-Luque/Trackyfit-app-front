@@ -22,7 +22,7 @@ const AuthState = ({ children })=>{
     const [ state, dispatch ] = useReducer(AuthReducer, initialState)
 
 
-    const signup = async (username, password)=>{
+    const userSignup = async (username, password)=>{
         try {
             const response = await axiosClient.post('/signup', { username, password });
             dispatch({
@@ -35,9 +35,9 @@ const AuthState = ({ children })=>{
         
     };
 
-    const login = async (username, password)=>{
+    const userLogin = async (user)=>{
         try {
-            const response = await axiosClient.get('/login', { username, password });
+            const response = await axiosClient.get('/login', user);
             dispatch({
                 type: LOGIN_USER,
                 payload: response
@@ -82,8 +82,10 @@ const AuthState = ({ children })=>{
                 value={{
                     user: state.user,
                     authenticated: state.authenticated,
-                    signup,
-                    login,
+                    token: state.token,
+                    message: state.message,
+                    userSignup,
+                    userLogin,
                     authenticateUser,
                     logout
                 }}

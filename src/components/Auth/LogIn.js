@@ -54,12 +54,12 @@ const LogIn = (props) => {
 			<Form className="form" onSubmit={handleFormSubmit}>
 				<Form.Group>
 					<Form.Label htmlFor="email">Email</Form.Label>
-					<Form.Control type="email" name="email" placeholder="Enter your email" value={email} onChange={(e) => handleChange(e)} />
+					<Form.Control required type="email" name="email" placeholder="Enter your email" value={email} onChange={(e) => handleChange(e)} />
 				</Form.Group>
 
 				<Form.Group>
 					<Form.Label>Password</Form.Label>
-					<Form.Control type="password" name="password" placeholder="Your password" value={password} onChange={(e) => handleChange(e)} />
+					<Form.Control required type="password" name="password" placeholder="Your password" value={password} onChange={(e) => handleChange(e)} />
 				</Form.Group>
 
 				{alert && <Alert alert={alert} variant='dark' />}

@@ -10,7 +10,7 @@ import ResultState from './context/results/resultsState';
 import MetricState from './context/metrics/metricsState';
 import MeasureState from './context/measures/measureState'; 
 import WorkoutState from './context/workouts/workoutState'; 
-import AlertState from './context/alerts/alertState'; 
+import AlertState from './context/alerts/alertsState';
 
 import Home from './components/Home';
 import SignUp from './components/Auth/SignUp';
