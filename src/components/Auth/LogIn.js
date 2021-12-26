@@ -50,8 +50,8 @@ const LogIn = (props) => {
 
 
 	return (
-		<div className="LogIn">
-			<Form className="form" onSubmit={handleFormSubmit}>
+		<div className="login">
+			<Form className="login__form" onSubmit={handleFormSubmit}>
 				<Form.Group>
 					<Form.Label htmlFor="email">Email</Form.Label>
 					<Form.Control required type="email" name="email" placeholder="Enter your email" value={email} onChange={(e) => handleChange(e)} />

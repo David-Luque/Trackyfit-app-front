@@ -28,9 +28,13 @@ const AllMetrics = () => {
 
 
     return(
-        <div className="allMetrics">
-            <h2>My metrics</h2>
-            <Button variant="info" onClick={()=>handleCreateMetricForm()}>
+        <div className="metrics">
+            <h2 className="metrics__title">My metrics</h2>
+            <Button 
+                variant="info" 
+                onClick={()=>handleCreateMetricForm()}
+                className="button-primary/tertiary?"
+            >
                 {isCreateFormDisplayed ? "Cancel" : "Create metric"}
             </Button>
             

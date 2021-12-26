@@ -38,8 +38,8 @@ const FormExerciseResuls = ({ exerciseId, addResult }) => {
 
 
     return(
-        <div>
-            <form onSubmit={handleFormSubmit}>
+        <div className="exercise__result">
+            <form className="exercise__result-form" onSubmit={handleFormSubmit}>
                 <label>Reps</label>
                 <br />
                 <input type="Number" name="reps" value={reps} onChange={(e)=>{handleChange(e)}}/>
@@ -56,7 +56,7 @@ const FormExerciseResuls = ({ exerciseId, addResult }) => {
                 <br />
                 <input type="Date" name="date" value={date} onChange={(e)=>{handleChange(e)}}/>
                 <br /><br />
-                <Button type="submit">Confirm</Button>
+                <Button className="button-primary?" type="submit">Confirm</Button>
             </form>
         </div>
     );

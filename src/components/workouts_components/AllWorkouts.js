@@ -27,11 +27,13 @@ const AllWorkouts = () => {
     };
     
     return(
-        <div>
-            <h2>Workouts history</h2>
+        <div className="workouts">
+            <h2 className="workouts-title">Workouts history</h2>
             {workouts && displayWorkouts()}
-            <Button onClick={handleCreateWorkoutForm}>
-                {isCreateWorkoutFormDisplayed ? "Cancel" : "Create Workout"}
+            <Button 
+                className="button-secondary" 
+                onClick={handleCreateWorkoutForm}
+            > {isCreateWorkoutFormDisplayed ? "Cancel" : "Create Workout"}
             </Button>
             {isCreateWorkoutFormDisplayed && 
                 <CreateWorkout createWorkout={createWorkout}/>

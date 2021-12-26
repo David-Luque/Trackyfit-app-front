@@ -144,7 +144,7 @@ const DetailsWorkouts = (props) => {
 
               <br />
               <hr />
-          <Button onClick={deleteTheExercise}>Delete</Button>
+          <Button className="button-secondary" onClick={deleteTheExercise}>Delete</Button>
         </div>
       )
     }
@@ -154,16 +154,20 @@ const DetailsWorkouts = (props) => {
 
 
   return(
-    <div className="DetailsWorkout">
-      <h2>{exerciseData.name}</h2>
+    <div className="exercises__details">
+      <h2 className="exercises__details-title">{exerciseData.name}</h2>
       
-      <Button variant="info" onClick={handleResultsForm}>
+      <Button 
+        variant="info" 
+        onClick={handleResultsForm}
+        className=""  
+      >
         {isResultsFormDisplayed ? "Cancel" : "Add results"}
       </Button>
 
       {isResultsFormDisplayed && displayResultsForm()}
         
-      <div className="all-exercises-container">
+      <div className="exercises-container">
         {exerciseData === null || exerciseData.results.length === 0
           ? renderLoadInfo() 
           : displayChart() }

@@ -6,13 +6,13 @@ import '../styles/Home.css'
 const Home = ()=>{
   return(
     <Layout>
-      <div className="Home">
-        <header className="header">
+      <div className="home">
+        <header className="home__header">
           TRACK YOUR PERFORMANCE PROGRESS AND HEALTH CONDITION
         </header>
         
-        <article className="article-metrics">
-          <div className="article-text">
+        <article className="home__article-metrics">
+          <div className="home__article-text">
             <h3>Keep your physical metrics under control</h3>
             <hr />
             <p>
@@ -21,8 +21,8 @@ const Home = ()=>{
           </div>
         </article>
         
-        <article className="article-workout">
-          <div className="article-text">
+        <article className="home__article-workout">
+          <div className="home__article-text">
             <h3>Encourage yourself to improve in every workout</h3>
             <hr />
             <p>

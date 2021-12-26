@@ -61,8 +61,8 @@ const SignUp = (props) => {
 
 	
 	return (
-		<div className="SignUp">
-			<Form className="form" onSubmit={handleFormSubmit}>
+		<div className="signup">
+			<Form className="signup__form" onSubmit={handleFormSubmit}>
 				
 				<Form.Group>
 					<Form.Label htmlFor="username">Username</Form.Label>

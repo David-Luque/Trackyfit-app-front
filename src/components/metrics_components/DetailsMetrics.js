@@ -127,13 +127,13 @@ const DetailsMetrics = (props) => {
     if(authenticated && user._id === metricInfo.owner) {
       return (
         <div>
-          <Button onClick={handleEditMetricForm}>
+          <Button className="button-secondary" onClick={handleEditMetricForm}>
           {isEditMetricFormDisplayed ? "Cancel" : "Edit metric"}
           </Button>
           {isEditMetricFormDisplayed && renderEditForm()}
 
           <hr/>
-          <Button onClick={deleteTheMetric}>Delete Metric</Button>
+          <Button className="button-tertiary" onClick={deleteTheMetric}>Delete Metric</Button>
         </div>
       )
     }
@@ -141,15 +141,15 @@ const DetailsMetrics = (props) => {
   
 
   return(
-    <div className="DetailsMetrics">
-      <h2>{metricInfo.name}</h2>   
+    <div className="metrics__details">
+      <h2 className="metrics__details-title">{metricInfo.name}</h2>   
       <Button variant="info" onClick={handleMeasureForm}>
         {isMeasureFormDisplayed ? "Cancel" : "Add measure"}
       </Button>
 
       {isMeasureFormDisplayed && renderMeasureForm()}
 
-      <div className="all-exercises-container">
+      <div className="metrics__chart-container">
         {renderInfo()}
       </div>
 

@@ -20,8 +20,11 @@ const CreateExercise = () => {
     };
 
     return(
-        <div>
-            <form onSubmit={handleFormSubmit} >
+        <div className="exercises__create-exer">
+            <form 
+                className="exercises__create-exer-form" 
+                onSubmit={handleFormSubmit} 
+            >
                 <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />
                 <br /><br />
                 <Button type="submit">Create</Button>

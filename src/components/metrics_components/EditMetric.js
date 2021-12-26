@@ -28,8 +28,8 @@ const EditMetric = ({ metricInfo, getMetricInfo, handleEditMetricForm }) => {
     };
 
     return(
-        <div>
-            <form onSubmit={handleFormSubmit} >
+        <div className="metric__edit">
+            <form className="metric__edit-form" onSubmit={handleFormSubmit} >
                 <label>New metric name:</label>
                 <br />
                 <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />

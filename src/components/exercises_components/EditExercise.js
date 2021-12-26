@@ -19,8 +19,8 @@ const EditExercise = ({ exerciseData, editExercise }) => {
     };
 
     return(
-        <div>
-            <form onSubmit={handleFormSubmit} >
+        <div className="exercises__edit">
+            <form className="exercises__edit-form" onSubmit={handleFormSubmit} >
                 <label>New exercise name:</label>
                 <br />
                 <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />

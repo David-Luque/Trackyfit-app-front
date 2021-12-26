@@ -17,9 +17,9 @@ const UserProfile = () => {
 
 
   return(
-    <div className="UserProfile">
-      <h2>Welcome {user.username}</h2>
-      <div className="user-info-buttons">
+    <div className="profile">
+      <h2 className="profile__title"> Welcome {user.username} </h2>
+      <div className="profile__info-buttons">
         <Link to="/all-exercises">
           <Button variant="info"> Exercises </Button>
         </Link>

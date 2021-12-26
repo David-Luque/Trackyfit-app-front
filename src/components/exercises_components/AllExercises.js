@@ -16,7 +16,7 @@ const AllExercises = () => {
     const renderExercises = ()=>{
         return exercises.map((element, index) => {
             return(
-                <div key={index}>
+                <div key={index} className="exercises__exer">
                     <Link to={`/details-exercise/${element._id}`}>
                         <h4>{element.name}</h4>
                     </Link>
@@ -28,10 +28,12 @@ const AllExercises = () => {
 
     
     return(
-        <div className="allExercises">
-            <h2>All Exercises</h2>
-            <Button variant="info" onClick={handleCreateForm}>
-                {isCreateFormDisplayed ? "Cancel" : "Create exercise"}
+        <div className="exercises">
+            <h2 className="exercises__title">All Exercises</h2>
+            <Button 
+                className="exercises__button"
+                onClick={handleCreateForm}
+            > {isCreateFormDisplayed ? "Cancel" : "Create exercise"}
             </Button>
             
             {isCreateFormDisplayed && <CreateExercise />}

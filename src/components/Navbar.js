@@ -43,12 +43,12 @@ const NavComp = (props) => {
 
     
     return (
-        <div className= "Navbar">
+        <div className= "navbar">
             <Navbar collapseOnSelect bg="info" expand="lg" fixed="top">
                 <Navbar.Brand>
                     <Link to="/"> 
-                        <img className="navbar-image" src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Athletics_pictogram.svg" alt="Trackifit" />
-                        <p className="logo-text">Trackyfit</p>
+                        <img className="navbar__image" src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Athletics_pictogram.svg" alt="Trackifit" />
+                        <p className="navbar__logo-text">Trackyfit</p>
                     </Link>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -23,8 +23,8 @@ const CreateMetric = ({ createMetric }) => {
     };
 
     return(
-        <div>
-            <form onSubmit={handleFormSubmit} >
+        <div className="metrics__create">
+            <form className="metrics__create--form" onSubmit={handleFormSubmit} >
                 <label>Metric name</label>
                 <br/>
                 <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />

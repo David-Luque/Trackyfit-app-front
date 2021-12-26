@@ -29,14 +29,14 @@ const CreateWorkout = ({ createWorkout }) => {
     };
 
     return(
-        <div>
-            <form onSubmit={handleFormSubmit} >
+        <div classNams="workouts__create-workout">
+            <form classNams="workouts__create-workout-form" onSubmit={handleFormSubmit} >
                 <label>Name</label>
                 <input type="text" name="name" value={name} onChange={(e)=>{handleChange(e)}} />
                 <label>Date</label>
                 <input type="date" name="date" value={date} onChange={(e)=>{handleChange(e)}} />
                 <br /><br />
-                <Button type="submit">Create</Button>
+                <Button classNams="button-tertiary" type="submit">Create</Button>
             </form>
             
         </div>
