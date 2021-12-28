@@ -34,19 +34,17 @@ const FormMetricMeasure = ({ metricInfo }) => {
 
 
     return(
-        <div className="metric__measure">
-            <form className="metric__measure-form" onSubmit={handleFormSubmit}>
-                <label>{`Quantity (in ${metricInfo.metricUnit})`}</label>
-                <br />
-                <input type="Number" name="quantity" value={quantity} required onChange={(e)=>{handleChange(e)}}/>
-                <br /><br />
-                <label>Date</label>
-                <br />
-                <input type="Date" name="date" value={date} required onChange={(e)=>{handleChange(e)}}/>
-                <br /><br />
-                <Button className="button-secondary" type="submit">Confirm</Button>
-            </form>
-        </div>
+        <form className="data-form--measures" onSubmit={handleFormSubmit}>
+            <label>{`Quantity (in ${metricInfo.metricUnit})`}</label>
+            <br />
+            <input type="Number" name="quantity" value={quantity} required onChange={(e)=>{handleChange(e)}}/>
+            <br /><br />
+            <label>Date</label>
+            <br />
+            <input type="Date" name="date" value={date} required onChange={(e)=>{handleChange(e)}}/>
+            <br /><br />
+            <Button className="button-secondary" type="submit">Confirm</Button>
+        </form>
     );
 };
 

@@ -66,7 +66,7 @@ const LogIn = (props) => {
 
 				<Button variant="info" type="submit"> Log In </Button>
 			</Form>
-			<p> 
+			<p className="login__signup-access"> 
 				Do not have an account yet?
 				<Link to={'/signup'}>Sign up here</Link>
 			</p>

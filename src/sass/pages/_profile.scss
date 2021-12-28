@@ -1,0 +1,19 @@
+.profile {
+    color: whitesmoke;
+
+
+    &__info-buttons {
+        margin: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        max-width: 600px;
+
+        btn {
+            padding: 3rem ;
+            font-size: 2rem;
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,20 @@
+.message {
+    color: whitesmoke;
+    font-size: larger;
+    margin: 2rem;
+    padding: 3rem;
+    border-radius: 15px;
+    font-family: 'Montserrat', sans-serif;
+
+    &--alert {
+        background-color: rgb(216, 231, 0);
+    }
+
+    &--success {
+        background-color: rgb(0, 177, 0);
+    }
+
+    &--failure {
+        background-color: rgb(214, 0, 0);
+    }
+}

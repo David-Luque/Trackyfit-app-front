@@ -88,9 +88,9 @@ const DetailsMetrics = (props) => {
   const displayLoad = ()=>{ 
     if (!isDBrequestDone) 
     {
-      return <p className="data-message"> Loading...</p>
+      return <p className="message"> Loading...</p>
     } else {
-      return <p className="data-message"> No data yet, try to add the first one </p>  
+      return <p className="message"> No data yet, try to add the first one </p>  
     }
   };
   

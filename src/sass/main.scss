@@ -8,13 +8,15 @@
 @import "base/utilities";
 
 @import "components/button";
-@import "components/form";
+@import "components/data-form";
+@import "components/chart";
 
 @import "layout/footer";
 @import "layout/header";
 @import "layout/navbar";
 
 @import "pages/home";
+@import "pages/auth";
 @import "pages/profile";
 @import "pages/exercise";
 @import "pages/metrics";

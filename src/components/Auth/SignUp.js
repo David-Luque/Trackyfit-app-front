@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Form, Alert } from 'react-bootstrap';
 import AuthContext from '../../context/auth/authContext';
 import AlertsContext from '../../context/alerts/alertsContext';
@@ -88,6 +89,10 @@ const SignUp = (props) => {
 				
 				<Button variant="info" type="submit"> Sign Up </Button>
 			</Form>
+			<p className='signup__login-access'>
+				Do yo have an account yet? 
+				<Link to={"/login"}>Login here</Link>
+			</p>
 		</div>
 	);
 }
