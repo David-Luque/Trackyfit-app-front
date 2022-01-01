@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import '../styles/Navbar.css'
 import { Link, withRouter } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import AuthContext from '../context/auth/authContext';

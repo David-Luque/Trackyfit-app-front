@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import PrivateRoute from './components/Auth/PrivateRoute';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import AuthState from './context/auth/authState';

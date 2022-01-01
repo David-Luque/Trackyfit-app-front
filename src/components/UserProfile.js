@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react'
 import AuthContext from '../context/auth/authContext';
-import '../styles/UserProfile.css'
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
