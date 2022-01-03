@@ -14,21 +14,24 @@ const AuthState = ({ children })=>{
 
     const initialState = {
         user: null,
-        authenticated: false,
-        token: null,
-        message: null
+        authenticated: null,
+        token: localStorage.getItem('token'),
+        message: null,
+        loading: true
     };
 
     const [ state, dispatch ] = useReducer(AuthReducer, initialState)
 
 
-    const userSignup = async (username, password)=>{
+    const userSignup = async (user)=>{
         try {
-            const response = await axiosClient.post('/signup', { username, password });
+            const response = await axiosClient.post('/api/auth/signup', user );
+            //console.log(response)
             dispatch({
                 type: SIGNUP_USER,
-                payload: response
+                payload: response.data
             })
+            authenticateUser();
         } catch(err) {
             console.log(err)
         }
@@ -48,16 +51,20 @@ const AuthState = ({ children })=>{
     };
 
     const authenticateUser = async ()=>{
+        console.log('AUTHENTICATED REDUCER_1 !!!')
         const token = localStorage.getItem('token');
         if(token) {
             authToken(token)
         }
         
         try {
-            const response = await axiosClient.get('/loggedin');
+            console.log('AUTHENTICATED REDUCER_2 !!!')
+            const response = await axiosClient.get('/api/auth/loggedin');
+            console.log('AUTHENTICATED REDUCER_3 !!!')
+            console.log(response)
             dispatch({
                 type: AUTH_USER,
-                payload: response
+                payload: response.data.user
             });
         } catch(err) {
             console.log(err)
@@ -84,6 +91,7 @@ const AuthState = ({ children })=>{
                     authenticated: state.authenticated,
                     token: state.token,
                     message: state.message,
+                    loading: state.loading,
                     userSignup,
                     userLogin,
                     authenticateUser,

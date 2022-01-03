@@ -48,7 +48,7 @@ const SignUp = (props) => {
 		if(password !== secondPassword) {
 			return showAlert('Both password must be identical', 'alert-error');
 		}
-
+		console.log('SIGN-UP!!')
 		userSignup({ username, email, password })
 	};
 
