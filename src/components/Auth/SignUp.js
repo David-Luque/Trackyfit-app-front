@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Form, Alert } from 'react-bootstrap';
 import AuthContext from '../../context/auth/authContext';
 import AlertsContext from '../../context/alerts/alertsContext';
@@ -12,14 +12,16 @@ const SignUp = (props) => {
 	const alertsContext = useContext(AlertsContext);
 	const { alert, showAlert } = alertsContext;
 
+	const history = useHistory();
+
 	useEffect(() => {
-		if(isAuthenticated) {
-			props.history.push('/profile');
-		}
+		// if(isAuthenticated) {
+		// 	history.push('/profile');
+		// }
 		if(message) {
 			showAlert(message.msg, message.category);
 		}
-	}, [ isAuthenticated, message ])
+	}, [ isAuthenticated, message, history ])
 
 	const [ user, setUser ] = useState({
 		username: "",
@@ -48,7 +50,6 @@ const SignUp = (props) => {
 		if(password !== secondPassword) {
 			return showAlert('Both password must be identical', 'alert-error');
 		}
-		console.log('SIGN-UP!!')
 		userSignup({ username, email, password })
 	};
 

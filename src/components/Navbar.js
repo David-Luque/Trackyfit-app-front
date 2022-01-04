@@ -9,11 +9,11 @@ import AuthContext from '../context/auth/authContext';
 const NavComp = (props) => {
 
     const authContext = useContext(AuthContext);
-    const { user, authenticated, authenticateUser, logout } = authContext;
+    const { user, isAuthenticated, authenticateUser, logout } = authContext;
 
     useEffect(()=>{
         authenticateUser();
-    }, []);
+    }, [isAuthenticated]);
 
 
     const logoutSession = ()=>{
@@ -52,7 +52,7 @@ const NavComp = (props) => {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    {authenticated ? renderUserOptions() : renderSignupLogin() }
+                    {isAuthenticated ? renderUserOptions() : renderSignupLogin() }
                 </Navbar.Collapse>
             </Navbar>
         </div>

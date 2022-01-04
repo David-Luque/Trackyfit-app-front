@@ -1,5 +1,7 @@
-export const SIGNUP_USER = "SIGNUP_USER";
-export const LOGIN_USER = "LOGIN_USER";
+export const SUCCESS_SIGNUP = "SUCCESS_SIGNUP";
+export const FAILURE_SIGNUP = "FAILURE_SIGNUP";
+export const SUCCESS_LOGIN = "SUCCESS_LOGIN";
+export const FAILURE_LOGIN = "FAILURE_LOGIN";
 export const AUTH_USER = "AUTH_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
