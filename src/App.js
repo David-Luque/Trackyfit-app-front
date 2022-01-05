@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+
 import PrivateRoute from './components/Auth/PrivateRoute';
+import authToken from './config/authToken';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import AuthState from './context/auth/authState';
@@ -31,7 +34,13 @@ import DetailsMetric from './components/metrics_components/DetailsMetrics';
 import UpdateMetrics from './components/metrics_components/EditMetric';
 import FormMetricMeasure from './components/metrics_components/FormMetricMeasure';
 
-import authToken from './config/authToken';
+import TimerHome from './components/timer_components/TimerHome';
+import Amrap from './components/timer_components/Amrap';
+import Emom from './components/timer_components/Emom';
+import ForTime from './components/timer_components/ForTime';
+import Tabata from './components/timer_components/Tabata';
+import Chrono from './components/timer_components/Chrono';
+
 
 const token = localStorage.getItem('token');
 if(token) {
@@ -52,6 +61,14 @@ const App = () => {
 					<Route exact path="/" component={Home} />
 					<Route exact path="/signup" render={()=> <SignUp />} />
 					<Route exact path="/login" render={()=> <LogIn />} />
+					
+					<Route exact path='/timer' component={TimerHome}/>
+						<Route exact path={'/timer/amrap'} component={Amrap}/>
+						<Route exact path='/timer/emom' component={Emom}/>
+						<Route exact path='/timer/fortime' component={ForTime}/>
+						<Route exact path='/timer/tabata' component={Tabata}/>
+						<Route exact path='/timer/chrono' component={Chrono}/>
+					
 					<PrivateRoute exact path="/profile" component={UserProfile} />
 					
 					<PrivateRoute exact path="/all-exercises" component={AllExercises} />
