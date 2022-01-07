@@ -2,49 +2,55 @@
 
 // class Timer {
 //     constructor() {
-//         this.currentTime = 0;
-//         this.intervalId = null;
+//         currentTime = 0;
+//         intervalId = null;
 //     }
 
-    export const startTime = () => {
-        const timerInterval = setInterval(()=>{
-            this.currentTime++;
-        }, 10);
-        this.intervalId = timerInterval;
+    // export const startTime = () => {
+    //     const timerInterval = setInterval(()=>{
+    //         currentTime++;
+    //     }, 10);
+    //     intervalId = timerInterval;
+    // };
+
+    // export const stopTime = () => {
+    //     clearInterval(intervalId);
+    // };
+
+    // export const resetTime = () => {
+    //     currentTime = 0;
+    // };
+
+    export const splitTimeToSecs = (time) => {
+        const minutes = twoDigitsNumber( getMinutes(time) );
+        const seconds = twoDigitsNumber( getSeconds(time) );
+        return `${minutes}:${seconds}`;
     };
 
-    export const stopTime = () => {
-        clearInterval(this.intervalId);
-    };
-
-    export const resetTime = () => {
-        this.currentTime = 0;
-    };
-
-    export const splitTime = () => {
-        const minutes = this.twoDigitsNumber( this.getMinutes() );
-        const seconds = this.twoDigitsNumber( this.getSeconds() );
-        const milliseconds = this.twoDigitsNumber( this.getMilliseconds() );
-
+    export const splitTimeToMillisecs = (time) => {
+        const minutes = twoDigitsNumber( getMinutes(time) );
+        const seconds = twoDigitsNumber( getSeconds(time) );
+        const milliseconds = twoDigitsNumber( getMilliseconds(time) );
         return `${minutes}:${seconds}:${milliseconds}`;
     };
 
-    export const getMinutes = (secs) => {
-        const minutes = Math.floor(secs / 60);
+    export const getMinutes = (time) => {
+        const minutes = Math.floor(time / 60);
         return minutes;
     };
 
-    export const getSeconds = () => {
-        const minutes = this.getMinutes();
-        const remainingTime = this.currentTime - minutes * 6000;
-        const seconds = Math.floor(remainingTime / 100);
+    export const getSeconds = (time) => {
+        const minutes = getMinutes(time);
+        const seconds = time - minutes * 60;
+        //const seconds = Math.floor(remainingTime / 100);
         return seconds;
     };
 
-    export const getMilliseconds = () => {
-        const minutes = this.getMinutes();
-        const seconds = this.getSeconds();
-        const milliseconds = this.currentTime - (minutes * 6000 + seconds * 100);
+    export const getMilliseconds = (time) => {
+        const minutes = getMinutes(time);
+        const seconds = getSeconds(time);
+        const remainingTime = time - (minutes * 60 + seconds);
+        const milliseconds = remainingTime * 100;
         return milliseconds;
     };
 

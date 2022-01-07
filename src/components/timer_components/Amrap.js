@@ -1,41 +1,62 @@
 import * as React from 'react';
-import { getMinutes } from '../../config/TimerHelper';
+import { splitTimeToSecs } from '../../config/TimerHelper';
 
 const Amrap = ()=>{
     
-    const getTimeOptions = ()=>{
-        const timeOptionsMin = []; //in minutes
-        let i = 0;
+    const getTimeOptions = (maxMinutes)=>{
+
+        const generateOptions = ()=>{
+            const timeOptionsMin = []; //in minutes
+            let i = 0;
+            do {
+                i += .5;
+                timeOptionsMin.push(i);
+            } while (timeOptionsMin[timeOptionsMin.length - 1] <= maxMinutes);
+            //convert to seconds
+            const timeOptionsSec = timeOptionsMin.map(op => op * 60);
+            return timeOptionsSec;
+        };
         
-        do {
-            i += .5;
-            timeOptionsMin.push(i);
-        } while (timeOptionsMin[timeOptionsMin.length - 1] < 30);
-        
-        //convert to seconds
-        const timeOptionsSec = timeOptionsMin.map(op => op * 60);
-        return timeOptionsSec;
+        const formatTimeOptions = (options)=>{
+            return options.map(opt => splitTimeToSecs(opt));
+        }; 
+
+        const compoundTimeOptions = ()=> {
+            const options = generateOptions(30);
+            const formatOptions = formatTimeOptions(options);
+            let timeData = [];
+            
+            for(let i = 0; i < options.length - 1; i++) {
+                timeData.push({
+                    value: options[i],
+                    formatValue: formatOptions[i]
+                });
+            }
+            return timeData;
+        };
+
+        return compoundTimeOptions();
     };
 
-    // const renderTimeOptions = ()=>{
-    //     const options = getTimeOptions();
-    //     return options.map((num, index) => {
-    //         <option value={} key={index}>
-    //             {}
-    //         </option>
-    //     });
-    // };
+
+    const renderTimeOptions = ()=>{
+        const options = getTimeOptions(150);
+        return options.map((op, index) => {
+            return (
+                <option value={op.value} key={index}>
+                    {op.formatValue}
+                </option>
+            )
+        });
+    };
     
-    console.log(getMinutes(120))
 
     return (
         <div>
             <h3>AMRAP</h3>
             <p>As many rounds as posible in:</p>
             <select name='time'>
-                <option value='60'>1:00</option>
-                <option>1:30</option>
-                <option>2:00</option>
+                {renderTimeOptions()}
             </select>
             <p>minutes</p>
             <button>Adds multiple AMRAPs</button>
