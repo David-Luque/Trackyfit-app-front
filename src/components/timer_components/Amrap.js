@@ -1,7 +1,10 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { splitTimeToSecs } from '../../config/TimerHelper';
 
 const Amrap = ()=>{
+
+    const [ sets, setSets ] = useState(1);
+    const [ amraps, setAmraps ] = useState([]);
     
     const getTimeOptions = (maxMinutes)=>{
 
