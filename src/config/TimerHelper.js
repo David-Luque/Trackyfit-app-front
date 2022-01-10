@@ -6,20 +6,20 @@
 //         intervalId = null;
 //     }
 
-    // export const startTime = () => {
-    //     const timerInterval = setInterval(()=>{
-    //         currentTime++;
-    //     }, 10);
-    //     intervalId = timerInterval;
-    // };
+    export const startTime = () => {
+        const timerInterval = setInterval(()=>{
+            currentTime++;
+        }, 10);
+        intervalId = timerInterval;
+    };
 
-    // export const stopTime = () => {
-    //     clearInterval(intervalId);
-    // };
+    export const stopTime = () => {
+        clearInterval(intervalId);
+    };
 
-    // export const resetTime = () => {
-    //     currentTime = 0;
-    // };
+    export const resetTime = () => {
+        currentTime = 0;
+    };
 
     export const splitTimeToSecs = (time) => {
         const minutes = twoDigitsNumber( getMinutes(time) );
