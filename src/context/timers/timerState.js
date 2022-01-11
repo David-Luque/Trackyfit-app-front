@@ -1,11 +1,18 @@
 import { useReducer } from 'react';
 import TimerContext from './timerContext';
 import TimerReducer from './timerReducer';
+import {
+    SAVE_INTERVAL,
+    COUNT_TIME,
+    STOP_INTERVAL,
+    RESET_TIME
+} from '../../types';
 
 const TimerState = ({ children })=>{
 
     const initialState = {
         timer: 0,
+        intervalID: null,
         sets: null,
         rest: null,
         amrap_time: null,
@@ -22,20 +29,34 @@ const TimerState = ({ children })=>{
     const [ state, dispatch ] = useReducer(TimerReducer, initialState);
 
 
-    // const startTime = () => {
-    //     const timerInterval = setInterval(()=>{
-    //         currentTime++;
-    //     }, 10);
-    //     intervalId = timerInterval;
-    // };
+    const startTime = () => {
+        const saveInterval = (int)=>{
+            dispatch({
+                type: SAVE_INTERVAL,
+                payload: int
+            });
+        }; 
 
-    // const stopTime = () => {
-    //     clearInterval(intervalId);
-    // };
+        const timerInterval = setInterval(()=>{
+            dispatch({
+                type: COUNT_TIME
+            });
+        }, 10);
 
-    // const resetTime = () => {
-    //     currentTime = 0;
-    // };
+        saveInterval(timerInterval);
+    };
+
+    const stopTime = () => {
+        dispatch({
+            type: STOP_INTERVAL
+        });
+    };
+
+    const resetTime = () => {
+        dispatch({
+            type: RESET_TIME
+        });
+    };
 
     const splitTimeToSecs = (time) => {
         const minutes = twoDigitsNumber( getMinutes(time) );
@@ -58,7 +79,6 @@ const TimerState = ({ children })=>{
     const getSeconds = (time) => {
         const minutes = getMinutes(time);
         const seconds = time - minutes * 60;
-        //const seconds = Math.floor(remainingTime / 100);
         return seconds;
     };
 
@@ -75,15 +95,68 @@ const TimerState = ({ children })=>{
         if(strNumber.length < 2) {
             return `0${strNumber}`;
         } else {
-            return strNumber;
+            return strNumber.substring(0, 2);
         }
+    };
+
+    const getTimeOptions = (maxMinutes)=>{
+
+        const generateOptions = ()=>{
+            const timeOptionsMin = []; //in minutes
+            let i = 0;
+            do {
+                i += .5;
+                timeOptionsMin.push(i);
+            } while (timeOptionsMin[timeOptionsMin.length - 1] <= maxMinutes);
+            //convert to seconds
+            const timeOptionsSec = timeOptionsMin.map(op => op * 60);
+            return timeOptionsSec;
+        };
+        
+        const formatTimeOptions = (options)=>{
+            return options.map(opt => splitTimeToSecs(opt));
+        }; 
+
+        const compoundTimeOptions = ()=> {
+            const options = generateOptions();
+            const formatOptions = formatTimeOptions(options);
+            let timeData = [];
+            
+            for(let i = 0; i < options.length - 1; i++) {
+                timeData.push({
+                    value: options[i],
+                    formatValue: formatOptions[i]
+                });
+            }
+            return timeData;
+        };
+
+        return compoundTimeOptions();
     };
 
 
     return (
         <TimerContext.Provider
             value={{
-
+                timer: state.timer,
+                intervalID: state.intervalID,
+                sets: state.sets,
+                rest: state.rest,
+                amrap_time: state.amrap_time,
+                amrap_sets: state.amrap_sets,
+                forTime_timeCap: state.forTime_timeCap,
+                emom_every: state.emom_every,
+                emom_for: state.emom_for,
+                asLongAsPossible: state.asLongAsPossible,
+                tabata_rounds: state.tabata_rounds,
+                tabata_workTime: state.tabata_workTime,
+                tabata_restTime: state.tabata_restTime,
+                startTime,
+                stopTime,
+                resetTime,
+                splitTimeToSecs,
+                splitTimeToMillisecs,
+                getTimeOptions
             }}
         >
             { children }

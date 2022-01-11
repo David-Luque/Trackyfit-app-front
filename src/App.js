@@ -12,6 +12,7 @@ import ResultState from './context/results/resultsState';
 import MetricState from './context/metrics/metricsState';
 import MeasureState from './context/measures/measureState'; 
 import WorkoutState from './context/workouts/workoutState'; 
+import TimerState from './context/timers/timerState'
 import AlertState from './context/alerts/alertsState';
 
 import Home from './components/Home';
@@ -56,6 +57,7 @@ const App = () => {
 		<MeasureState>
 		<WorkoutState>
 		<AlertState>
+		<TimerState>
 			<Router>
 				<Switch>
 					<Route exact path="/" component={Home} />
@@ -86,7 +88,8 @@ const App = () => {
 					<PrivateRoute exact path="/update-metric" component={UpdateMetrics} />
 					<PrivateRoute exact path="/add-measure" component={FormMetricMeasure} />
 				</Switch>
-		</Router>
+			</Router>
+		</TimerState>
 		</AlertState>
 		</WorkoutState>
 		</MeasureState>
