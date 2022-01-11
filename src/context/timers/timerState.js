@@ -13,6 +13,7 @@ const TimerState = ({ children })=>{
     const initialState = {
         timer: 0,
         intervalID: null,
+        isTimerReady: null,
         sets: null,
         rest: null,
         amrap_time: null,
@@ -140,6 +141,7 @@ const TimerState = ({ children })=>{
             value={{
                 timer: state.timer,
                 intervalID: state.intervalID,
+                isTimerReady: state.isTimerReady,
                 sets: state.sets,
                 rest: state.rest,
                 amrap_time: state.amrap_time,
