@@ -5,7 +5,10 @@ import {
     SAVE_INTERVAL,
     COUNT_TIME,
     STOP_INTERVAL,
-    RESET_TIME
+    RESET_TIME,
+    SET_AMRAP_TIME,
+    ADD_AMRAP_SET,
+    REMOVE_AMRAP_SET
 } from '../../types';
 
 const TimerState = ({ children })=>{
@@ -17,7 +20,7 @@ const TimerState = ({ children })=>{
         sets: null,
         rest: null,
         amrap_time: null,
-        amrap_sets: null, //an arary of objects with rest and time for every set
+        amrap_sets: [], //an arary of objects with rest and time for every set
         forTime_timeCap: 0,
         emom_every: 0,
         emom_for: 0,
@@ -135,6 +138,38 @@ const TimerState = ({ children })=>{
         return compoundTimeOptions();
     };
 
+    const setAmrapTime = (time)=>{
+        console.log(time)
+        dispatch({
+            type: SET_AMRAP_TIME,
+            payload: Number(time)
+        });
+    };
+
+    const addAmrap = ()=>{
+        console.log('AMRAP!!!')
+        let newAmrap;
+        if(state.amrap_sets.length === 0) {
+            newAmrap = {
+                rest: 60,
+                minutes: 120
+            }
+        } else if(state.amrap_sets.length > 0) {
+            newAmrap = state.amrap_sets[state.amrap_sets.length - 1]
+        };
+        console.log(newAmrap)
+        dispatch({
+            type: ADD_AMRAP_SET,
+            payload: newAmrap
+        });
+    };
+
+    const removeAmrap = ()=>{
+        dispatch({
+            type: REMOVE_AMRAP_SET
+        });
+    };
+
 
     return (
         <TimerContext.Provider
@@ -158,7 +193,10 @@ const TimerState = ({ children })=>{
                 resetTime,
                 splitTimeToSecs,
                 splitTimeToMillisecs,
-                getTimeOptions
+                getTimeOptions,
+                setAmrapTime,
+                addAmrap,
+                removeAmrap
             }}
         >
             { children }

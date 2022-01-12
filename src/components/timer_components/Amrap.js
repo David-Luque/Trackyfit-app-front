@@ -5,6 +5,10 @@ const Amrap = ()=>{
 
     const timerContext = useContext(TimerContext);
     const {
+        timer,
+        setAmrapTime,
+        addAmrap,
+        removeAmrap,
         isTimerReady,
         getTimeOptions
     } = timerContext
@@ -20,9 +24,7 @@ const Amrap = ()=>{
         });
     };
 
-    const addAmrap = ()=>{};
-
-    const removeAmrap = ()=>{};
+    
     
 
     if(isTimerReady) { 
@@ -45,16 +47,21 @@ const Amrap = ()=>{
         return (
             <div>
                 <h3>AMRAP</h3>
+                
                 <p>As many rounds as posible in:</p>
-                <select name='time'>
+                <select onChange={(e)=>setAmrapTime(e.target.value)} name='time'>
                     {renderTimeOptions()}
                 </select>
                 <p>minutes</p>
+                
                 {/* <div>{amraps}</div> */}
+                
                 <button
-                    onClick={() => addAmrap()}
+                    onClick={addAmrap}
                 > Adds multiple AMRAPs </button>
+                
                 <button>START</button>
+                
                 {/* <p>Total time: {}</p> */}
             </div>
         )
