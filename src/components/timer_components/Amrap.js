@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import TimerContext from '../../context/timers/timerContext';
+import AmrapSet from './minor_timer_comp/AmrapSet';
 
 const Amrap = ()=>{
 
@@ -9,12 +10,15 @@ const Amrap = ()=>{
         setAmrapTime,
         addAmrap,
         removeAmrap,
+        amrap_sets,
+        editAmrapSet,
         isTimerReady,
         getTimeOptions
     } = timerContext
 
-    const renderTimeOptions = ()=>{
-        const options = getTimeOptions(10);
+    const renderTimeOptions = (maxMinutes)=>{
+        const max_minutes = maxMinutes;
+        const options = getTimeOptions(max_minutes);
         return options.map((op, index) => {
             return (
                 <option value={op.value} key={index}>
@@ -24,7 +28,17 @@ const Amrap = ()=>{
         });
     };
 
-    
+    const renderAmraps = ()=>{
+        const timeOptions = getTimeOptions(10);
+        return amrap_sets.map(amrap => (
+            <AmrapSet 
+                amrap={amrap}
+                removeAmrap={removeAmrap}
+                editAmrapSet={editAmrapSet}
+                timeOptions={timeOptions}
+            />
+        ));
+    };
     
 
     if(isTimerReady) { 
@@ -50,11 +64,11 @@ const Amrap = ()=>{
                 
                 <p>As many rounds as posible in:</p>
                 <select onChange={(e)=>setAmrapTime(e.target.value)} name='time'>
-                    {renderTimeOptions()}
+                    {renderTimeOptions(10)}
                 </select>
                 <p>minutes</p>
                 
-                {/* <div>{amraps}</div> */}
+                { amrap_sets.length > 0 && renderAmraps() }
                 
                 <button
                     onClick={addAmrap}

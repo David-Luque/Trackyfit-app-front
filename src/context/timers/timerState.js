@@ -170,6 +170,10 @@ const TimerState = ({ children })=>{
         });
     };
 
+    const editAmrapSet = ()=>{
+        console.log('edit')
+    };
+
 
     return (
         <TimerContext.Provider
@@ -196,7 +200,8 @@ const TimerState = ({ children })=>{
                 getTimeOptions,
                 setAmrapTime,
                 addAmrap,
-                removeAmrap
+                removeAmrap,
+                editAmrapSet
             }}
         >
             { children }
