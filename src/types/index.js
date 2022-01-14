@@ -38,5 +38,6 @@ export const RESET_TIME = 'RESET_TIME';
 export const SET_AMRAP_TIME = 'SET_AMRAP_TIME';
 export const ADD_AMRAP_SET = 'ADD_AMRAP_SET';
 export const REMOVE_AMRAP_SET = 'REMOVE_AMRAP_SET';
+export const EDIT_AMRAP_SET = 'EDIT_AMRAP_SET';
 
 export const SET_ALERT = 'SET_ALERT';

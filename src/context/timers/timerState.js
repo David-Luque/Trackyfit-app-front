@@ -8,7 +8,8 @@ import {
     RESET_TIME,
     SET_AMRAP_TIME,
     ADD_AMRAP_SET,
-    REMOVE_AMRAP_SET
+    REMOVE_AMRAP_SET,
+    EDIT_AMRAP_SET
 } from '../../types';
 
 const TimerState = ({ children })=>{
@@ -147,31 +148,48 @@ const TimerState = ({ children })=>{
     };
 
     const addAmrap = ()=>{
-        console.log('AMRAP!!!')
         let newAmrap;
         if(state.amrap_sets.length === 0) {
             newAmrap = {
-                rest: 60,
-                minutes: 120
+                rest: 30,
+                work: 30,
+                position: state.amrap_sets.length
             }
         } else if(state.amrap_sets.length > 0) {
-            newAmrap = state.amrap_sets[state.amrap_sets.length - 1]
+            const previousAmrap = state.amrap_sets[state.amrap_sets.length - 1]
+            newAmrap = {
+                ...previousAmrap,
+                position: state.amrap_sets.length
+            };
         };
-        console.log(newAmrap)
         dispatch({
             type: ADD_AMRAP_SET,
             payload: newAmrap
         });
     };
 
-    const removeAmrap = ()=>{
+    const removeAmrap = (position)=>{
+        const amrap_sets_Copy = [...state.amrap_sets];
+        amrap_sets_Copy.splice(position, 1);
+        for(let i = 0; i < amrap_sets_Copy.length; i++) {
+            amrap_sets_Copy[i].position = i;
+        }
+        
         dispatch({
-            type: REMOVE_AMRAP_SET
+            type: REMOVE_AMRAP_SET,
+            payload: amrap_sets_Copy
         });
     };
 
-    const editAmrapSet = ()=>{
-        console.log('edit')
+    const editAmrapSet = (amrap_set)=>{
+        const { position } = amrap_set;
+        const amrap_sets_Copy = [...state.amrap_sets];
+        amrap_sets_Copy.splice(position, 1, amrap_set)
+        //console.log(amrap_sets_Copy)
+        dispatch({
+            type: EDIT_AMRAP_SET,
+            payload: amrap_sets_Copy
+        });
     };
 
 

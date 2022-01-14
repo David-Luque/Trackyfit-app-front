@@ -5,7 +5,8 @@ import {
     RESET_TIME,
     SET_AMRAP_TIME,
     ADD_AMRAP_SET,
-    REMOVE_AMRAP_SET
+    REMOVE_AMRAP_SET,
+    EDIT_AMRAP_SET
 } from '../../types'
 
 const TimerReducer = (state, action)=>{
@@ -42,8 +43,11 @@ const TimerReducer = (state, action)=>{
                 amrap_sets: [...state.amrap_sets, action.payload]
             };
         case REMOVE_AMRAP_SET:
-            state.amrap_sets.pop();
-            return state;
+        case EDIT_AMRAP_SET:
+            return {
+                ...state,
+                amrap_sets: action.payload
+            };
         default:
             return state;
     };
