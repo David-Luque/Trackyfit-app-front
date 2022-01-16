@@ -185,7 +185,7 @@ const TimerState = ({ children })=>{
         const { position } = amrap_set;
         const amrap_sets_Copy = [...state.amrap_sets];
         amrap_sets_Copy.splice(position, 1, amrap_set)
-        //console.log(amrap_sets_Copy)
+
         dispatch({
             type: EDIT_AMRAP_SET,
             payload: amrap_sets_Copy

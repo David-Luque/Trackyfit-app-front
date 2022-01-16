@@ -35,9 +35,6 @@ const TimerReducer = (state, action)=>{
                 amrap_time: action.payload
             }
         case ADD_AMRAP_SET:
-            //console.log('Reducer log: ' + action)
-            // state.amrap_sets.push(action.payload);
-            // console.log(state.amrap_sets)
             return {
                 ...state,
                 amrap_sets: [...state.amrap_sets, action.payload]

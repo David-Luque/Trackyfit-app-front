@@ -29,7 +29,7 @@ const Amrap = ()=>{
     };
 
     const renderAmraps = ()=>{
-        const timeOptions =  getTimeOptions(10) ;
+        const timeOptions =  getTimeOptions(10);
         return amrap_sets.map(amrap => (
             <AmrapSet 
                 amrap={amrap}
@@ -38,6 +38,9 @@ const Amrap = ()=>{
                 timeOptions={timeOptions}
             />
         ));
+    };
+
+    const prepareAmrap = ()=>{
     };
     
 
@@ -74,7 +77,9 @@ const Amrap = ()=>{
                     onClick={addAmrap}
                 > Adds multiple AMRAPs </button>
                 
-                <button>START</button>
+                <button onClick={()=>prepareAmrap()}>
+                    START
+                </button>
                 
                 {/* <p>Total time: {}</p> */}
             </div>

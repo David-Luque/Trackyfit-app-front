@@ -29,6 +29,11 @@ const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, timeOptions }) => {
     };
 
     const renderSetOptions = ()=>{
+        //TODO: test update of every select values after delete any set
+
+        // update total time of the complete AMRAP
+
+
         return timeOptions.map((op, index)=>{
             return (
                 <option value={op.value} key={index}>
@@ -38,7 +43,7 @@ const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, timeOptions }) => {
         });
     };
     
-    //TODO: test update of every select values after delete any set
+
     return (
         <div>
             <h4>{amrap.num}. AMRAP (total_time)</h4>
