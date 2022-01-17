@@ -9,7 +9,8 @@ import {
     SET_AMRAP_TIME,
     ADD_AMRAP_SET,
     REMOVE_AMRAP_SET,
-    EDIT_AMRAP_SET
+    EDIT_AMRAP_SET,
+    SET_TIMER_READY
 } from '../../types';
 
 const TimerState = ({ children })=>{
@@ -33,6 +34,11 @@ const TimerState = ({ children })=>{
 
     const [ state, dispatch ] = useReducer(TimerReducer, initialState);
 
+    const setTimerReady = ()=>{
+        dispatch({
+            type: SET_TIMER_READY 
+        });
+    };
 
     const startTime = () => {
         const saveInterval = (int)=>{
@@ -218,7 +224,8 @@ const TimerState = ({ children })=>{
                 setAmrapTime,
                 addAmrap,
                 removeAmrap,
-                editAmrapSet
+                editAmrapSet,
+                setTimerReady
             }}
         >
             { children }

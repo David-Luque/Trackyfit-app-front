@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import TimerContext from '../../context/timers/timerContext';
 import AmrapSet from './minor_timer_comp/AmrapSet';
 
@@ -15,9 +15,33 @@ const Amrap = ()=>{
         amrap_sets,
         editAmrapSet,
         isTimerReady,
+        setTimerReady,
         getTimeOptions,
         splitTimeToSecs
     } = timerContext
+
+    const [ sessionTimes, setSessionTimes ] = useState({});
+
+
+    useEffect(()=>{
+        setSessionTimes({
+            ...sessionTimes,
+            session_amrap: amrap_time
+        });
+        
+        if(amrap_sets.length > 0) {
+            const session_amrap_sets = amrap_sets.map(amrap => amrap.work);
+            const session_amrap_rests = amrap_sets.map(amrap => amrap.rest);
+            setSessionTimes({
+                ...sessionTimes,
+                session_sets: session_amrap_sets,
+                session_rests: session_amrap_rests
+            })
+        } else {
+            setSessionTimes({ session_amrap: amrap_time });
+        }
+    }, [amrap_time, amrap_sets]);
+
 
     const renderTimeOptions = (maxMinutes)=>{
         const max_minutes = maxMinutes;
@@ -40,7 +64,6 @@ const Amrap = ()=>{
     };
 
     const renderAmraps = ()=>{
-        //const timeOptions =  getTimeOptions(10);
         return amrap_sets.map(amrap => (
             <AmrapSet 
                 amrap={amrap}
@@ -58,19 +81,14 @@ const Amrap = ()=>{
         const restTotalTime = amrap_sets.reduce((acc, current)=>{
             return acc + current.rest
         }, 0);
-        // console.log(workTotalTime)
-        // console.log(restTotalTime)
         const totalTime = amrap_time + workTotalTime + restTotalTime; 
         return splitTimeToSecs(totalTime);
     };
     
     const prepareAmrap = ()=>{
-        //create localstate where locate: 
-            //initial amrap time
-            //extract and set in all amrap's work times in array
-            //extract and set in all amrap's rest times in array
-
         //change "isTimeReady" to true
+        setTimerReady();
+        
     };
 
     

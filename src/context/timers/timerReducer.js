@@ -6,7 +6,8 @@ import {
     SET_AMRAP_TIME,
     ADD_AMRAP_SET,
     REMOVE_AMRAP_SET,
-    EDIT_AMRAP_SET
+    EDIT_AMRAP_SET,
+    SET_TIMER_READY
 } from '../../types'
 
 const TimerReducer = (state, action)=>{
@@ -45,6 +46,11 @@ const TimerReducer = (state, action)=>{
                 ...state,
                 amrap_sets: action.payload
             };
+        case SET_TIMER_READY:
+            return {
+                ...state,
+                isTimerReady: true
+            }
         default:
             return state;
     };
