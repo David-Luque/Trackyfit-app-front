@@ -3,45 +3,76 @@ import TimerContext from '../../context/timers/timerContext';
 import AmrapSet from './minor_timer_comp/AmrapSet';
 
 const Amrap = ()=>{
+    //TODO: include an "useEffect" on every timer_component where execute a fuction to reset "initialState" of TimerContext
 
     const timerContext = useContext(TimerContext);
     const {
         timer,
+        amrap_time,
         setAmrapTime,
         addAmrap,
         removeAmrap,
         amrap_sets,
         editAmrapSet,
         isTimerReady,
-        getTimeOptions
+        getTimeOptions,
+        splitTimeToSecs
     } = timerContext
 
     const renderTimeOptions = (maxMinutes)=>{
         const max_minutes = maxMinutes;
         const options = getTimeOptions(max_minutes);
-        return options.map((op, index) => {
-            return (
-                <option value={op.value} key={index}>
-                    {op.formatValue}
-                </option>
-            )
-        });
+        
+        return (
+            <>
+                <option> - </option>
+                {
+                    options.map((op, index) => {
+                        return (
+                            <option value={op.value} key={index}>
+                                {op.formatValue}
+                            </option>
+                        )
+                    })
+                }
+            </>
+        );        
     };
 
     const renderAmraps = ()=>{
-        const timeOptions =  getTimeOptions(10);
+        //const timeOptions =  getTimeOptions(10);
         return amrap_sets.map(amrap => (
             <AmrapSet 
                 amrap={amrap}
                 removeAmrap={removeAmrap}
                 editAmrapSet={editAmrapSet}
-                timeOptions={timeOptions}
+                getTimeOptions={getTimeOptions}
             />
         ));
     };
 
-    const prepareAmrap = ()=>{
+    const renderTotalTime = ()=>{
+        const workTotalTime = amrap_sets.reduce((acc, current) => {
+            return acc + current.work;
+        }, 0);
+        const restTotalTime = amrap_sets.reduce((acc, current)=>{
+            return acc + current.rest
+        }, 0);
+        // console.log(workTotalTime)
+        // console.log(restTotalTime)
+        const totalTime = amrap_time + workTotalTime + restTotalTime; 
+        return splitTimeToSecs(totalTime);
     };
+    
+    const prepareAmrap = ()=>{
+        //create localstate where locate: 
+            //initial amrap time
+            //extract and set in all amrap's work times in array
+            //extract and set in all amrap's rest times in array
+
+        //change "isTimeReady" to true
+    };
+
     
 
     if(isTimerReady) { 
@@ -81,7 +112,7 @@ const Amrap = ()=>{
                     START
                 </button>
                 
-                {/* <p>Total time: {}</p> */}
+                <p>Total time: {renderTotalTime()}</p>
             </div>
         )
     }

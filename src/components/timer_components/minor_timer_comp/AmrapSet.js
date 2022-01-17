@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, timeOptions }) => {
+const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, getTimeOptions }) => {
 
     const { work, rest, position } = amrap;
 
@@ -29,11 +29,8 @@ const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, timeOptions }) => {
     };
 
     const renderSetOptions = ()=>{
-        //TODO: test update of every select values after delete any set
-
-        // update total time of the complete AMRAP
-
-
+        const timeOptions = getTimeOptions(10);
+        
         return timeOptions.map((op, index)=>{
             return (
                 <option value={op.value} key={index}>
@@ -48,11 +45,11 @@ const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, timeOptions }) => {
         <div>
             <h4>{amrap.num}. AMRAP (total_time)</h4>
             <label>Rest</label>
-            <select name="rest" onChange={(e) => handleChange(e)}>
+            <select name="rest" value={rest} onChange={(e) => handleChange(e)}>
                 {renderSetOptions()}
             </select>
             <label>Work</label>
-            <select name="work" onChange={(e) => handleChange(e)}>
+            <select name="work" value={work} onChange={(e) => handleChange(e)}>
                 {renderSetOptions()}
             </select>
             <button onClick={()=>removeAmrap(position)}> x </button>

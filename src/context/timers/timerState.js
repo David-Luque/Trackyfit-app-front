@@ -140,7 +140,6 @@ const TimerState = ({ children })=>{
     };
 
     const setAmrapTime = (time)=>{
-        console.log(time)
         dispatch({
             type: SET_AMRAP_TIME,
             payload: Number(time)
