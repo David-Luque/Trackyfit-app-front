@@ -23,8 +23,10 @@ const TimerReducer = (state, action)=>{
                 timer: state.timer++
             }
         case STOP_INTERVAL:
-            return clearInterval(state.intervalID);
-            //return state;
+            return {
+                ...state,
+                intervalID: ''
+            };
         case RESET_TIME:
             return {
                 ...state,

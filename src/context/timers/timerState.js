@@ -58,6 +58,7 @@ const TimerState = ({ children })=>{
     };
 
     const stopTime = () => {
+        clearInterval(state.intervalID);
         dispatch({
             type: STOP_INTERVAL
         });

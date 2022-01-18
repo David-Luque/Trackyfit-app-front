@@ -20,9 +20,20 @@ const Amrap = ()=>{
         splitTimeToSecs
     } = timerContext
 
-    const [ sessionTimes, setSessionTimes ] = useState({});
+    const [ sessionTimes, setSessionTimes ] = useState({
+        session_sets: null,
+        all_session_amraps: null,
+        session_rests: null
+    });
+    const { session_sets, all_session_amraps, session_rests } = sessionTimes
 
+    const [ sessionCounter, setSessionCounter ] = useState({
+        currentAmrap: null,
+        currentRest: null
+    });
+    const { currentAmrap, currentRest } = sessionCounter
 
+    //REHACER LOGICA DE useEffect con los nuevos localStates
     useEffect(()=>{
         setSessionTimes({
             ...sessionTimes,
@@ -86,18 +97,38 @@ const Amrap = ()=>{
     };
     
     const prepareAmrap = ()=>{
-        //change "isTimeReady" to true
-        setTimerReady();
+        if('session_sets' in setSessionTimes) {
+            setSessionCounter({
+            currentAmrap: 1,
+            currentRest: 1
+            })  
+        }
         
+        setTimerReady();
     };
 
-    
+    const renderAmrapCount = ()=>{
+        if(session_sets.length > 0) {
+            return (
+                <>
+                    <h3>AMRAP {currentAmrap} of {all_session_amraps.length}</h3>
+                    <p>{splitTimeToSecs(all_session_amraps[currentAmrap])} minutes</p>
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <h3>AMRAP</h3>
+                    <p>{splitTimeToSecs(all_session_amraps[currentAmrap])} minutes</p>
+                </>
+            )
+        }
+    };
 
     if(isTimerReady) { 
         return (
             <div>
-                <h3>AMRAP</h3>
-                {/* <p>Minutes: {}</p> */}
+                { renderAmrapCount() }
                 <div>
                     <main>
                         <img/>
