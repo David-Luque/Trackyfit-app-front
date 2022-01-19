@@ -21,11 +21,12 @@ const Amrap = ()=>{
     } = timerContext
 
     const [ sessionTimes, setSessionTimes ] = useState({
+        session_amrap: null,
         session_sets: null,
         all_session_amraps: null,
         session_rests: null
     });
-    const { session_sets, all_session_amraps, session_rests } = sessionTimes
+    const { session_amrap, session_sets, all_session_amraps, session_rests } = sessionTimes
 
     const [ sessionCounter, setSessionCounter ] = useState({
         currentAmrap: null,
@@ -33,12 +34,12 @@ const Amrap = ()=>{
     });
     const { currentAmrap, currentRest } = sessionCounter
 
-    //REHACER LOGICA DE useEffect con los nuevos localStates
+
     useEffect(()=>{
-        setSessionTimes({
-            ...sessionTimes,
-            session_amrap: amrap_time
-        });
+        // setSessionTimes({
+        //     ...sessionTimes,
+        //     session_amrap: amrap_time
+        // });
         
         if(amrap_sets.length > 0) {
             const session_amrap_sets = amrap_sets.map(amrap => amrap.work);
@@ -49,7 +50,12 @@ const Amrap = ()=>{
                 session_rests: session_amrap_rests
             })
         } else {
-            setSessionTimes({ session_amrap: amrap_time });
+            setSessionTimes({
+                session_amrap: amrap_time,
+                session_sets: null,
+                all_session_amraps: null,
+                session_rests: null
+            });
         }
     }, [amrap_time, amrap_sets]);
 
@@ -97,40 +103,71 @@ const Amrap = ()=>{
     };
     
     const prepareAmrap = ()=>{
-        if('session_sets' in setSessionTimes) {
-            setSessionCounter({
+        setSessionCounter({
             currentAmrap: 1,
             currentRest: 1
-            })  
+        });
+
+        if(session_sets) {
+            setSessionTimes({
+                ...sessionTimes,
+                all_session_amraps: [session_amrap, ...session_sets]
+            });
+        } else {
+            setSessionTimes({
+                ...sessionTimes,
+                all_session_amraps: [session_amrap]
+            });
         }
         
         setTimerReady();
     };
 
     const renderAmrapCount = ()=>{
-        if(session_sets.length > 0) {
+        if(session_sets) {
             return (
                 <>
                     <h3>AMRAP {currentAmrap} of {all_session_amraps.length}</h3>
-                    <p>{splitTimeToSecs(all_session_amraps[currentAmrap])} minutes</p>
+                    <p>{splitTimeToSecs(all_session_amraps[currentAmrap-1])} minutes</p>
                 </>
             )
         } else {
             return (
                 <>
                     <h3>AMRAP</h3>
-                    <p>{splitTimeToSecs(all_session_amraps[currentAmrap])} minutes</p>
+                    <p>{splitTimeToSecs(all_session_amraps[currentAmrap-1])} minutes</p>
                 </>
             )
         }
     };
+
+    const startSession = ()=>{
+        //countdown 10sec => done in function
+
+        //start timer
+            //startTime()
+            // currentAmrap - timer
+            //if count is 0:
+                //if not more elements in all_session_amraps => endSession
+                //if more elements in all_session_amraps:
+                    //add 1 to amrap count
+                    //reset timer and start again
+                    //current rest - timer
+                    //if count is 0:
+                        //if more elements in session_rests => adds 1 to rest count
+                        //restart the hole cicle?
+                    //display operation
+            // display operation before
+
+    };
+
 
     if(isTimerReady) { 
         return (
             <div>
                 { renderAmrapCount() }
                 <div>
-                    <main>
+                    <main onClick={()=>startSession()}>
                         <img/>
                         <p>Tap to start</p>
                     </main>
