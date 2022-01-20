@@ -8,6 +8,10 @@ const Amrap = ()=>{
     const timerContext = useContext(TimerContext);
     const {
         timer,
+        intervalID,
+        saveIntervalID,
+        startTime,
+        resetTimer,
         amrap_time,
         setAmrapTime,
         addAmrap,
@@ -17,7 +21,7 @@ const Amrap = ()=>{
         isTimerReady,
         setTimerReady,
         getTimeOptions,
-        splitTimeToSecs
+        splitTimeToSecs,
     } = timerContext
 
     const [ sessionTimes, setSessionTimes ] = useState({
@@ -32,7 +36,10 @@ const Amrap = ()=>{
         currentAmrap: null,
         currentRest: null
     });
-    const { currentAmrap, currentRest } = sessionCounter
+    let { currentAmrap, currentRest } = sessionCounter
+
+    const [ countDownTime, setCountDown ] = useState(11);
+    const [ currentAmrapTime, setCurrentAmrapTime ] = useState(null);
 
 
     useEffect(()=>{
@@ -142,7 +149,42 @@ const Amrap = ()=>{
     };
 
     const startSession = ()=>{
-        //countdown 10sec => done in function
+        const countDown = ()=>{
+            const countDownInterval = setInterval(()=>{
+                startTime();
+                setCountDown(countDown - timer);
+                if(countDownTime === 0) {
+                    clearInterval(intervalID);
+                    resetTimer();
+                    startAmrap();
+                }
+            }, 10);
+            
+            saveIntervalID(countDownInterval);
+        };
+
+        const startAmrap = ()=>{
+            setCurrentAmrapTime(all_session_amraps[0]);
+            
+            const amrapInterval = setInterval(()=>{
+                startTime();
+                setCurrentAmrapTime(currentAmrapTime - timer)
+                if(currentAmrapTime === 0) {
+                    clearInterval(amrapInterval);
+
+                    if(!all_session_amraps[currentAmrap+1]) return //endSession();
+
+                    setSessionCounter({
+                        ...sessionCounter,
+                        currentAmrap: currentAmrap++
+                    });
+
+                    resetTimer();
+
+                    //startRest();
+                }
+            }, 10);
+        };
 
         //start timer
             //startTime()
@@ -159,6 +201,7 @@ const Amrap = ()=>{
                     //display operation
             // display operation before
 
+        countDown();
     };
 
 
@@ -167,7 +210,7 @@ const Amrap = ()=>{
             <div>
                 { renderAmrapCount() }
                 <div>
-                    <main onClick={()=>startSession()}>
+                    <main className="inactive" onClick={()=>startSession()}>
                         <img/>
                         <p>Tap to start</p>
                     </main>

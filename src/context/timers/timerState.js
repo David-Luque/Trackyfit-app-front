@@ -41,20 +41,16 @@ const TimerState = ({ children })=>{
     };
 
     const startTime = () => {
-        const saveInterval = (int)=>{
-            dispatch({
-                type: SAVE_INTERVAL,
-                payload: int
-            });
-        }; 
+        dispatch({
+            type: COUNT_TIME
+        });
+    };
 
-        const timerInterval = setInterval(()=>{
-            dispatch({
-                type: COUNT_TIME
-            });
-        }, 10);
-
-        saveInterval(timerInterval);
+    const saveIntervalID = (intId) => {
+        dispatch({
+            type: SAVE_INTERVAL,
+            payload: intId
+        });
     };
 
     const stopTime = () => {
@@ -64,7 +60,7 @@ const TimerState = ({ children })=>{
         });
     };
 
-    const resetTime = () => {
+    const resetTimer = () => {
         dispatch({
             type: RESET_TIME
         });
@@ -217,8 +213,9 @@ const TimerState = ({ children })=>{
                 tabata_workTime: state.tabata_workTime,
                 tabata_restTime: state.tabata_restTime,
                 startTime,
+                saveIntervalID,
                 stopTime,
-                resetTime,
+                resetTimer,
                 splitTimeToSecs,
                 splitTimeToMillisecs,
                 getTimeOptions,
