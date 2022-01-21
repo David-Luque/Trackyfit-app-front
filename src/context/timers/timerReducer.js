@@ -7,7 +7,8 @@ import {
     ADD_AMRAP_SET,
     REMOVE_AMRAP_SET,
     EDIT_AMRAP_SET,
-    SET_TIMER_READY
+    SET_TIMER_READY,
+    SET_END_SESSION
 } from '../../types'
 
 const TimerReducer = (state, action)=>{
@@ -52,6 +53,11 @@ const TimerReducer = (state, action)=>{
             return {
                 ...state,
                 isTimerReady: true
+            }
+        case SET_END_SESSION:
+            return {
+                ...state,
+                isEndSession: true
             }
         default:
             return state;

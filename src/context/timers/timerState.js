@@ -10,7 +10,8 @@ import {
     ADD_AMRAP_SET,
     REMOVE_AMRAP_SET,
     EDIT_AMRAP_SET,
-    SET_TIMER_READY
+    SET_TIMER_READY,
+    SET_END_SESSION
 } from '../../types';
 
 const TimerState = ({ children })=>{
@@ -19,6 +20,7 @@ const TimerState = ({ children })=>{
         timer: 0,
         intervalID: null,
         isTimerReady: null,
+        isEndSession: null,
         sets: null,
         rest: null,
         amrap_time: null,
@@ -63,6 +65,12 @@ const TimerState = ({ children })=>{
     const resetTimer = () => {
         dispatch({
             type: RESET_TIME
+        });
+    };
+
+    const setEndSession = ()=>{
+        dispatch({
+            type: SET_END_SESSION
         });
     };
 
@@ -212,6 +220,7 @@ const TimerState = ({ children })=>{
                 tabata_rounds: state.tabata_rounds,
                 tabata_workTime: state.tabata_workTime,
                 tabata_restTime: state.tabata_restTime,
+                isEndSession: state.isEndSession,
                 startTime,
                 saveIntervalID,
                 stopTime,
@@ -223,7 +232,8 @@ const TimerState = ({ children })=>{
                 addAmrap,
                 removeAmrap,
                 editAmrapSet,
-                setTimerReady
+                setTimerReady,
+                setEndSession
             }}
         >
             { children }

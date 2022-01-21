@@ -36,6 +36,8 @@ export const COUNT_TIME = 'COUNT_TIME';
 export const STOP_INTERVAL = 'STOP_INTERVAL';
 export const RESET_TIME = 'RESET_TIME';
 export const SET_TIMER_READY = 'SET_TIMER_READY';
+export const SET_END_SESSION = 'SET_END_SESSION';
+
 export const SET_AMRAP_TIME = 'SET_AMRAP_TIME';
 export const ADD_AMRAP_SET = 'ADD_AMRAP_SET';
 export const REMOVE_AMRAP_SET = 'REMOVE_AMRAP_SET';

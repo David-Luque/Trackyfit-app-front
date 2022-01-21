@@ -22,6 +22,8 @@ const Amrap = ()=>{
         setTimerReady,
         getTimeOptions,
         splitTimeToSecs,
+        isEndSession,
+        setEndSession
     } = timerContext
 
     const [ sessionTimes, setSessionTimes ] = useState({
@@ -38,8 +40,8 @@ const Amrap = ()=>{
     });
     let { currentAmrap, currentRest } = sessionCounter
 
-    const [ countDownTime, setCountDown ] = useState(11);
-    const [ currentAmrapTime, setCurrentAmrapTime ] = useState(null);
+    const [ countDownTime, setCountDownTime ] = useState(10);
+    const [ currentTime, setCurrentTime ] = useState(null);
 
 
     useEffect(()=>{
@@ -149,10 +151,11 @@ const Amrap = ()=>{
     };
 
     const startSession = ()=>{
+        console.log('START!!!')
         const countDown = ()=>{
             const countDownInterval = setInterval(()=>{
                 startTime();
-                setCountDown(countDown - timer);
+                setCountDownTime(countDownTime - timer);
                 if(countDownTime === 0) {
                     clearInterval(intervalID);
                     resetTimer();
@@ -164,54 +167,85 @@ const Amrap = ()=>{
         };
 
         const startAmrap = ()=>{
-            setCurrentAmrapTime(all_session_amraps[0]);
+            setCurrentTime(all_session_amraps[0]);
             
             const amrapInterval = setInterval(()=>{
                 startTime();
-                setCurrentAmrapTime(currentAmrapTime - timer)
-                if(currentAmrapTime === 0) {
+                setCurrentTime(currentTime - timer)
+                
+                if(currentTime === 0) {
                     clearInterval(amrapInterval);
-
-                    if(!all_session_amraps[currentAmrap+1]) return //endSession();
-
+                    if(!all_session_amraps[currentAmrap+1]) return endSession();
                     setSessionCounter({
                         ...sessionCounter,
                         currentAmrap: currentAmrap++
                     });
-
                     resetTimer();
-
-                    //startRest();
+                    startRest();
                 }
             }, 10);
         };
 
-        //start timer
-            //startTime()
-            // currentAmrap - timer
-            //if count is 0:
-                //if not more elements in all_session_amraps => endSession
-                //if more elements in all_session_amraps:
-                    //add 1 to amrap count
-                    //reset timer and start again
-                    //current rest - timer
-                    //if count is 0:
-                        //if more elements in session_rests => adds 1 to rest count
-                        //restart the hole cicle?
-                    //display operation
-            // display operation before
+        const startRest = ()=>{
+            setCurrentTime(session_rests[currentRest]);
+            
+            const restInterval = setInterval(()=>{
+                startTime();
+                setCurrentTime(currentTime - timer)
+                
+                if(currentTime === 0) {
+                    clearInterval(restInterval);
+                    // if(!session_rests[currentRest+1]) return lastRound alert
+                    if(session_rests[currentRest+1]) {
+                        setSessionCounter({
+                            ...sessionCounter,
+                            currentRest: currentRest++
+                        });
+                    };
+                    resetTimer();
+                    startAmrap();
+                }
+            }, 10);
+        };
+
+        const endSession = ()=>{
+            setEndSession();
+        };
+
 
         countDown();
     };
 
 
-    if(isTimerReady) { 
+    if(isEndSession) { 
+        return (
+            <div>
+                <div>
+                    <header>
+                        <span> back arrow</span>
+                        <p>app logo-name</p>
+                        <div>actions buttons</div>
+                    </header>
+                    <main>
+                        <img/>
+                        <p>Motivation sentence</p>
+                        <div>
+                            <span>amraps</span>
+                            <span>time</span>
+                        </div>
+                    </main>
+                    <footer> View amrap times</footer>
+                </div>
+            </div>
+        )
+    } else if(isTimerReady) {
         return (
             <div>
                 { renderAmrapCount() }
                 <div>
                     <main className="inactive" onClick={()=>startSession()}>
-                        <img/>
+                        {/* <img/> */}
+                        <h1>{splitTimeToSecs(countDownTime)}</h1>
                         <p>Tap to start</p>
                     </main>
                     <aside>
@@ -220,7 +254,8 @@ const Amrap = ()=>{
                     </aside>
                 </div>
             </div>
-        )} else {
+        )
+    } else {
         return (
             <div>
                 <h3>AMRAP</h3>
