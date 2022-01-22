@@ -21,7 +21,7 @@ const TimerReducer = (state, action)=>{
         case COUNT_TIME:
             return {
                 ...state,
-                timer: state.timer++
+                timer: state.timer + 1
             }
         case STOP_INTERVAL:
             return {

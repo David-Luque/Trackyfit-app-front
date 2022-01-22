@@ -43,6 +43,7 @@ const TimerState = ({ children })=>{
     };
 
     const startTime = () => {
+        //console.log('startTime()')
         dispatch({
             type: COUNT_TIME
         });
@@ -63,6 +64,7 @@ const TimerState = ({ children })=>{
     };
 
     const resetTimer = () => {
+        console.log('resetTimer()')
         dispatch({
             type: RESET_TIME
         });
