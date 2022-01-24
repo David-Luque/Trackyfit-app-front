@@ -28,21 +28,21 @@ const Amrap = ()=>{
 
     
     const [ amrapState, setAmrapState] = useState({
-        session_amrap: null,
-        session_sets: null,
-        all_session_amraps: null,
-        session_rests: null,
-        current_amrap_count: null,
-        current_rest_count: null,
-        currentDownTime: 10,
-        currentTime: null
+        session_amrap: 0,
+        session_sets: [],
+        all_session_amraps: [],
+        session_rests: [],
+        current_amrap_count: 0,
+        current_rest_count: 0,
+        countDownTime: 10,
+        currentTime: 2
     });
     const { 
         session_sets, 
         session_amrap,
         all_session_amraps,
         current_amrap_count,
-        currentDownTime,
+        countDownTime,
         currentTime,
         session_rests,
         current_rest_count
@@ -62,9 +62,9 @@ const Amrap = ()=>{
             setAmrapState({
                 ...amrapState,
                 session_amrap: amrap_time,
-                session_sets: null,
-                all_session_amraps: null,
-                session_rests: null
+                session_sets: [],
+                all_session_amraps: [],
+                session_rests: []
             });
         }
     }, [amrap_time, amrap_sets]);
@@ -76,7 +76,7 @@ const Amrap = ()=>{
         
         return (
             <>
-                <option> - </option>
+                <option value={0} key={-1}> --- </option>
                 {
                     options.map((op, index) => {
                         return (
@@ -91,8 +91,9 @@ const Amrap = ()=>{
     };
 
     const renderAmraps = ()=>{
-        return amrap_sets.map(amrap => (
+        return amrap_sets.map((amrap, index) => (
             <AmrapSet 
+                key={index}
                 amrap={amrap}
                 removeAmrap={removeAmrap}
                 editAmrapSet={editAmrapSet}
@@ -115,8 +116,8 @@ const Amrap = ()=>{
     const prepareAmrap = ()=>{
         setAmrapState({
             ...amrapState,
-            currentAmrap: 1,
-            currentRest: 1
+            current_amrap_count: 0,
+            current_rest_count: 0,
         });
 
         if(session_sets) {
@@ -135,58 +136,78 @@ const Amrap = ()=>{
     };
 
     const renderAmrapCount = ()=>{
-        if(session_sets) {
+        if(session_sets.length > 0) {
             return (
                 <>
-                    <h3>AMRAP {current_amrap_count} of {all_session_amraps.length}</h3>
-                    <p>{splitTimeToSecs(all_session_amraps[current_amrap_count - 1])} minutes</p>
+                    <h3>AMRAP {current_amrap_count+1} of {all_session_amraps.length}</h3>
+                    <p>{splitTimeToSecs(all_session_amraps[current_amrap_count])} minutes</p>
                 </>
             )
         } else {
             return (
                 <>
                     <h3>AMRAP</h3>
-                    <p>{splitTimeToSecs(all_session_amraps[current_amrap_count - 1])} minutes</p>
+                    <p>{splitTimeToSecs(all_session_amraps[current_amrap_count])} minutes</p>
                 </>
             )
         }
     };
 
     const startSession = ()=>{
-        //console.log('START!!!')
-        //console.log(timer)
+        console.log('startSession()')
+        
         const countDown = ()=>{
-            const countDownInterval = setInterval(()=>{
-                startTime();
+            console.log('countDown()')
+            const countDownCopy = countDownTime
+            setAmrapState({
+                ...amrapState,
+                currentTime: countDownCopy
+            });
+            console.log(countDownTime)
+            console.log(countDownCopy)
+            console.log(currentTime)
+
+            const updateCountDown = ()=>{
+                console.log('updateCountDown()')
+                let diffTime = countDownTime - timer
                 setAmrapState({
                     ...amrapState,
-                    currentDownTime: currentDownTime - 1
+                    currentTime: diffTime
                 });
-                //console.log(currentDownTime)
+                console.log(diffTime)
+                console.log(currentTime)
+            };
+
+            const countDownInterval = setInterval(()=>{
+                console.log('setInterval()')
+
+                startTime();
+                updateCountDown()
                 
-                if(currentDownTime === 0) {
-                    //console.log('FINISH!!')
-                    clearInterval(intervalID);
+                if(currentTime === 0) {
+                    console.log('finish downtime!')
+                    clearInterval(countDownInterval);
                     resetTimer();
                     startAmrap();
                 }
             }, 1000);
-            
-            saveIntervalID(countDownInterval);
+            //saveIntervalID(countDownInterval);
         };
+
+
 
         const startAmrap = ()=>{
             //console.log('startAmrap()');
             setAmrapState({
                 ...amrapState,
-                currentTime: all_session_amraps[0]
+                currentTime: all_session_amraps[current_amrap_count]
             });
             
             const amrapInterval = setInterval(()=>{
                 startTime();
                 setAmrapState({
                     ...amrapState,
-                    currentTime: currentTime - timer
+                    currentTime: all_session_amraps[current_amrap_count] - timer
                 });
                 
                 if(currentTime === 0) {
@@ -267,7 +288,7 @@ const Amrap = ()=>{
                 <div>
                     <main className="inactive" onClick={()=>startSession()}>
                         {/* <img/> */}
-                        <h1>{splitTimeToSecs(currentDownTime)}</h1>
+                        <h1>{splitTimeToSecs(currentTime)}</h1>
                         <p>Tap to start</p>
                     </main>
                     <aside>
