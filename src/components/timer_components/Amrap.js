@@ -7,7 +7,6 @@ const Amrap = ()=>{
 
     const timerContext = useContext(TimerContext);
     const {
-        timer,
         intervalID,
         saveIntervalID,
         startTime,
@@ -26,7 +25,8 @@ const Amrap = ()=>{
         setEndSession
     } = timerContext
 
-    
+    //const [ timer, setTimer ] = useState(0);
+    const [ currentGTime, setCurrentGTime ] = useState(null);
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
         session_sets: [],
@@ -34,8 +34,8 @@ const Amrap = ()=>{
         session_rests: [],
         current_amrap_count: 0,
         current_rest_count: 0,
-        countDownTime: 10,
-        currentTime: 2
+        countDownTime: 4,
+        //currentTime: 0
     });
     const { 
         session_sets, 
@@ -43,7 +43,6 @@ const Amrap = ()=>{
         all_session_amraps,
         current_amrap_count,
         countDownTime,
-        currentTime,
         session_rests,
         current_rest_count
     } = amrapState;
@@ -154,105 +153,86 @@ const Amrap = ()=>{
     };
 
     const startSession = ()=>{
-        console.log('startSession()')
+        let timer, currentTime;
+        console.log(!all_session_amraps[current_amrap_count+1])
+        //if(!)
         
         const countDown = ()=>{
-            console.log('countDown()')
-            const countDownCopy = countDownTime
-            setAmrapState({
-                ...amrapState,
-                currentTime: countDownCopy
-            });
-            console.log(countDownTime)
-            console.log(countDownCopy)
-            console.log(currentTime)
-
-            const updateCountDown = ()=>{
-                console.log('updateCountDown()')
-                let diffTime = countDownTime - timer
-                setAmrapState({
-                    ...amrapState,
-                    currentTime: diffTime
-                });
-                console.log(diffTime)
-                console.log(currentTime)
-            };
+            timer = 0;
+            currentTime = countDownTime;
 
             const countDownInterval = setInterval(()=>{
-                console.log('setInterval()')
-
-                startTime();
-                updateCountDown()
+                timer++;
+                currentTime--;
+                setCurrentGTime(currentTime)
+                console.log(timer, currentTime)
                 
                 if(currentTime === 0) {
-                    console.log('finish downtime!')
                     clearInterval(countDownInterval);
-                    resetTimer();
                     startAmrap();
                 }
             }, 1000);
-            //saveIntervalID(countDownInterval);
         };
 
 
-
         const startAmrap = ()=>{
-            //console.log('startAmrap()');
-            setAmrapState({
-                ...amrapState,
-                currentTime: all_session_amraps[current_amrap_count]
-            });
+            console.log('startAmrap()');
+            timer = 0;
+            currentTime = all_session_amraps[current_amrap_count] + 1;
             
             const amrapInterval = setInterval(()=>{
-                startTime();
-                setAmrapState({
-                    ...amrapState,
-                    currentTime: all_session_amraps[current_amrap_count] - timer
-                });
+                timer++;
+                currentTime--;
+                setCurrentGTime(currentTime);
+                console.log(timer, currentTime)
                 
                 if(currentTime === 0) {
                     clearInterval(amrapInterval);
-                    if(!all_session_amraps[current_amrap_count+1]) return endSession();
+                    console.log(all_session_amraps[current_amrap_count+1])
+                    if(!all_session_amraps[current_amrap_count+1]) {
+                        return endSession();
+                    };
                     setAmrapState({
                         ...amrapState,
                         current_amrap_count: current_amrap_count + 1
                     });
-                    resetTimer();
                     startRest();
                 }
             }, 1000);
         };
 
+
         const startRest = ()=>{
-            setAmrapState({
-                ...amrapState,
-                currentTime: session_rests[current_rest_count]
-            });
+            console.log('startRest()');
+            timer = 0;
+            currentTime = session_rests[current_rest_count] + 1;
             
             const restInterval = setInterval(()=>{
-                startTime();
-                setAmrapState({
-                    ...amrapState,
-                    currentTime: currentTime - timer
-                });
+                timer ++
+                currentTime--;
+                setCurrentGTime(currentTime);
+                console.log(timer, currentTime)
                 
                 if(currentTime === 0) {
                     clearInterval(restInterval);
-                    // if(!session_rests[current_rest_count+1]) return lastRound alert
                     if(session_rests[current_rest_count+1]) {
+                        console.log('more rests!!')
                         setAmrapState({
                             ...amrapState,
                             current_rest_count: current_rest_count + 1
                         });
+                        startAmrap();
+                    } else {
+                        console.log('finalRoundSound()')
+                        startAmrap();
                     };
-                    resetTimer();
-                    startAmrap();
                 }
-            }, 10);
+            }, 1000);
         };
 
         const endSession = ()=>{
-            setEndSession();
+            //setEndSession();
+            console.log('endSession()')
         };
 
 
@@ -288,7 +268,7 @@ const Amrap = ()=>{
                 <div>
                     <main className="inactive" onClick={()=>startSession()}>
                         {/* <img/> */}
-                        <h1>{splitTimeToSecs(currentTime)}</h1>
+                        <h1>{splitTimeToSecs(currentGTime)}</h1>
                         <p>Tap to start</p>
                     </main>
                     <aside>
