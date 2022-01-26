@@ -27,6 +27,7 @@ const Amrap = ()=>{
 
     //const [ timer, setTimer ] = useState(0);
     const [ currentGTime, setCurrentGTime ] = useState(null);
+    const [ amrapCount, setAmrapCount ] = useState(0);
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
         session_sets: [],
@@ -154,8 +155,7 @@ const Amrap = ()=>{
 
     const startSession = ()=>{
         let timer, currentTime;
-        console.log(!all_session_amraps[current_amrap_count+1])
-        //if(!)
+        let current_count_work, current_count_rest;
         
         const countDown = ()=>{
             timer = 0;
@@ -177,8 +177,10 @@ const Amrap = ()=>{
 
         const startAmrap = ()=>{
             console.log('startAmrap()');
+            
             timer = 0;
-            currentTime = all_session_amraps[current_amrap_count] + 1;
+            current_count_work = current_amrap_count
+            currentTime = all_session_amraps[current_count_work] + 1;
             
             const amrapInterval = setInterval(()=>{
                 timer++;
@@ -188,14 +190,17 @@ const Amrap = ()=>{
                 
                 if(currentTime === 0) {
                     clearInterval(amrapInterval);
-                    console.log(all_session_amraps[current_amrap_count+1])
+                    console.log('Next amrap time: ' + all_session_amraps[current_amrap_count+1])
                     if(!all_session_amraps[current_amrap_count+1]) {
                         return endSession();
                     };
+                    current_count_work++;
+                    console.log('Next count: ' + current_count_work)
                     setAmrapState({
                         ...amrapState,
-                        current_amrap_count: current_amrap_count + 1
+                        current_amrap_count: current_count_work
                     });
+                    console.log('Next amrap count: ' + current_amrap_count)
                     startRest();
                 }
             }, 1000);
@@ -215,12 +220,14 @@ const Amrap = ()=>{
                 
                 if(currentTime === 0) {
                     clearInterval(restInterval);
+                    console.log(session_rests[current_rest_count+1])
                     if(session_rests[current_rest_count+1]) {
                         console.log('more rests!!')
                         setAmrapState({
                             ...amrapState,
                             current_rest_count: current_rest_count + 1
                         });
+                        console.log(current_rest_count)
                         startAmrap();
                     } else {
                         console.log('finalRoundSound()')
