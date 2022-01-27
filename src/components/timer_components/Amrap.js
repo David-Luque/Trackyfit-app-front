@@ -25,27 +25,26 @@ const Amrap = ()=>{
         setEndSession
     } = timerContext
 
-    //const [ timer, setTimer ] = useState(0);
     const [ currentGTime, setCurrentGTime ] = useState(null);
-    const [ amrapCount, setAmrapCount ] = useState(0);
+    const [ count, setCount ] = useState({ amrap: 0, rest: 0 });
+
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
         session_sets: [],
         all_session_amraps: [],
         session_rests: [],
-        current_amrap_count: 0,
-        current_rest_count: 0,
         countDownTime: 4,
-        //currentTime: 0
+        isOnRest: false,
+        isSessionEnd: false
     });
     const { 
         session_sets, 
         session_amrap,
         all_session_amraps,
-        current_amrap_count,
         countDownTime,
         session_rests,
-        current_rest_count
+        isOnRest,
+        isSessionEnd
     } = amrapState;
 
 
@@ -139,15 +138,19 @@ const Amrap = ()=>{
         if(session_sets.length > 0) {
             return (
                 <>
-                    <h3>AMRAP {current_amrap_count+1} of {all_session_amraps.length}</h3>
-                    <p>{splitTimeToSecs(all_session_amraps[current_amrap_count])} minutes</p>
+                    <h3>AMRAP {count.amrap + 1} of {all_session_amraps.length}</h3>
+                    { isOnRest ? (
+                        <p>REST</p>
+                    ) : (
+                        <p>{splitTimeToSecs(all_session_amraps[count.amrap])} minutes</p>
+                    )}
                 </>
             )
         } else {
             return (
                 <>
                     <h3>AMRAP</h3>
-                    <p>{splitTimeToSecs(all_session_amraps[current_amrap_count])} minutes</p>
+                    <p>{splitTimeToSecs(all_session_amraps[count.amrap])} minutes</p>
                 </>
             )
         }
@@ -155,7 +158,8 @@ const Amrap = ()=>{
 
     const startSession = ()=>{
         let timer, currentTime;
-        let current_count_work, current_count_rest;
+        let amrap_count = 0;
+        let rest_count = 0;
         
         const countDown = ()=>{
             timer = 0;
@@ -164,8 +168,7 @@ const Amrap = ()=>{
             const countDownInterval = setInterval(()=>{
                 timer++;
                 currentTime--;
-                setCurrentGTime(currentTime)
-                console.log(timer, currentTime)
+                setCurrentGTime(currentTime);
                 
                 if(currentTime === 0) {
                     clearInterval(countDownInterval);
@@ -174,72 +177,57 @@ const Amrap = ()=>{
             }, 1000);
         };
 
-
         const startAmrap = ()=>{
-            console.log('startAmrap()');
+            setAmrapState({ ...amrapState, isOnRest: false });
             
             timer = 0;
-            current_count_work = current_amrap_count
-            currentTime = all_session_amraps[current_count_work] + 1;
+            currentTime = all_session_amraps[amrap_count] + 1;
             
             const amrapInterval = setInterval(()=>{
                 timer++;
                 currentTime--;
                 setCurrentGTime(currentTime);
-                console.log(timer, currentTime)
                 
                 if(currentTime === 0) {
                     clearInterval(amrapInterval);
-                    console.log('Next amrap time: ' + all_session_amraps[current_amrap_count+1])
-                    if(!all_session_amraps[current_amrap_count+1]) {
+                    amrap_count++;
+                    if(!all_session_amraps[amrap_count]) {
                         return endSession();
                     };
-                    current_count_work++;
-                    console.log('Next count: ' + current_count_work)
-                    setAmrapState({
-                        ...amrapState,
-                        current_amrap_count: current_count_work
-                    });
-                    console.log('Next amrap count: ' + current_amrap_count)
                     startRest();
                 }
             }, 1000);
         };
 
-
         const startRest = ()=>{
-            console.log('startRest()');
+            setAmrapState({ ...amrapState, isOnRest: true });
+            
             timer = 0;
-            currentTime = session_rests[current_rest_count] + 1;
+            currentTime = session_rests[rest_count] + 1;
             
             const restInterval = setInterval(()=>{
                 timer ++
                 currentTime--;
                 setCurrentGTime(currentTime);
-                console.log(timer, currentTime)
                 
                 if(currentTime === 0) {
                     clearInterval(restInterval);
-                    console.log(session_rests[current_rest_count+1])
-                    if(session_rests[current_rest_count+1]) {
-                        console.log('more rests!!')
-                        setAmrapState({
-                            ...amrapState,
-                            current_rest_count: current_rest_count + 1
-                        });
-                        console.log(current_rest_count)
-                        startAmrap();
+                    rest_count++;
+                    
+                    if(!session_rests[rest_count]) {
+                        console.log('final round!')
                     } else {
-                        console.log('finalRoundSound()')
-                        startAmrap();
+                        console.log('one more set!')
                     };
+
+                    setCount({ amrap: amrap_count, rest: rest_count });
+                    startAmrap();
                 }
             }, 1000);
         };
 
         const endSession = ()=>{
-            //setEndSession();
-            console.log('endSession()')
+            setAmrapState({ ...amrapState, isSessionEnd: true });
         };
 
 
@@ -247,7 +235,12 @@ const Amrap = ()=>{
     };
 
 
-    if(isEndSession) { 
+
+
+
+
+
+    if(isSessionEnd) { 
         return (
             <div>
                 <div>
