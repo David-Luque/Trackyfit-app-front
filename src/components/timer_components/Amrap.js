@@ -35,7 +35,9 @@ const Amrap = ()=>{
         session_rests: [],
         countDownTime: 4,
         isOnRest: false,
-        isSessionEnd: false
+        isSessionEnd: false,
+        userRounds: 0,
+        userRoundsTimes: []
     });
     const { 
         session_sets, 
@@ -44,7 +46,9 @@ const Amrap = ()=>{
         countDownTime,
         session_rests,
         isOnRest,
-        isSessionEnd
+        isSessionEnd,
+        userRounds,
+        userRoundsTimes
     } = amrapState;
 
 
@@ -97,6 +101,7 @@ const Amrap = ()=>{
                 removeAmrap={removeAmrap}
                 editAmrapSet={editAmrapSet}
                 getTimeOptions={getTimeOptions}
+                splitTimeToSecs={splitTimeToSecs}
             />
         ));
     };
@@ -116,7 +121,7 @@ const Amrap = ()=>{
         setAmrapState({
             ...amrapState,
             current_amrap_count: 0,
-            current_rest_count: 0,
+            current_rest_count: 0
         });
 
         if(session_sets) {
@@ -234,9 +239,32 @@ const Amrap = ()=>{
         countDown();
     };
 
+    // const addUserRound = ()=>{
+    //     setAmrapState({
+    //         ...amrapState,
+    //         userRounds: userRounds + 1,
+    //         userRoundsTimes: [ ...userRoundsTimes, timer ]
+    //     });
+    // };
 
+    const renderUserRounds = ()=>{
+        if(userRounds === 0) {
+            return (
+                <span>+</span>
+            );
+        } else {
+            return(
+                <span>{userRounds}</span>
+            )
+        }
+    };
 
-
+    const renderLastTime = ()=>{
+        const lastTime = userRoundsTimes[ userRoundsTimes.length - 1 ]
+        return(
+            <p>Last round: {splitTimeToSecs(lastTime)}</p>
+        )
+    };
 
 
 
@@ -265,6 +293,7 @@ const Amrap = ()=>{
         return (
             <div>
                 { renderAmrapCount() }
+                { userRoundsTimes.length > 0 && renderLastTime() }
                 <div>
                     <main className="inactive" onClick={()=>startSession()}>
                         {/* <img/> */}
@@ -272,7 +301,9 @@ const Amrap = ()=>{
                         <p>Tap to start</p>
                     </main>
                     <aside>
-                        <p>+</p>
+                        {/* <p onClick={()=> addUserRound()}>
+                            { renderUserRounds() }
+                        </p> */}
                         <p>round counter</p>
                     </aside>
                 </div>
@@ -284,9 +315,12 @@ const Amrap = ()=>{
                 <h3>AMRAP</h3>
                 
                 <p>As many rounds as posible in:</p>
-                <select onChange={(e)=>setAmrapTime(e.target.value)} name='time'>
-                    {renderTimeOptions(10)}
-                </select>
+                
+                <select 
+                    name='time'
+                    value={session_amrap}
+                    onChange={(e)=>setAmrapTime(e.target.value)}
+                > {renderTimeOptions(10)} </select>
                 <p>minutes</p>
                 
                 { amrap_sets.length > 0 && renderAmraps() }

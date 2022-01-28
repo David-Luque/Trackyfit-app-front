@@ -23,7 +23,7 @@ const TimerState = ({ children })=>{
         isEndSession: null,
         sets: null,
         rest: null,
-        amrap_time: 0,
+        amrap_time: 60,
         amrap_sets: [], //an arary of objects with rest and time for every set
         forTime_timeCap: 0,
         emom_every: 0,

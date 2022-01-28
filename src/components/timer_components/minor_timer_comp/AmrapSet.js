@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, getTimeOptions }) => {
+const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, getTimeOptions, splitTimeToSecs }) => {
 
     const { work, rest, position } = amrap;
 
@@ -43,7 +43,7 @@ const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, getTimeOptions }) => {
 
     return (
         <div>
-            <h4>{amrap.num}. AMRAP (total_time)</h4>
+            <h4>{position+1}. AMRAP ({splitTimeToSecs(work)} min)</h4>
             <label>Rest</label>
             <select name="rest" value={rest} onChange={(e) => handleChange(e)}>
                 {renderSetOptions()}
