@@ -25,7 +25,9 @@ const Amrap = ()=>{
         setEndSession
     } = timerContext
 
-    const [ currentGTime, setCurrentGTime ] = useState(null);
+    const [ timersRef, setTimersRef ] = useState({ currentTime_ref: 0, timer_ref: 0});
+    const { currentTime_ref, timer_ref } = timersRef;
+    
     const [ count, setCount ] = useState({ amrap: 0, rest: 0 });
 
     const [ amrapState, setAmrapState] = useState({
@@ -37,7 +39,8 @@ const Amrap = ()=>{
         isOnRest: false,
         isSessionEnd: false,
         userRounds: 0,
-        userRoundsTimes: []
+        userRoundsTimes: [],
+        userLastTime: null
     });
     const { 
         session_sets, 
@@ -48,7 +51,8 @@ const Amrap = ()=>{
         isOnRest,
         isSessionEnd,
         userRounds,
-        userRoundsTimes
+        userRoundsTimes,
+        userLastTime
     } = amrapState;
 
 
@@ -118,11 +122,11 @@ const Amrap = ()=>{
     };
     
     const prepareAmrap = ()=>{
-        setAmrapState({
-            ...amrapState,
-            current_amrap_count: 0,
-            current_rest_count: 0
-        });
+        // setAmrapState({
+        //     ...amrapState,
+        //     current_amrap_count: 0,
+        //     current_rest_count: 0
+        // });
 
         if(session_sets) {
             setAmrapState({
@@ -173,7 +177,10 @@ const Amrap = ()=>{
             const countDownInterval = setInterval(()=>{
                 timer++;
                 currentTime--;
-                setCurrentGTime(currentTime);
+                setTimersRef({
+                    currentTime_ref: currentTime,
+                    timer_ref: timer
+                });
                 
                 if(currentTime === 0) {
                     clearInterval(countDownInterval);
@@ -191,7 +198,10 @@ const Amrap = ()=>{
             const amrapInterval = setInterval(()=>{
                 timer++;
                 currentTime--;
-                setCurrentGTime(currentTime);
+                setTimersRef({
+                    currentTime_ref: currentTime,
+                    timer_ref: timer
+                });
                 
                 if(currentTime === 0) {
                     clearInterval(amrapInterval);
@@ -213,7 +223,10 @@ const Amrap = ()=>{
             const restInterval = setInterval(()=>{
                 timer ++
                 currentTime--;
-                setCurrentGTime(currentTime);
+                setTimersRef({
+                    currentTime_ref: currentTime,
+                    timer_ref: timer
+                });
                 
                 if(currentTime === 0) {
                     clearInterval(restInterval);
@@ -239,13 +252,22 @@ const Amrap = ()=>{
         countDown();
     };
 
-    // const addUserRound = ()=>{
-    //     setAmrapState({
-    //         ...amrapState,
-    //         userRounds: userRounds + 1,
-    //         userRoundsTimes: [ ...userRoundsTimes, timer ]
-    //     });
-    // };
+    const addUserRound = ()=>{
+        const userPrevTimesTotal = userRoundsTimes.reduce((acc, curr)=>{
+            return acc + curr
+        }, 0);
+        const actualAmrapTime = all_session_amraps[count.amrap];
+        const remainingTime = currentTime_ref;
+        
+        const lastTime =  actualAmrapTime - remainingTime - userPrevTimesTotal;
+        
+        setAmrapState({
+            ...amrapState,
+            userRounds: userRounds + 1,
+            userLastTime: lastTime,
+            userRoundsTimes: [ ...userRoundsTimes, lastTime ]
+        });
+    };
 
     const renderUserRounds = ()=>{
         if(userRounds === 0) {
@@ -259,13 +281,23 @@ const Amrap = ()=>{
         }
     };
 
-    const renderLastTime = ()=>{
-        const lastTime = userRoundsTimes[ userRoundsTimes.length - 1 ]
-        return(
-            <p>Last round: {splitTimeToSecs(lastTime)}</p>
-        )
-    };
+    const handleTimer = ()=>{
+        const timerElem = document.getElementById('timer');
+        
+        if(timerElem.className === 'inactive') {
+            //cambiar className a 'active'
+            return startSession();
+        } else if(timerElem.className === 'active') {
+            //cambiar className a 'paused'
+            //return pauseSession();
+        } else if(timerElem.className === 'paused') {
+            //cambiar className a 'active'
+            //return startSession() or create restartSession()?
+        }
 
+        // cambiar los 'else if' statements por un switch??
+        // meter startsession() en handletimer() y definir aqui el resto de funciones
+    };
 
 
     if(isSessionEnd) { 
@@ -293,17 +325,19 @@ const Amrap = ()=>{
         return (
             <div>
                 { renderAmrapCount() }
-                { userRoundsTimes.length > 0 && renderLastTime() }
+                { userLastTime && 
+                    <p>Last round: {splitTimeToSecs(userLastTime)}</p> 
+                }
                 <div>
-                    <main className="inactive" onClick={()=>startSession()}>
+                    <main id='timer' className="inactive" onClick={()=>handleTimer()}>
                         {/* <img/> */}
-                        <h1>{splitTimeToSecs(currentGTime)}</h1>
+                        <h1>{splitTimeToSecs(currentTime_ref)}</h1>
                         <p>Tap to start</p>
                     </main>
                     <aside>
-                        {/* <p onClick={()=> addUserRound()}>
+                        <p onClick={()=> addUserRound()}>
                             { renderUserRounds() }
-                        </p> */}
+                        </p>
                         <p>round counter</p>
                     </aside>
                 </div>

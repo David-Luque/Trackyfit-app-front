@@ -43,7 +43,7 @@ const AmrapSet = ({ amrap, removeAmrap, editAmrapSet, getTimeOptions, splitTimeT
 
     return (
         <div>
-            <h4>{position+1}. AMRAP ({splitTimeToSecs(work)} min)</h4>
+            <h4>{position+2}. AMRAP ({splitTimeToSecs(work)} min)</h4>
             <label>Rest</label>
             <select name="rest" value={rest} onChange={(e) => handleChange(e)}>
                 {renderSetOptions()}
