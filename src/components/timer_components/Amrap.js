@@ -7,8 +7,6 @@ const Amrap = ()=>{
 
     const timerContext = useContext(TimerContext);
     const {
-        intervalID,
-        saveIntervalID,
         startTime,
         resetTimer,
         amrap_time,
@@ -27,15 +25,13 @@ const Amrap = ()=>{
 
     const [ timersRef, setTimersRef ] = useState({ currentTime_ref: 0, timer_ref: 0});
     const { currentTime_ref, timer_ref } = timersRef;
-    
-    const [ count, setCount ] = useState({ amrap: 0, rest: 0 });
 
-    const [ pausedData, setPausedData ] = useState({
-        currentTime: '',
-        timer: '',
-        amrapCount: '',
-        restCount: ''
-    });
+    const [ count, setCount ] = useState({ amrap: 0, rest: 0 });
+    const [ pausedData, setPausedData ] = useState(null);
+    const [ intervalID, setIntervalID ] = useState('');
+    const [ isCountDownDone, setIsCountDownDone ] = useState(false);
+    const [ isOnRest, setIsOnRest ] = useState(false);
+    const [ isSessionEnd, setIsSessionEnd ] = useState(false);
 
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
@@ -43,9 +39,6 @@ const Amrap = ()=>{
         all_session_amraps: [],
         session_rests: [],
         countDownTime: 4,
-        isCountDown_Done: false,
-        isOnRest: false,
-        isSessionEnd: false,
         userRounds: 0,
         userRoundsTimes: [],
         userLastTime: null,
@@ -57,13 +50,10 @@ const Amrap = ()=>{
         all_session_amraps,
         countDownTime,
         session_rests,
-        isOnRest,
-        isSessionEnd,
         userRounds,
         userRoundsTimes,
         userLastTime,
-        amrapInterval,
-        isCountDown_Done
+        amrapInterval
     } = amrapState;
 
 
@@ -132,6 +122,40 @@ const Amrap = ()=>{
         return splitTimeToSecs(totalTime);
     };
     
+    const renderAmrapCount = ()=>{
+        if(session_sets.length > 0) {
+            return (
+                <>
+                    <h3>AMRAP {count.amrap + 1} of {all_session_amraps.length}</h3>
+                    { isOnRest ? (
+                        <p>REST</p>
+                    ) : (
+                        <p>{splitTimeToSecs(all_session_amraps[count.amrap])} minutes</p>
+                    )}
+                </>
+            )
+        } else {
+            return (
+                <>
+                    <h3>AMRAP</h3>
+                    <p>{splitTimeToSecs(all_session_amraps[count.amrap])} minutes</p>
+                </>
+            )
+        }
+    };
+    
+    const renderUserRounds = ()=>{
+        if(userRounds === 0) {
+            return (
+                <span>+</span>
+            );
+        } else {
+            return(
+                <span>{userRounds}</span>
+            )
+        }
+    };
+
     const prepareAmrap = ()=>{
         // setAmrapState({
         //     ...amrapState,
@@ -154,28 +178,6 @@ const Amrap = ()=>{
         setTimerReady();
     };
 
-    const renderAmrapCount = ()=>{
-        if(session_sets.length > 0) {
-            return (
-                <>
-                    <h3>AMRAP {count.amrap + 1} of {all_session_amraps.length}</h3>
-                    { isOnRest ? (
-                        <p>REST</p>
-                    ) : (
-                        <p>{splitTimeToSecs(all_session_amraps[count.amrap])} minutes</p>
-                    )}
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <h3>AMRAP</h3>
-                    <p>{splitTimeToSecs(all_session_amraps[count.amrap])} minutes</p>
-                </>
-            )
-        }
-    };
-
     const addUserRound = ()=>{
         const userPrevTimesTotal = userRoundsTimes.reduce((acc, curr)=>{
             return acc + curr
@@ -193,28 +195,36 @@ const Amrap = ()=>{
         });
     };
 
-    const renderUserRounds = ()=>{
-        if(userRounds === 0) {
-            return (
-                <span>+</span>
-            );
-        } else {
-            return(
-                <span>{userRounds}</span>
-            )
-        }
-    };
 
     const handleTimer = ()=>{
 
         const startSession = ()=>{
             let timer, currentTime;
-            let amrap_count = 0;
-            let rest_count = 0;
+            let amrap_count, rest_count;
+
+            if(pausedData) {
+                amrap_count = pausedData.amrapCount;
+                rest_count = pausedData.restCount;
+                //setPausedData(null);
+            } else {
+                amrap_count = count.amrap;
+                rest_count = count.rest;
+            }
             
-            const countDown = ()=>{
-                timer = 0;
-                currentTime = countDownTime;
+            const startCountDown = ()=>{
+                console.log('startCountDown')
+                if(pausedData) {
+                    timer = pausedData.timer
+                    currentTime = pausedData.currentTime
+                } else {
+                    timer = 0;
+                    currentTime = countDownTime;
+                }
+
+                pausedData ? setPausedData('') : console.log('clean pausedData');
+                console.log(`Pause data in countdown: ${pausedData}`)
+                
+                let countDownIntervalID;
     
                 const countDownInterval = setInterval(()=>{
                     timer++;
@@ -225,18 +235,33 @@ const Amrap = ()=>{
                     });
                     
                     if(currentTime === 0) {
-                        clearInterval(amrapInterval);
+                        clearInterval(countDownIntervalID);
+                        setIsCountDownDone(true);
                         startAmrap();
                     }
                 }, 1000);
-                setAmrapState({ ...amrapState, amrapInterval: countDownInterval });
+                countDownIntervalID = countDownInterval;
+                setIntervalID(countDownIntervalID);
             };
     
             const startAmrap = ()=>{
-                setAmrapState({ ...amrapState, isOnRest: false });
+                console.log('startAmrap')
+                setIsOnRest(false);
                 
-                timer = 0;
-                currentTime = all_session_amraps[amrap_count] + 1;
+                console.log(`Pause data in startAmrap; ${pausedData}`);
+                if(pausedData) {
+                    console.log('pausedData')
+                    timer = pausedData.timer
+                    currentTime = pausedData.currentTime
+                    setPausedData(null);
+                    console.log(`Pause data in startAmrap; ${pausedData}`);
+                } else {
+                    console.log('NO pausedData')
+                    timer = 0;
+                    currentTime = all_session_amraps[amrap_count] + 1;
+                }
+
+                let workIntervalID;
                 
                 const workInterval = setInterval(()=>{
                     timer++;
@@ -247,7 +272,7 @@ const Amrap = ()=>{
                     });
                     
                     if(currentTime === 0) {
-                        clearInterval(amrapInterval);
+                        clearInterval(workIntervalID);
                         amrap_count++;
                         if(!all_session_amraps[amrap_count]) {
                             return endSession();
@@ -255,15 +280,23 @@ const Amrap = ()=>{
                         startRest();
                     }
                 }, 1000);
-                setAmrapState({ ...amrapState, amrapInterval: workInterval });
+                workIntervalID = workInterval;
+                setIntervalID(workIntervalID);
             };
     
             const startRest = ()=>{
-                setAmrapState({ ...amrapState, isOnRest: true });
+                console.log('startRest')
+                setIsOnRest(true);
                 
-                timer = 0;
-                currentTime = session_rests[rest_count] + 1;
-                
+                if(pausedData) {
+                    timer = pausedData.timer;
+                    currentTime = pausedData.currentTime;
+                    setPausedData(null);
+                } else {
+                    timer = 0;
+                    currentTime = session_rests[rest_count] + 1; 
+                }
+  
                 const restInterval = setInterval(()=>{
                     timer ++
                     currentTime--;
@@ -290,15 +323,17 @@ const Amrap = ()=>{
             };
     
             const endSession = ()=>{
-                setAmrapState({ ...amrapState, isSessionEnd: true });
+                setIsSessionEnd(true);
             };
     
-            countDown();
+            if(!isCountDownDone) startCountDown();
+            if(isCountDownDone && !isOnRest) startAmrap();
+            if(isCountDownDone && isOnRest) startRest();
         };
 
         const pauseSession = ()=>{
-            //console.log('pauseSession()')
-            clearInterval(amrapInterval);
+            console.log('pauseSession()')
+            clearInterval(intervalID);
             setPausedData({
                 currentTime: currentTime_ref,
                 timer: timer_ref,
@@ -309,11 +344,10 @@ const Amrap = ()=>{
 
         const restartSession = ()=>{
             console.log('restartSession()')
-            //execute start session with prev saved current_time and count
+            startSession();
         };
 
         const timerElem = document.getElementById('timer');
-
         switch (timerElem.className) {
             case 'inactive':
                 timerElem.className = 'active';
