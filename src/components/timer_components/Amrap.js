@@ -27,11 +27,11 @@ const Amrap = ()=>{
     const { currentTime_ref, timer_ref } = timersRef;
 
     const [ count, setCount ] = useState({ amrap: 0, rest: 0 });
-    const [ pausedData, setPausedData ] = useState(null);
     const [ intervalID, setIntervalID ] = useState('');
     const [ isCountDownDone, setIsCountDownDone ] = useState(false);
     const [ isOnRest, setIsOnRest ] = useState(false);
     const [ isSessionEnd, setIsSessionEnd ] = useState(false);
+    const [ pausedData, setPausedData ] = useState(null);
 
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
@@ -184,6 +184,10 @@ const Amrap = ()=>{
         }, 0);
         const actualAmrapTime = all_session_amraps[count.amrap];
         const remainingTime = currentTime_ref;
+
+        console.log('actualAmrapTime -> ' + actualAmrapTime)
+        console.log('remainingTime -> ' + remainingTime)
+        console.log('userPrevTimesTotal -> ' + userPrevTimesTotal)
         
         const lastTime =  actualAmrapTime - remainingTime - userPrevTimesTotal;
         
@@ -195,34 +199,31 @@ const Amrap = ()=>{
         });
     };
 
-
     const handleTimer = ()=>{
 
         const startSession = ()=>{
             let timer, currentTime;
             let amrap_count, rest_count;
+            let pausedDataLocal;
+            if(pausedData) pausedDataLocal = pausedData;
 
-            if(pausedData) {
-                amrap_count = pausedData.amrapCount;
-                rest_count = pausedData.restCount;
-                //setPausedData(null);
+            if(pausedDataLocal) {
+                amrap_count = pausedDataLocal.amrapCount;
+                rest_count = pausedDataLocal.restCount;
             } else {
                 amrap_count = count.amrap;
                 rest_count = count.rest;
             }
             
             const startCountDown = ()=>{
-                console.log('startCountDown')
-                if(pausedData) {
-                    timer = pausedData.timer
-                    currentTime = pausedData.currentTime
+                if(pausedDataLocal) {
+                    timer = pausedDataLocal.timer
+                    currentTime = pausedDataLocal.currentTime
+                    pausedDataLocal = null;
                 } else {
                     timer = 0;
                     currentTime = countDownTime;
                 }
-
-                pausedData ? setPausedData('') : console.log('clean pausedData');
-                console.log(`Pause data in countdown: ${pausedData}`)
                 
                 let countDownIntervalID;
     
@@ -245,18 +246,14 @@ const Amrap = ()=>{
             };
     
             const startAmrap = ()=>{
-                console.log('startAmrap')
+                //console.log('startAmrap')
                 setIsOnRest(false);
                 
-                console.log(`Pause data in startAmrap; ${pausedData}`);
-                if(pausedData) {
-                    console.log('pausedData')
-                    timer = pausedData.timer
-                    currentTime = pausedData.currentTime
-                    setPausedData(null);
-                    console.log(`Pause data in startAmrap; ${pausedData}`);
+                if(pausedDataLocal) {
+                    timer = pausedDataLocal.timer
+                    currentTime = pausedDataLocal.currentTime
+                    pausedDataLocal = null;
                 } else {
-                    console.log('NO pausedData')
                     timer = 0;
                     currentTime = all_session_amraps[amrap_count] + 1;
                 }
@@ -288,14 +285,16 @@ const Amrap = ()=>{
                 console.log('startRest')
                 setIsOnRest(true);
                 
-                if(pausedData) {
-                    timer = pausedData.timer;
-                    currentTime = pausedData.currentTime;
-                    setPausedData(null);
+                if(pausedDataLocal) {
+                    timer = pausedDataLocal.timer;
+                    currentTime = pausedDataLocal.currentTime;
+                    pausedDataLocal = null;
                 } else {
                     timer = 0;
                     currentTime = session_rests[rest_count] + 1; 
                 }
+
+                let restIntervalID;
   
                 const restInterval = setInterval(()=>{
                     timer ++
@@ -306,7 +305,7 @@ const Amrap = ()=>{
                     });
                     
                     if(currentTime === 0) {
-                        clearInterval(amrapInterval);
+                        clearInterval(restIntervalID);
                         rest_count++;
                         
                         if(!session_rests[rest_count]) {
@@ -319,7 +318,8 @@ const Amrap = ()=>{
                         startAmrap();
                     }
                 }, 1000);
-                setAmrapState({ ...amrapState, amrapInterval: restInterval });
+                restIntervalID = restInterval;
+                setIntervalID(restIntervalID);
             };
     
             const endSession = ()=>{
