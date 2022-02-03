@@ -32,6 +32,7 @@ const Amrap = ()=>{
     const [ isOnRest, setIsOnRest ] = useState(false);
     const [ isSessionEnd, setIsSessionEnd ] = useState(false);
     const [ pausedData, setPausedData ] = useState(null);
+    const [ userRoundsTimes, setUserRoundsTimes ] = useState([]);
 
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
@@ -40,8 +41,8 @@ const Amrap = ()=>{
         session_rests: [],
         countDownTime: 4,
         userRounds: 0,
-        userRoundsTimes: [],
         userLastTime: null,
+        userPrevAmrapsTimes: 0,
         amrapInterval: ''
     });
     const { 
@@ -51,7 +52,7 @@ const Amrap = ()=>{
         countDownTime,
         session_rests,
         userRounds,
-        userRoundsTimes,
+        userPrevAmrapsTimes,
         userLastTime,
         amrapInterval
     } = amrapState;
@@ -189,7 +190,7 @@ const Amrap = ()=>{
         console.log('remainingTime -> ' + remainingTime)
         console.log('userPrevTimesTotal -> ' + userPrevTimesTotal)
         
-        const lastTime =  actualAmrapTime - remainingTime - userPrevTimesTotal;
+        const lastTime =  actualAmrapTime - remainingTime - userPrevTimesTotal
         
         setAmrapState({
             ...amrapState,
@@ -197,6 +198,10 @@ const Amrap = ()=>{
             userLastTime: lastTime,
             userRoundsTimes: [ ...userRoundsTimes, lastTime ]
         });
+    };
+
+    const handleUserAmrapTimes = ()=>{
+        //store user times for every amrap on 'userRoundsTimes' state like: [{ "amrap": 1, times: [..., ...] }]
     };
 
     const handleTimer = ()=>{
