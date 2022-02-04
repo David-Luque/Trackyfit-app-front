@@ -32,7 +32,7 @@ const Amrap = ()=>{
     const [ isOnRest, setIsOnRest ] = useState(false);
     const [ isSessionEnd, setIsSessionEnd ] = useState(false);
     const [ pausedData, setPausedData ] = useState(null);
-    const [ userRoundsTimes, setUserRoundsTimes ] = useState([]);
+    const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
 
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
@@ -180,28 +180,36 @@ const Amrap = ()=>{
     };
 
     const addUserRound = ()=>{
-        const userPrevTimesTotal = userRoundsTimes.reduce((acc, curr)=>{
+        const userTimes_copy = userRoundsTimes[count.amrap.toString()];
+
+        const userPrevTimesTotal = userTimes_copy.reduce((acc, curr)=>{
             return acc + curr
         }, 0);
         const actualAmrapTime = all_session_amraps[count.amrap];
         const remainingTime = currentTime_ref;
-
-        console.log('actualAmrapTime -> ' + actualAmrapTime)
-        console.log('remainingTime -> ' + remainingTime)
-        console.log('userPrevTimesTotal -> ' + userPrevTimesTotal)
-        
         const lastTime =  actualAmrapTime - remainingTime - userPrevTimesTotal
+        
+        userTimes_copy.push(lastTime);
+        
+        setUserRoundsTimes({
+            ...userRoundsTimes,
+            [count.amrap.toString()] : userTimes_copy
+        });
         
         setAmrapState({
             ...amrapState,
             userRounds: userRounds + 1,
-            userLastTime: lastTime,
-            userRoundsTimes: [ ...userRoundsTimes, lastTime ]
+            userLastTime: lastTime
         });
     };
 
     const handleUserAmrapTimes = ()=>{
-        //store user times for every amrap on 'userRoundsTimes' state like: [{ "amrap": 1, times: [..., ...] }]
+        const userRoundsTimes_copy = userRoundsTimes;
+        const uRT_copy_keys = Object.keys(userRoundsTimes_copy)
+        let newRound_value = Number(uRT_copy_keys[uRT_copy_keys.length - 1]) + 1;
+        if(isNaN(newRound_value)) newRound_value = 0;
+        userRoundsTimes_copy[newRound_value.toString()] = [];
+        setUserRoundsTimes(userRoundsTimes_copy);
     };
 
     const handleTimer = ()=>{
@@ -253,6 +261,7 @@ const Amrap = ()=>{
             const startAmrap = ()=>{
                 //console.log('startAmrap')
                 setIsOnRest(false);
+                handleUserAmrapTimes();
                 
                 if(pausedDataLocal) {
                     timer = pausedDataLocal.timer
