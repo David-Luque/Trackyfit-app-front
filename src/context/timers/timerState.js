@@ -77,6 +77,7 @@ const TimerState = ({ children })=>{
     };
 
     const splitTimeToSecs = (time) => {
+        if(time === 0) return '00:00';
         const minutes = twoDigitsNumber( getMinutes(time) );
         const seconds = twoDigitsNumber( getSeconds(time) );
         return `${minutes}:${seconds}`;
