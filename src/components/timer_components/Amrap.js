@@ -29,6 +29,7 @@ const Amrap = ()=>{
     const [ intervalID, setIntervalID ] = useState('');
     const [ isCountDownDone, setIsCountDownDone ] = useState(false);
     const [ isOnRest, setIsOnRest ] = useState(false);
+    //const [ isOnWork, setIsOnWork ] = useState(false);
     const [ isSessionEnd, setIsSessionEnd ] = useState(false);
     const [ pausedData, setPausedData ] = useState(null);
     const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
@@ -145,48 +146,32 @@ const Amrap = ()=>{
     };
 
     const addUserRound = ()=>{
-        console.log('addUserRound()')
-        const userTimes_copy = userRoundsTimes[count.amrap.toString()];
+        //create 'isOnWork' state to do more readable??
+        //or this:
+        // const roundsButton = document.getElementById('round-btn');
+        // if(roundsButton.className === 'active')
+        if(isCountDownDone && !isOnRest) {
+            console.log('addUserRound()')
+            const userTimes_copy = userRoundsTimes[count.amrap.toString()];
 
-        const userPrevTimesTotal = userTimes_copy.reduce((acc, curr)=>{
-            return acc + curr
-        }, 0);
-        const actualAmrapTime = all_session_amraps[count.amrap];
-        const remainingTime = currentTime_ref;
-        const lastTime =  actualAmrapTime - remainingTime - userPrevTimesTotal
-        
-        userTimes_copy.push(lastTime);
-        
-        setUserRoundsTimes({
-            ...userRoundsTimes,
-            [count.amrap.toString()] : userTimes_copy
-        });
-        setAmrapState({
-            ...amrapState,
-            userRounds: userRounds + 1,
-            userLastTime: lastTime
-        });
-    };
-
-    const renderUserRounds = ()=>{
-        if(userRounds === 0) {
-            return (
-                <button 
-                    id="round-btn" 
-                    className='inactive'
-                    disabled 
-                    onClick={()=> addUserRound()}
-                > + </button>
-            );
-        } else {
-            return(
-                <button 
-                    id="round-btn" 
-                    className='inactive'
-                    disabled 
-                    onClick={()=> addUserRound()}
-                > {userRounds} </button>
-            )
+            const userPrevTimesTotal = userTimes_copy.reduce((acc, curr)=>{
+                return acc + curr
+            }, 0);
+            const actualAmrapTime = all_session_amraps[count.amrap];
+            const remainingTime = currentTime_ref;
+            const lastTime =  actualAmrapTime - remainingTime - userPrevTimesTotal
+            
+            userTimes_copy.push(lastTime);
+            
+            setUserRoundsTimes({
+                ...userRoundsTimes,
+                [count.amrap.toString()] : userTimes_copy
+            });
+            setAmrapState({
+                ...amrapState,
+                userRounds: userRounds + 1,
+                userLastTime: lastTime
+            })
         }
     };
 
@@ -223,12 +208,12 @@ const Amrap = ()=>{
 
     const handleRoundsButton = ()=>{
         const roundsButton = document.getElementById('round-btn');
-        let buttonStatus = roundsButton.className;
-        buttonStatus === 'active' ? buttonStatus = 'inactive' : buttonStatus = 'active';
-        roundsButton.disabled = !roundsButton.disabled;
-        console.log(roundsButton)
-        console.log(buttonStatus)
-        console.log(roundsButton.disabled)
+        if(roundsButton.className === 'active') {
+            roundsButton.className = 'inactive'
+        } else {
+            roundsButton.className = 'active';
+        }
+        console.log(roundsButton.className)
     };
 
     const handleTimer = ()=>{
@@ -437,8 +422,10 @@ const Amrap = ()=>{
                         <p>Tap to start</p>
                     </main>
                     <aside>
-                        { renderUserRounds() }
-                        <p>round counter</p>
+                        <button id="round-btn" className='inactive' onClick={()=> addUserRound()}> 
+                            {userRounds !== 0 ? userRounds : '+'} 
+                        </button>
+                        <p>Rounds counter</p>
                     </aside>
                 </div>
             </div>
