@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import TimerContext from '../../context/timers/timerContext';
 import AmrapSet from './minor_timer_comp/AmrapSet';
+import AmrapTimes from './minor_timer_comp/AmrapTimes';
 
 const Amrap = ()=>{
     //TODO: include an "useEffect" on every timer_component where execute a fuction to reset "initialState" of TimerContext
@@ -146,11 +147,8 @@ const Amrap = ()=>{
     };
 
     const addUserRound = ()=>{
-        //create 'isOnWork' state to do more readable??
-        //or this:
-        // const roundsButton = document.getElementById('round-btn');
-        // if(roundsButton.className === 'active')
-        if(isCountDownDone && !isOnRest) {
+        const roundsButton = document.getElementById('round-btn');
+        if(roundsButton.className === 'active') {
             console.log('addUserRound()')
             const userTimes_copy = userRoundsTimes[count.amrap.toString()];
 
@@ -404,6 +402,9 @@ const Amrap = ()=>{
                         </div>
                     </main>
                     <footer> View amrap times</footer>
+                    <AmrapTimes
+                        userRoundsTimes={userRoundsTimes}
+                    />
                 </div>
             </div>
         )
