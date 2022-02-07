@@ -31,9 +31,12 @@ const Amrap = ()=>{
     const [ isCountDownDone, setIsCountDownDone ] = useState(false);
     const [ isOnRest, setIsOnRest ] = useState(false);
     //const [ isOnWork, setIsOnWork ] = useState(false);
-    const [ isSessionEnd, setIsSessionEnd ] = useState(false);
+    const [ isSessionEnd, setIsSessionEnd ] = useState(true);
     const [ pausedData, setPausedData ] = useState(null);
-    const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
+    const [ userRoundsTimes, setUserRoundsTimes ] = useState({
+        '0': [5, 4, 6, 7, 7],
+        '1': [3, 5, 5, 6, 4]
+    });
 
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
@@ -394,7 +397,7 @@ const Amrap = ()=>{
                         <div>actions buttons</div>
                     </header>
                     <main>
-                        <img/>
+                        {/* <img/> */}
                         <p>Motivation sentence</p>
                         <div>
                             <span>amraps</span>
@@ -404,6 +407,7 @@ const Amrap = ()=>{
                     <footer> View amrap times</footer>
                     <AmrapTimes
                         userRoundsTimes={userRoundsTimes}
+                        splitTimeToSecs={splitTimeToSecs}
                     />
                 </div>
             </div>
