@@ -4,13 +4,10 @@ const AmrapTimes = ({ userRoundsTimes, splitTimeToSecs })=>{
 
     const renderAmrapTimes = ()=>{
         const amrapRounds = Object.keys(userRoundsTimes);
-        //console.log(amrapRounds)
-
         return amrapRounds.map(round => {
-            //console.log(round, userRoundsTimes[round])
             return (
                 <div>
-                    <h6> Round {round+1}</h6>
+                    <h6> Amrap {Number(round) + 1}</h6>
                     <ul>
                         {displayRoundTimes(userRoundsTimes[round])}
                     </ul>
@@ -20,26 +17,35 @@ const AmrapTimes = ({ userRoundsTimes, splitTimeToSecs })=>{
     };
     
     const displayRoundTimes = (roundTimes)=> {
-        //TODO: change to .map
-        for(let i = 0; i < roundTimes.length; i++) {
+        let index;
+        return roundTimes.map(time => {
+            if(index === undefined) { index = 0 } else { index++ }
             return (
-                <li key={i}>
-                    Round {i+1}
-                    { splitTimeToSecs(roundTimes[i]) }
-                    { getDiffTime(i, roundTimes[i], roundTimes[i-1]) }
+                <li key={index}>
+                    Round {index+1} <br/>
+                    { splitTimeToSecs(time) } <br/>
+                    { getDiffTime(index, time, roundTimes[index-1]) }
                 </li>     
             )
-        }
+        })
     };
 
     const getDiffTime = (index, currTime, prevTime)=>{
         if(index > 0) {
             const diff = currTime - prevTime;
-            return(
-                <span className={diff > 0 ? 'positive' : 'negative'}>
-                    {diff} sec
-                </span>
-            )
+            if (diff < 0) {
+                return (
+                    <span className='negative'>
+                        {diff} sec
+                    </span> 
+                )
+            } else if(diff > 0) {
+                return (
+                    <span className='positive'>
+                        +{diff} sec
+                    </span> 
+                )
+            } else { return <span> = </span> }
         }
     };
 
