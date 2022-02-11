@@ -31,12 +31,9 @@ const Amrap = ()=>{
     const [ isCountDownDone, setIsCountDownDone ] = useState(false);
     const [ isOnRest, setIsOnRest ] = useState(false);
     //const [ isOnWork, setIsOnWork ] = useState(false);
-    const [ isSessionEnd, setIsSessionEnd ] = useState(true);
+    const [ isSessionEnd, setIsSessionEnd ] = useState(false);
     const [ pausedData, setPausedData ] = useState(null);
-    const [ userRoundsTimes, setUserRoundsTimes ] = useState({
-        '0': [5, 4, 6, 7, 7],
-        '1': [3, 5, 5, 6, 4]
-    });
+    const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
 
     const [ amrapState, setAmrapState] = useState({
         session_amrap: 0,
@@ -152,7 +149,7 @@ const Amrap = ()=>{
     const addUserRound = ()=>{
         const roundsButton = document.getElementById('round-btn');
         if(roundsButton.className === 'active') {
-            console.log('addUserRound()')
+            //console.log('addUserRound()')
             const userTimes_copy = userRoundsTimes[count.amrap.toString()];
 
             const userPrevTimesTotal = userTimes_copy.reduce((acc, curr)=>{
@@ -177,12 +174,6 @@ const Amrap = ()=>{
     };
 
     const prepareAmrap = ()=>{
-        // setAmrapState({
-        //     ...amrapState,
-        //     current_amrap_count: 0,
-        //     current_rest_count: 0
-        // });
-
         if(session_sets) {
             setAmrapState({
                 ...amrapState,
@@ -200,8 +191,8 @@ const Amrap = ()=>{
 
     const handleUserAmrapTimes = ()=>{
         const userRoundsTimes_copy = userRoundsTimes;
-        const uRT_copy_keys = Object.keys(userRoundsTimes_copy)
-        let newRound_value = Number(uRT_copy_keys[uRT_copy_keys.length - 1]) + 1;
+        const userRoundTimes_keys = Object.keys(userRoundsTimes_copy)
+        let newRound_value = Number(userRoundTimes_keys[userRoundTimes_keys.length - 1]) + 1;
         if(isNaN(newRound_value)) newRound_value = 0;
         userRoundsTimes_copy[newRound_value.toString()] = [];
         setUserRoundsTimes(userRoundsTimes_copy);
@@ -214,7 +205,6 @@ const Amrap = ()=>{
         } else {
             roundsButton.className = 'active';
         }
-        console.log(roundsButton.className)
     };
 
     const handleTimer = ()=>{
@@ -268,6 +258,7 @@ const Amrap = ()=>{
                 setIsOnRest(false);
                 handleUserAmrapTimes();
                 handleRoundsButton();
+                setAmrapState({ ...amrapState, userRounds: 0 });
                 
                 if(pausedDataLocal) {
                     timer = pausedDataLocal.timer
@@ -303,7 +294,7 @@ const Amrap = ()=>{
             };
     
             const startRest = ()=>{
-                console.log('startRest')
+                //console.log('startRest')
                 setIsOnRest(true);
                 
                 if(pausedDataLocal) {
@@ -353,7 +344,7 @@ const Amrap = ()=>{
         };
 
         const pauseSession = ()=>{
-            console.log('pauseSession()')
+            //console.log('pauseSession()')
             clearInterval(intervalID);
             handleRoundsButton();
             setPausedData({
@@ -365,7 +356,7 @@ const Amrap = ()=>{
         };
 
         const restartSession = ()=>{
-            console.log('restartSession()')
+            //console.log('restartSession()')
             startSession();
         };
 
@@ -408,6 +399,7 @@ const Amrap = ()=>{
                     <AmrapTimes
                         userRoundsTimes={userRoundsTimes}
                         splitTimeToSecs={splitTimeToSecs}
+                        all_session_amraps={all_session_amraps}
                     />
                 </div>
             </div>
