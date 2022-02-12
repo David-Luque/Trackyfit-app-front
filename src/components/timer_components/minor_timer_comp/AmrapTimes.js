@@ -1,24 +1,19 @@
 import React from 'react';
 
-const AmrapTimes = ({ userRoundsTimes, splitTimeToSecs, all_session_amraps })=>{
+const AmrapTimes = ({ userRoundsTimes, splitTimeToSecs, all_session_amraps, renderSessionResume })=>{
 
     const renderAmrapTimes = ()=>{
         const amrapRounds = Object.keys(userRoundsTimes);
-        //const session_amraps_copy = [...all_session_amraps];
         let time_left_over;
         let counter = 0;
 
         return amrapRounds.map(round => {
-            console.log(all_session_amraps)
             const currentAmrapTime = all_session_amraps[counter];
             const totalRoundTimes = userRoundsTimes[round].reduce((acc, curr)=> {
                 return acc + curr 
             }, 0);
             counter++;
-            console.log(currentAmrapTime)
-            console.log(totalRoundTimes)
             time_left_over = currentAmrapTime - totalRoundTimes;
-            console.log(time_left_over)
 
             return (
                 <div>
@@ -73,10 +68,9 @@ const AmrapTimes = ({ userRoundsTimes, splitTimeToSecs, all_session_amraps })=>{
                 <button>share</button>
                 <p>Hide round times</p>
             </header>
-            <div>
-                <span>amraps</span>
-                <span>time</span>
-            </div>
+            <ul>
+                {renderSessionResume()}
+            </ul>
             <div>
                 <h5>Round times:</h5>
                 <div>

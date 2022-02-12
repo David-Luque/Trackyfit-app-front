@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import TimerContext from '../../context/timers/timerContext';
 import AmrapSet from './minor_timer_comp/AmrapSet';
 import AmrapTimes from './minor_timer_comp/AmrapTimes';
@@ -377,29 +378,48 @@ const Amrap = ()=>{
 
     };
 
+    const renderSessionResume = ()=>{
+        let counter = 0;
+
+        return all_session_amraps.map(amrap => {
+            counter++;
+            console.log(amrap)
+            console.log(splitTimeToSecs(amrap))
+            return (
+                <li>
+                    <span>AMRAP {counter}</span>
+                    <br/>
+                    <span>{splitTimeToSecs(amrap)}</span>
+                </li>
+            )
+        });
+    };
+
 
     if(isSessionEnd) { 
         return (
             <div>
                 <div>
                     <header>
-                        <span> back arrow</span>
+                        <Link to={'/timer'}> <span>&larr;</span> </Link>
                         <p>app logo-name</p>
-                        <div>actions buttons</div>
+                        <div>
+                            <button>share</button>
+                        </div>
                     </header>
                     <main>
                         {/* <img/> */}
                         <p>Motivation sentence</p>
-                        <div>
-                            <span>amraps</span>
-                            <span>time</span>
-                        </div>
+                        <ul>
+                            {renderSessionResume()}
+                        </ul>
                     </main>
-                    <footer> View amrap times</footer>
+                    <footer> Show amrap times</footer>
                     <AmrapTimes
                         userRoundsTimes={userRoundsTimes}
                         splitTimeToSecs={splitTimeToSecs}
                         all_session_amraps={all_session_amraps}
+                        renderSessionResume={renderSessionResume}
                     />
                 </div>
             </div>
