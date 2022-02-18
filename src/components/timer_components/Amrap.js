@@ -3,14 +3,13 @@ import { Redirect, Link } from 'react-router-dom';
 import TimerContext from '../../context/timers/timerContext';
 import AmrapSet from './minor_timer_comp/AmrapSet';
 import AmrapTimes from './minor_timer_comp/AmrapTimes';
+//TODO: FIX VISTA DE AMRAP AL ENTRAR de nuevo TRAS terminar UNA SESION
 
 const Amrap = ()=>{
     //TODO: include an "useEffect" on every timer_component where execute a fuction to reset "initialState" of TimerContext
 
     const timerContext = useContext(TimerContext);
     const {
-        startTime,
-        resetTimer,
         amrap_time,
         setAmrapTime,
         addAmrap,
@@ -20,9 +19,7 @@ const Amrap = ()=>{
         isTimerReady,
         setTimerReady,
         getTimeOptions,
-        splitTimeToSecs,
-        isEndSession,
-        setEndSession
+        splitTimeToSecs
     } = timerContext
 
     const [ timersRef, setTimersRef ] = useState({ currentTime_ref: 0, timer_ref: 0});
@@ -31,7 +28,6 @@ const Amrap = ()=>{
     const [ intervalID, setIntervalID ] = useState('');
     const [ isCountDownDone, setIsCountDownDone ] = useState(false);
     const [ isOnRest, setIsOnRest ] = useState(false);
-    //const [ isOnWork, setIsOnWork ] = useState(false);
     const [ isSessionEnd, setIsSessionEnd ] = useState(false);
     const [ pausedData, setPausedData ] = useState(null);
     const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
@@ -44,8 +40,9 @@ const Amrap = ()=>{
         countDownTime: 4,
         userRounds: 0,
         userLastTime: null,
-        userPrevAmrapsTimes: 0,
-        amrapInterval: ''
+        //userPrevAmrapsTimes: 0,
+        //amrapInterval: '',
+        isSessionPaused: false
     });
     const { 
         session_sets, 
@@ -54,9 +51,8 @@ const Amrap = ()=>{
         countDownTime,
         session_rests,
         userRounds,
-        userPrevAmrapsTimes,
         userLastTime,
-        amrapInterval
+        isSessionPaused
     } = amrapState;
 
 
@@ -87,7 +83,7 @@ const Amrap = ()=>{
         
         return (
             <>
-                <option value={0} key={-1}> --- </option>
+                <option value="defaultValue disabled" key={-1}> --- </option>
                 {
                     options.map((op, index) => {
                         return (
@@ -191,6 +187,7 @@ const Amrap = ()=>{
     };
 
     const handleUserAmrapTimes = ()=>{
+        console.log('handleUserAmrapTimes()')
         const userRoundsTimes_copy = userRoundsTimes;
         const userRoundTimes_keys = Object.keys(userRoundsTimes_copy)
         let newRound_value = Number(userRoundTimes_keys[userRoundTimes_keys.length - 1]) + 1;
@@ -257,9 +254,13 @@ const Amrap = ()=>{
             const startAmrap = ()=>{
                 //console.log('startAmrap')
                 setIsOnRest(false);
-                handleUserAmrapTimes();
                 handleRoundsButton();
-                setAmrapState({ ...amrapState, userRounds: 0 });
+                
+                if(!isSessionPaused) {
+                    handleUserAmrapTimes();
+                } else {
+                    setAmrapState({ ...amrapState, iseSessionPaused: false })
+                }
                 
                 if(pausedDataLocal) {
                     timer = pausedDataLocal.timer
@@ -328,6 +329,7 @@ const Amrap = ()=>{
                         };
     
                         setCount({ amrap: amrap_count, rest: rest_count });
+                        setAmrapState({ ...amrapState, userRounds: 0 });
                         startAmrap();
                     }
                 }, 1000);
@@ -347,6 +349,7 @@ const Amrap = ()=>{
         const pauseSession = ()=>{
             //console.log('pauseSession()')
             clearInterval(intervalID);
+            setAmrapState({ ...amrapState, isSessionPaused: true })
             handleRoundsButton();
             setPausedData({
                 currentTime: currentTime_ref,
@@ -429,7 +432,7 @@ const Amrap = ()=>{
             <div>
                 { renderAmrapCount() }
                 { userLastTime === 0 || userLastTime === null ? (
-                    <p>Last round: {splitTimeToSecs(0)}</p> 
+                    <p>Last round: -:- </p> 
                     ) : <p>Last round: {splitTimeToSecs(userLastTime)}</p> 
                 }
                 <div>

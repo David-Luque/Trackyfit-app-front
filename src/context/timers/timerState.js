@@ -17,21 +17,27 @@ import {
 const TimerState = ({ children })=>{
 
     const initialState = {
-        timer: 0,
-        intervalID: null,
+        intervalID: '',
+        countDownTime: 4,
+        userRounds: 0,
         isTimerReady: null,
-        isEndSession: null,
-        sets: null,
-        rest: null,
-        amrap_time: 60,
-        amrap_sets: [], //an arary of objects with rest and time for every set
-        forTime_timeCap: 0,
-        emom_every: 0,
-        emom_for: 0,
-        asLongAsPossible: false,
-        tabata_rounds: 0,
-        tabata_workTime: 0,
-        tabata_restTime: 0
+        timersRef: { currentTime_ref: 0, timer_ref: 0 },
+        isCountDownDone: false,
+        isOnRest: false,
+        isSessionEnd: false,
+        pauseData: null,
+        userRoundsTime: {}
+        // sets: null,
+        // rest: null,
+        //amrap_time: 60,
+        //amrap_sets: [], //an arary of objects with rest and time for every set
+        //forTime_timeCap: 0,
+        // emom_every: 0,
+        // emom_for: 0,
+        // asLongAsPossible: false,
+        // tabata_rounds: 0,
+        // tabata_workTime: 0,
+        // tabata_restTime: 0
     }
 
     const [ state, dispatch ] = useReducer(TimerReducer, initialState);
@@ -49,10 +55,10 @@ const TimerState = ({ children })=>{
         });
     };
 
-    const saveIntervalID = (intId) => {
+    const saveIntervalID = (id) => {
         dispatch({
             type: SAVE_INTERVAL,
-            payload: intId
+            payload: id
         });
     };
 
