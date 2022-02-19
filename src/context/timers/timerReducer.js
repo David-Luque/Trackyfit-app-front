@@ -8,7 +8,11 @@ import {
     REMOVE_AMRAP_SET,
     EDIT_AMRAP_SET,
     SET_TIMER_READY,
-    SET_END_SESSION
+    SET_END_SESSION,
+    SET_TIME_REFERENCES,
+    HANDLE_COUNTDOWN,
+    HANDLE_REST,
+    HANDLE_SESSION_END
 } from '../../types'
 
 const TimerReducer = (state, action)=>{
@@ -59,6 +63,26 @@ const TimerReducer = (state, action)=>{
                 ...state,
                 isEndSession: true
             }
+        case SET_TIME_REFERENCES:
+            return {
+                ...state,
+                timersRef: action.payload
+            }
+        case HANDLE_COUNTDOWN:
+            return {
+                ...state,
+                isCountDownDone: action.payload
+            }
+        case HANDLE_REST:
+        return {
+            ...state,
+            isOnRest: action.payload
+        }
+        case HANDLE_SESSION_END:
+        return {
+            ...state,
+            isSessionEnd: action.payload
+        }
         default:
             return state;
     };

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import TimerContext from '../../context/timers/timerContext';
 import AmrapSet from './minor_timer_comp/AmrapSet';
 import AmrapTimes from './minor_timer_comp/AmrapTimes';
@@ -19,16 +19,24 @@ const Amrap = ()=>{
         isTimerReady,
         setTimerReady,
         getTimeOptions,
-        splitTimeToSecs
+        splitTimeToSecs,
+        timersRef,
+        setTimersRef,
+        intervalID,
+        saveIntervalID,
+        isCountDownDone,
+        isOnRest,
+        isSessionEnd,
+        handleCountDownDone,
+        handleIsOnRest,
+        handleIsSessionEnd,
+        countDownTime
     } = timerContext
-
-    const [ timersRef, setTimersRef ] = useState({ currentTime_ref: 0, timer_ref: 0});
+    
     const { currentTime_ref, timer_ref } = timersRef;
+   
+    
     const [ count, setCount ] = useState({ amrap: 0, rest: 0 });
-    const [ intervalID, setIntervalID ] = useState('');
-    const [ isCountDownDone, setIsCountDownDone ] = useState(false);
-    const [ isOnRest, setIsOnRest ] = useState(false);
-    const [ isSessionEnd, setIsSessionEnd ] = useState(false);
     const [ pausedData, setPausedData ] = useState(null);
     const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
 
@@ -37,18 +45,14 @@ const Amrap = ()=>{
         session_sets: [],
         all_session_amraps: [],
         session_rests: [],
-        countDownTime: 4,
         userRounds: 0,
         userLastTime: null,
-        //userPrevAmrapsTimes: 0,
-        //amrapInterval: '',
         isSessionPaused: false
     });
     const { 
         session_sets, 
         session_amrap,
         all_session_amraps,
-        countDownTime,
         session_rests,
         userRounds,
         userLastTime,
@@ -146,7 +150,7 @@ const Amrap = ()=>{
     const addUserRound = ()=>{
         const roundsButton = document.getElementById('round-btn');
         if(roundsButton.className === 'active') {
-            //console.log('addUserRound()')
+            console.log('addUserRound()')
             const userTimes_copy = userRoundsTimes[count.amrap.toString()];
 
             const userPrevTimesTotal = userTimes_copy.reduce((acc, curr)=>{
@@ -243,17 +247,17 @@ const Amrap = ()=>{
                     
                     if(currentTime === 0) {
                         clearInterval(countDownIntervalID);
-                        setIsCountDownDone(true);
+                        handleCountDownDone(true);
                         startAmrap();
                     }
                 }, 1000);
                 countDownIntervalID = countDownInterval;
-                setIntervalID(countDownIntervalID);
+                saveIntervalID(countDownIntervalID);
             };
     
             const startAmrap = ()=>{
                 //console.log('startAmrap')
-                setIsOnRest(false);
+                handleIsOnRest(false);
                 handleRoundsButton();
                 
                 if(!isSessionPaused) {
@@ -292,12 +296,12 @@ const Amrap = ()=>{
                     }
                 }, 1000);
                 workIntervalID = workInterval;
-                setIntervalID(workIntervalID);
+                saveIntervalID(workIntervalID);
             };
     
             const startRest = ()=>{
                 //console.log('startRest')
-                setIsOnRest(true);
+                handleIsOnRest(true);
                 
                 if(pausedDataLocal) {
                     timer = pausedDataLocal.timer;
@@ -334,11 +338,11 @@ const Amrap = ()=>{
                     }
                 }, 1000);
                 restIntervalID = restInterval;
-                setIntervalID(restIntervalID);
+                saveIntervalID(restIntervalID);
             };
     
             const endSession = ()=>{
-                setIsSessionEnd(true);
+                handleIsSessionEnd(true);
             };
     
             if(!isCountDownDone) startCountDown();

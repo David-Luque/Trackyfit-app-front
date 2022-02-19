@@ -11,7 +11,10 @@ import {
     REMOVE_AMRAP_SET,
     EDIT_AMRAP_SET,
     SET_TIMER_READY,
-    SET_END_SESSION
+    SET_END_SESSION,
+    HANDLE_COUNTDOWN,
+    HANDLE_REST,
+    HANDLE_SESSION_END
 } from '../../types';
 
 const TimerState = ({ children })=>{
@@ -26,21 +29,48 @@ const TimerState = ({ children })=>{
         isOnRest: false,
         isSessionEnd: false,
         pauseData: null,
-        userRoundsTime: {}
-        // sets: null,
-        // rest: null,
-        //amrap_time: 60,
-        //amrap_sets: [], //an arary of objects with rest and time for every set
-        //forTime_timeCap: 0,
-        // emom_every: 0,
-        // emom_for: 0,
-        // asLongAsPossible: false,
-        // tabata_rounds: 0,
-        // tabata_workTime: 0,
-        // tabata_restTime: 0
+        userRoundsTime: {},
+        sets: null,
+        rest: null,
+        amrap_time: 60,
+        amrap_sets: [], //an arary of objects with rest and time for every set
+        forTime_timeCap: 0,
+        emom_every: 0,
+        emom_for: 0,
+        asLongAsPossible: false,
+        tabata_rounds: 0,
+        tabata_workTime: 0,
+        tabata_restTime: 0
     }
 
     const [ state, dispatch ] = useReducer(TimerReducer, initialState);
+
+
+    const setTimersRef = (times)=>{
+        dispatch({
+            type: 'SET_TIME_REFERENCES',
+            payload: times
+        });
+    };
+
+    const handleCountDownDone = (status)=>{
+        dispatch({
+            type: HANDLE_COUNTDOWN,
+            payload: status
+        });
+    };
+    const handleIsOnRest = (status)=>{
+        dispatch({
+            type: HANDLE_REST,
+            payload: status
+        });
+    };
+    const handleIsSessionEnd = (status)=>{
+        dispatch({
+            type: HANDLE_SESSION_END,
+            payload: status
+        });
+    };
 
     const setTimerReady = ()=>{
         dispatch({
@@ -216,6 +246,7 @@ const TimerState = ({ children })=>{
         <TimerContext.Provider
             value={{
                 timer: state.timer,
+                timersRef: state.timersRef,
                 intervalID: state.intervalID,
                 isTimerReady: state.isTimerReady,
                 sets: state.sets,
@@ -230,6 +261,10 @@ const TimerState = ({ children })=>{
                 tabata_workTime: state.tabata_workTime,
                 tabata_restTime: state.tabata_restTime,
                 isEndSession: state.isEndSession,
+                isCountDownDone: state.isCountDownDone,
+                isOnRest: state.isOnRest,
+                isSessionEnd: state.isSessionEnd,
+                countDownTime: state.countDownTime,
                 startTime,
                 saveIntervalID,
                 stopTime,
@@ -242,7 +277,11 @@ const TimerState = ({ children })=>{
                 removeAmrap,
                 editAmrapSet,
                 setTimerReady,
-                setEndSession
+                setEndSession,
+                setTimersRef,
+                handleCountDownDone,
+                handleIsOnRest,
+                handleIsSessionEnd
             }}
         >
             { children }
