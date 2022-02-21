@@ -10,12 +10,6 @@ const Amrap = ()=>{
 
     const timerContext = useContext(TimerContext);
     const {
-        amrap_time,
-        setAmrapTime,
-        addAmrap,
-        removeAmrap,
-        amrap_sets,
-        editAmrapSet,
         isTimerReady,
         setTimerReady,
         getTimeOptions,
@@ -30,14 +24,20 @@ const Amrap = ()=>{
         handleCountDownDone,
         handleIsOnRest,
         handleIsSessionEnd,
-        countDownTime
+        countDownTime,
+        isSessionPaused,
+        handleIsSessionPaused,
+        pauseData,
+        setPauseData,
+        userRounds,
+        sumUserRound
     } = timerContext
     
     const { currentTime_ref, timer_ref } = timersRef;
-   
     
+    const [ amrap_time, setAmrap_time ] = useState(60);
+    const [ amrap_sets, setAmrap_sets ] = useState([]);
     const [ count, setCount ] = useState({ amrap: 0, rest: 0 });
-    const [ pausedData, setPausedData ] = useState(null);
     const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
 
     const [ amrapState, setAmrapState] = useState({
@@ -45,18 +45,14 @@ const Amrap = ()=>{
         session_sets: [],
         all_session_amraps: [],
         session_rests: [],
-        userRounds: 0,
-        userLastTime: null,
-        isSessionPaused: false
+        userLastTime: null
     });
     const { 
         session_sets, 
         session_amrap,
         all_session_amraps,
         session_rests,
-        userRounds,
-        userLastTime,
-        isSessionPaused
+        userLastTime
     } = amrapState;
 
 
@@ -171,6 +167,7 @@ const Amrap = ()=>{
                 userRounds: userRounds + 1,
                 userLastTime: lastTime
             })
+            sumUserRound()
         }
     };
 
@@ -215,7 +212,7 @@ const Amrap = ()=>{
             let timer, currentTime;
             let amrap_count, rest_count;
             let pausedDataLocal;
-            if(pausedData) pausedDataLocal = pausedData;
+            if(pauseData) pausedDataLocal = pauseData;
 
             if(pausedDataLocal) {
                 amrap_count = pausedDataLocal.amrapCount;
@@ -263,7 +260,7 @@ const Amrap = ()=>{
                 if(!isSessionPaused) {
                     handleUserAmrapTimes();
                 } else {
-                    setAmrapState({ ...amrapState, iseSessionPaused: false })
+                    handleIsSessionPaused(false)
                 }
                 
                 if(pausedDataLocal) {
@@ -353,9 +350,9 @@ const Amrap = ()=>{
         const pauseSession = ()=>{
             //console.log('pauseSession()')
             clearInterval(intervalID);
-            setAmrapState({ ...amrapState, isSessionPaused: true })
+            handleIsSessionPaused(true);
             handleRoundsButton();
-            setPausedData({
+            setPauseData({
                 currentTime: currentTime_ref,
                 timer: timer_ref,
                 amrapCount: count.amrap,
@@ -401,6 +398,44 @@ const Amrap = ()=>{
             )
         });
     };
+
+    const editAmrapSet = (amrap_set)=>{
+        const { position } = amrap_set;
+        const amrap_sets_Copy = [...amrap_sets];
+        amrap_sets_Copy.splice(position, 1, amrap_set)
+
+        setAmrap_sets(amrap_sets_Copy);
+    };
+
+    const addAmrap = ()=>{
+        let newAmrap;
+        if(amrap_sets.length === 0) {
+            newAmrap = {
+                rest: 30,
+                work: 30,
+                position: amrap_sets.length
+            }
+        } else if(amrap_sets.length > 0) {
+            const previousAmrap = amrap_sets[amrap_sets.length - 1]
+            newAmrap = {
+                ...previousAmrap,
+                position: amrap_sets.length
+            };
+        };
+        
+        setAmrap_sets([ ...amrap_sets, newAmrap ])
+    };
+
+    const removeAmrap = (position)=>{
+        const amrap_sets_Copy = [...amrap_sets];
+        amrap_sets_Copy.splice(position, 1);
+        for(let i = 0; i < amrap_sets_Copy.length; i++) {
+            amrap_sets_Copy[i].position = i;
+        }
+        
+        setAmrap_sets(amrap_sets_Copy);
+    };
+
 
 
     if(isSessionEnd) { 
@@ -464,7 +499,7 @@ const Amrap = ()=>{
                 <select 
                     name='time'
                     value={session_amrap}
-                    onChange={(e)=>setAmrapTime(e.target.value)}
+                    onChange={ e => setAmrap_time(Number(e.target.value)) }
                 > {renderTimeOptions(10)} </select>
                 <p>minutes</p>
                 

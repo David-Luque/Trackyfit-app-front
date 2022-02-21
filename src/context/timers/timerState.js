@@ -6,15 +6,18 @@ import {
     COUNT_TIME,
     STOP_INTERVAL,
     RESET_TIME,
-    SET_AMRAP_TIME,
-    ADD_AMRAP_SET,
-    REMOVE_AMRAP_SET,
-    EDIT_AMRAP_SET,
+    //SET_AMRAP_TIME,
+    //ADD_AMRAP_SET,
+    //REMOVE_AMRAP_SET,
+    //EDIT_AMRAP_SET,
     SET_TIMER_READY,
     SET_END_SESSION,
     HANDLE_COUNTDOWN,
     HANDLE_REST,
-    HANDLE_SESSION_END
+    HANDLE_SESSION_END,
+    HANDLE_SESSION_PAUSED,
+    HANDLE_PAUSE_DATA,
+    ADD_USER_ROUND
 } from '../../types';
 
 const TimerState = ({ children })=>{
@@ -28,19 +31,20 @@ const TimerState = ({ children })=>{
         isCountDownDone: false,
         isOnRest: false,
         isSessionEnd: false,
+        isSessionPaused: false,
         pauseData: null,
         userRoundsTime: {},
-        sets: null,
-        rest: null,
-        amrap_time: 60,
-        amrap_sets: [], //an arary of objects with rest and time for every set
-        forTime_timeCap: 0,
-        emom_every: 0,
-        emom_for: 0,
-        asLongAsPossible: false,
-        tabata_rounds: 0,
-        tabata_workTime: 0,
-        tabata_restTime: 0
+        //sets: null,
+        //rest: null,
+        //amrap_time: 60,
+        //amrap_sets: [], //an arary of objects with rest and time for every set
+        // forTime_timeCap: 0,
+        // emom_every: 0,
+        // emom_for: 0,
+        // asLongAsPossible: false,
+        // tabata_rounds: 0,
+        // tabata_workTime: 0,
+        // tabata_restTime: 0
     }
 
     const [ state, dispatch ] = useReducer(TimerReducer, initialState);
@@ -69,6 +73,25 @@ const TimerState = ({ children })=>{
         dispatch({
             type: HANDLE_SESSION_END,
             payload: status
+        });
+    };
+    const handleIsSessionPaused = (status)=>{
+        dispatch({
+            type: HANDLE_SESSION_PAUSED,
+            payload: status
+        });
+    };
+
+    const setPauseData = (data)=>{
+        dispatch({
+            type: HANDLE_PAUSE_DATA,
+            payload: data
+        });
+    };
+
+    const sumUserRound = ()=>{
+        dispatch({
+            type: ADD_USER_ROUND
         });
     };
 
@@ -189,82 +212,79 @@ const TimerState = ({ children })=>{
         return compoundTimeOptions();
     };
 
-    const setAmrapTime = (time)=>{
-        dispatch({
-            type: SET_AMRAP_TIME,
-            payload: Number(time)
-        });
-    };
+    // const setAmrapTime = (time)=>{
+    //     dispatch({
+    //         type: SET_AMRAP_TIME,
+    //         payload: Number(time)
+    //     });
+    // };
 
-    const addAmrap = ()=>{
-        let newAmrap;
-        if(state.amrap_sets.length === 0) {
-            newAmrap = {
-                rest: 30,
-                work: 30,
-                position: state.amrap_sets.length
-            }
-        } else if(state.amrap_sets.length > 0) {
-            const previousAmrap = state.amrap_sets[state.amrap_sets.length - 1]
-            newAmrap = {
-                ...previousAmrap,
-                position: state.amrap_sets.length
-            };
-        };
-        dispatch({
-            type: ADD_AMRAP_SET,
-            payload: newAmrap
-        });
-    };
+    // const addAmrap = ()=>{
+    //     let newAmrap;
+    //     if(state.amrap_sets.length === 0) {
+    //         newAmrap = {
+    //             rest: 30,
+    //             work: 30,
+    //             position: state.amrap_sets.length
+    //         }
+    //     } else if(state.amrap_sets.length > 0) {
+    //         const previousAmrap = state.amrap_sets[state.amrap_sets.length - 1]
+    //         newAmrap = {
+    //             ...previousAmrap,
+    //             position: state.amrap_sets.length
+    //         };
+    //     };
+    //     dispatch({
+    //         type: ADD_AMRAP_SET,
+    //         payload: newAmrap
+    //     });
+    // };
 
-    const removeAmrap = (position)=>{
-        const amrap_sets_Copy = [...state.amrap_sets];
-        amrap_sets_Copy.splice(position, 1);
-        for(let i = 0; i < amrap_sets_Copy.length; i++) {
-            amrap_sets_Copy[i].position = i;
-        }
+    // const removeAmrap = (position)=>{
+    //     const amrap_sets_Copy = [...state.amrap_sets];
+    //     amrap_sets_Copy.splice(position, 1);
+    //     for(let i = 0; i < amrap_sets_Copy.length; i++) {
+    //         amrap_sets_Copy[i].position = i;
+    //     }
         
-        dispatch({
-            type: REMOVE_AMRAP_SET,
-            payload: amrap_sets_Copy
-        });
-    };
+    //     dispatch({
+    //         type: REMOVE_AMRAP_SET,
+    //         payload: amrap_sets_Copy
+    //     });
+    // };
 
-    const editAmrapSet = (amrap_set)=>{
-        const { position } = amrap_set;
-        const amrap_sets_Copy = [...state.amrap_sets];
-        amrap_sets_Copy.splice(position, 1, amrap_set)
+    // const editAmrapSet = (amrap_set)=>{
+    //     const { position } = amrap_set;
+    //     const amrap_sets_Copy = [...state.amrap_sets];
+    //     amrap_sets_Copy.splice(position, 1, amrap_set)
 
-        dispatch({
-            type: EDIT_AMRAP_SET,
-            payload: amrap_sets_Copy
-        });
-    };
+    //     dispatch({
+    //         type: EDIT_AMRAP_SET,
+    //         payload: amrap_sets_Copy
+    //     });
+    // };
 
 
     return (
         <TimerContext.Provider
             value={{
-                timer: state.timer,
                 timersRef: state.timersRef,
                 intervalID: state.intervalID,
                 isTimerReady: state.isTimerReady,
-                sets: state.sets,
-                rest: state.rest,
-                amrap_time: state.amrap_time,
-                amrap_sets: state.amrap_sets,
-                forTime_timeCap: state.forTime_timeCap,
-                emom_every: state.emom_every,
-                emom_for: state.emom_for,
-                asLongAsPossible: state.asLongAsPossible,
-                tabata_rounds: state.tabata_rounds,
-                tabata_workTime: state.tabata_workTime,
-                tabata_restTime: state.tabata_restTime,
-                isEndSession: state.isEndSession,
+                // forTime_timeCap: state.forTime_timeCap,
+                // emom_every: state.emom_every,
+                // emom_for: state.emom_for,
+                // asLongAsPossible: state.asLongAsPossible,
+                // tabata_rounds: state.tabata_rounds,
+                // tabata_workTime: state.tabata_workTime,
+                // tabata_restTime: state.tabata_restTime,
                 isCountDownDone: state.isCountDownDone,
                 isOnRest: state.isOnRest,
                 isSessionEnd: state.isSessionEnd,
                 countDownTime: state.countDownTime,
+                pauseData: state.pauseData,
+                userRounds: state.userRounds,
+                isSessionPaused: state.isSessionPaused,
                 startTime,
                 saveIntervalID,
                 stopTime,
@@ -272,16 +292,15 @@ const TimerState = ({ children })=>{
                 splitTimeToSecs,
                 splitTimeToMillisecs,
                 getTimeOptions,
-                setAmrapTime,
-                addAmrap,
-                removeAmrap,
-                editAmrapSet,
                 setTimerReady,
                 setEndSession,
                 setTimersRef,
                 handleCountDownDone,
                 handleIsOnRest,
-                handleIsSessionEnd
+                handleIsSessionEnd,
+                handleIsSessionPaused,
+                setPauseData,
+                sumUserRound
             }}
         >
             { children }

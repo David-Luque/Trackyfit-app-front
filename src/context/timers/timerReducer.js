@@ -12,7 +12,10 @@ import {
     SET_TIME_REFERENCES,
     HANDLE_COUNTDOWN,
     HANDLE_REST,
-    HANDLE_SESSION_END
+    HANDLE_SESSION_END,
+    HANDLE_SESSION_PAUSED,
+    HANDLE_PAUSE_DATA,
+    ADD_USER_ROUND
 } from '../../types'
 
 const TimerReducer = (state, action)=>{
@@ -83,6 +86,21 @@ const TimerReducer = (state, action)=>{
             ...state,
             isSessionEnd: action.payload
         }
+        case HANDLE_SESSION_PAUSED:
+            return {
+                ...state,
+                isSessionPaused: action.payload
+            }
+        case HANDLE_PAUSE_DATA:
+            return {
+                ...state,
+                pauseData: action.payload
+            }
+        case ADD_USER_ROUND:
+            return {
+                ...state,
+                userRounds: state.userRounds + 1
+            }
         default:
             return state;
     };
