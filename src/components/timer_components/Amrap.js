@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import TimerContext from '../../context/timers/timerContext';
 import AmrapSet from './minor_timer_comp/AmrapSet';
 import AmrapTimes from './minor_timer_comp/AmrapTimes';
-//TODO: FIX VISTA DE AMRAP AL ENTRAR de nuevo TRAS terminar UNA SESION
+
+//TODO: fix bug on sets when timer is paused on rest time.
+//TODO: fix isSessionPaused on rest
+//
 
 const Amrap = ()=>{
-    //TODO: include an "useEffect" on every timer_component where execute a fuction to reset "initialState" of TimerContext
 
     const timerContext = useContext(TimerContext);
     const {
@@ -30,7 +32,8 @@ const Amrap = ()=>{
         pauseData,
         setPauseData,
         userRounds,
-        sumUserRound
+        sumUserRound,
+        resetState
     } = timerContext
     
     const { currentTime_ref, timer_ref } = timersRef;
@@ -55,13 +58,14 @@ const Amrap = ()=>{
         userLastTime
     } = amrapState;
 
-
+    useEffect(() => { resetState() }, []);
     useEffect(()=>{
         if(amrap_sets.length > 0) {
             const session_amrap_sets = amrap_sets.map(amrap => amrap.work);
             const session_amrap_rests = amrap_sets.map(amrap => amrap.rest);
             setAmrapState({
                 ...amrapState,
+                session_amrap: amrap_time,
                 session_sets: session_amrap_sets,
                 session_rests: session_amrap_rests
             })
@@ -197,13 +201,9 @@ const Amrap = ()=>{
         setUserRoundsTimes(userRoundsTimes_copy);
     };
 
-    const handleRoundsButton = ()=>{
+    const handleRoundsButtonStatus = (status)=>{
         const roundsButton = document.getElementById('round-btn');
-        if(roundsButton.className === 'active') {
-            roundsButton.className = 'inactive'
-        } else {
-            roundsButton.className = 'active';
-        }
+        roundsButton.className = status;
     };
 
     const handleTimer = ()=>{
@@ -255,7 +255,7 @@ const Amrap = ()=>{
             const startAmrap = ()=>{
                 //console.log('startAmrap')
                 handleIsOnRest(false);
-                handleRoundsButton();
+                handleRoundsButtonStatus('active');
                 
                 if(!isSessionPaused) {
                     handleUserAmrapTimes();
@@ -288,7 +288,7 @@ const Amrap = ()=>{
                         if(!all_session_amraps[amrap_count]) {
                             return endSession();
                         };
-                        handleRoundsButton();
+                        handleRoundsButtonStatus('inactive');
                         startRest();
                     }
                 }, 1000);
@@ -351,7 +351,7 @@ const Amrap = ()=>{
             //console.log('pauseSession()')
             clearInterval(intervalID);
             handleIsSessionPaused(true);
-            handleRoundsButton();
+            handleRoundsButtonStatus('inactive');
             setPauseData({
                 currentTime: currentTime_ref,
                 timer: timer_ref,

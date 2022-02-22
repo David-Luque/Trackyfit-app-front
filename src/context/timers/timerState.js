@@ -6,10 +6,6 @@ import {
     COUNT_TIME,
     STOP_INTERVAL,
     RESET_TIME,
-    //SET_AMRAP_TIME,
-    //ADD_AMRAP_SET,
-    //REMOVE_AMRAP_SET,
-    //EDIT_AMRAP_SET,
     SET_TIMER_READY,
     SET_END_SESSION,
     HANDLE_COUNTDOWN,
@@ -17,7 +13,8 @@ import {
     HANDLE_SESSION_END,
     HANDLE_SESSION_PAUSED,
     HANDLE_PAUSE_DATA,
-    ADD_USER_ROUND
+    ADD_USER_ROUND,
+    RESET_TIMER_STATE
 } from '../../types';
 
 const TimerState = ({ children })=>{
@@ -32,19 +29,7 @@ const TimerState = ({ children })=>{
         isOnRest: false,
         isSessionEnd: false,
         isSessionPaused: false,
-        pauseData: null,
-        userRoundsTime: {},
-        //sets: null,
-        //rest: null,
-        //amrap_time: 60,
-        //amrap_sets: [], //an arary of objects with rest and time for every set
-        // forTime_timeCap: 0,
-        // emom_every: 0,
-        // emom_for: 0,
-        // asLongAsPossible: false,
-        // tabata_rounds: 0,
-        // tabata_workTime: 0,
-        // tabata_restTime: 0
+        pauseData: null
     }
 
     const [ state, dispatch ] = useReducer(TimerReducer, initialState);
@@ -212,6 +197,16 @@ const TimerState = ({ children })=>{
         return compoundTimeOptions();
     };
 
+
+    const resetState = ()=>{
+        const initialStateCopy = {  ...initialState };
+
+        dispatch({
+            type: RESET_TIMER_STATE,
+            payload: initialStateCopy
+        });
+    };
+
     // const setAmrapTime = (time)=>{
     //     dispatch({
     //         type: SET_AMRAP_TIME,
@@ -300,7 +295,8 @@ const TimerState = ({ children })=>{
                 handleIsSessionEnd,
                 handleIsSessionPaused,
                 setPauseData,
-                sumUserRound
+                sumUserRound,
+                resetState
             }}
         >
             { children }

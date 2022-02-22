@@ -3,10 +3,6 @@ import {
     COUNT_TIME,
     STOP_INTERVAL,
     RESET_TIME,
-    SET_AMRAP_TIME,
-    ADD_AMRAP_SET,
-    REMOVE_AMRAP_SET,
-    EDIT_AMRAP_SET,
     SET_TIMER_READY,
     SET_END_SESSION,
     SET_TIME_REFERENCES,
@@ -15,7 +11,8 @@ import {
     HANDLE_SESSION_END,
     HANDLE_SESSION_PAUSED,
     HANDLE_PAUSE_DATA,
-    ADD_USER_ROUND
+    ADD_USER_ROUND,
+    RESET_TIMER_STATE
 } from '../../types'
 
 const TimerReducer = (state, action)=>{
@@ -40,22 +37,6 @@ const TimerReducer = (state, action)=>{
                 ...state,
                 timer: 0
             }
-        case SET_AMRAP_TIME:
-            return {
-                ...state,
-                amrap_time: action.payload
-            }
-        case ADD_AMRAP_SET:
-            return {
-                ...state,
-                amrap_sets: [...state.amrap_sets, action.payload]
-            };
-        case REMOVE_AMRAP_SET:
-        case EDIT_AMRAP_SET:
-            return {
-                ...state,
-                amrap_sets: action.payload
-            };
         case SET_TIMER_READY:
             return {
                 ...state,
@@ -101,6 +82,8 @@ const TimerReducer = (state, action)=>{
                 ...state,
                 userRounds: state.userRounds + 1
             }
+        case RESET_TIMER_STATE:
+            return action.payload
         default:
             return state;
     };
