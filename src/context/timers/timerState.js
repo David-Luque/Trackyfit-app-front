@@ -197,7 +197,6 @@ const TimerState = ({ children })=>{
         return compoundTimeOptions();
     };
 
-
     const resetState = ()=>{
         const initialStateCopy = {  ...initialState };
 

@@ -1,70 +1,116 @@
-import * as React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { splitTimeToSecs } from '../../config/TimerHelper';
+import TimerContext from '../../context/timers/timerContext';
+import ForTimeResults from './minor_timer_comp/ForTimeResults';
 
 
 const ForTime = ()=>{
 
-    const getTimeOptions = (maxMinutes)=>{
+    const timerContext = useContext(TimerContext);
+    const {
+        getTimeOptions,
+        isSessionEnd,
+        isTimerReady,
+        resetState
+    } = timerContext;
 
-        const generateOptions = ()=>{
-            const timeOptionsMin = []; //in minutes
-            let i = 0;
-            do {
-                i += .5;
-                timeOptionsMin.push(i);
-            } while (timeOptionsMin[timeOptionsMin.length - 1] <= maxMinutes);
-            //convert to seconds
-            const timeOptionsSec = timeOptionsMin.map(op => op * 60);
-            return timeOptionsSec;
-        };
+    const [ forTimeCap, setForTimeCap ] = useState('0');
+    const [ isForTimeSets, setIsForTimeSets ] = useState(false);
+
+    useEffect(()=>{ resetState() }, []);
+
+    const renderTimeOptions = (maxMinutes)=>{
+        //const maxMinutes = maxMinutes;
+        const options = getTimeOptions(maxMinutes);
         
-        const formatTimeOptions = (options)=>{
-            return options.map(opt => splitTimeToSecs(opt));
-        }; 
-
-        const compoundTimeOptions = ()=> {
-            const options = generateOptions(30);
-            const formatOptions = formatTimeOptions(options);
-            let timeData = [];
-            
-            for(let i = 0; i < options.length - 1; i++) {
-                timeData.push({
-                    value: options[i],
-                    formatValue: formatOptions[i]
-                });
-            }
-            return timeData;
-        };
-
-        return compoundTimeOptions();
-    };
-
-
-    const renderTimeOptions = ()=>{
-        const options = getTimeOptions(150);
-        return options.map((op, index) => {
-            return (
-                <option value={op.value} key={index}>
-                    {op.formatValue}
-                </option>
-            )
-        });
+        return (
+            <>
+                <option value='0' key={-1}> None </option>
+                {
+                    options.map((op, index) => (
+                        <option value={op.value} key={index}>
+                            {op.formatValue}
+                        </option>
+                    ))
+                }
+            </>
+        )
     };
     
 
-    return (
-        <div>
-            <h3>FOR TIME</h3>
-            <p>As fast as posible for time:</p>
-            <p>Tie cap:</p>
-            <select name='time'>
-                {renderTimeOptions()}
-            </select>
-            <p>minutes</p>
-            <button>Adds sets</button>
-            <button>START</button>
-        </div>
-    )
+    if(isSessionEnd) { 
+        return (
+            <div>
+                <div>
+                    <header>
+                        <Link to={'/timer'}> <span>&larr;</span> </Link>
+                        <p>app logo-name</p>
+                        <div>
+                            <button>share</button>
+                        </div>
+                    </header>
+                    <main>
+                        {/* <img/> */}
+                        <p>Motivation sentence</p>
+                        <ul>
+                            {renderSessionResume()}
+                        </ul>
+                    </main>
+                    <footer> Show round times</footer>
+                    <ForTimeResults />
+                </div>
+            </div>
+        )
+    } else if(isTimerReady) {
+        return (
+            <div>
+                { renderForTimeCount() }
+                { userLastTime === 0 || userLastTime === null ? (
+                    <p>Last round: -:- </p> 
+                    ) : <p>Last round: {splitTimeToSecs(userLastTime)}</p> 
+                }
+                <div>
+                    <main id='timer' className="inactive" onClick={()=>handleTimer()}>
+                        {/* <img/> */}
+                        <h1>{splitTimeToSecs(currentTime_ref)}</h1>
+                        <p>Tap to start</p>
+                    </main>
+                    <aside>
+                        <button id="round-btn" className='inactive' onClick={()=> addUserRound()}> 
+                            {userRounds !== 0 ? userRounds : '+'} 
+                        </button>
+                        <p>Rounds counter</p>
+                    </aside>
+                </div>
+            </div>
+        )
+    } else {
+        return (
+            <div>
+                <h3>FOR TIME</h3>
+                
+                <p>As fast as posible for time:</p>
+                
+                <p>Time cap:</p>
+                <select 
+                    name='time'
+                    value={forTimeCap}
+                    onChange={ e => setForTimeCap(Number(e.target.value)) }
+                > {renderTimeOptions(50)} </select>
+                
+                { isForTimeSets && <ForTimeSets /> }
+                
+                <button
+                    onClick={() => setIsForTimeSets()}
+                > Add sets (optional) </button>
+                
+                <button onClick={()=>prepareForTime()}>
+                    START TIME
+                </button>
+            </div>
+        )
+    }
 };
 
 export default ForTime;
