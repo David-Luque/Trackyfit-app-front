@@ -6,7 +6,6 @@ import AmrapTimes from './minor_timer_comp/AmrapTimes';
 
 //TODO: fix bug on sets when timer is paused on rest time.
 //TODO: fix isSessionPaused on rest
-//
 
 const Amrap = ()=>{
 
@@ -387,8 +386,6 @@ const Amrap = ()=>{
 
         return all_session_amraps.map(amrap => {
             counter++;
-            console.log(amrap)
-            console.log(splitTimeToSecs(amrap))
             return (
                 <li>
                     <span>AMRAP {counter}</span>
