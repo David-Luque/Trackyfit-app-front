@@ -20,7 +20,7 @@ const ForTime = ()=>{
 
     const { currentTime_ref, timer_ref } = timersRef;
 
-    const [ forTimeCap, setForTimeCap ] = useState('0');
+    const [ forTimeCap, setForTimeCap ] = useState(0);
     const [ isForTimeSets, setIsForTimeSets ] = useState(false);
     const [ count, setCount ] = useState({ forTime: 0, rest: 0 });
     const [ allForTimeSets, setAllForTimeSets ] = useState([]);
@@ -87,7 +87,13 @@ const ForTime = ()=>{
         console.log('addUserRound()')
     };
 
-
+    const handleForTimeSets = ()=>{
+        if(isForTimeSets) {
+            setIsForTimeSets(false)
+        } else {
+            setIsForTimeSets(true)
+        }
+    };
 
 
 
@@ -153,11 +159,14 @@ const ForTime = ()=>{
                     onChange={ e => setForTimeCap(Number(e.target.value)) }
                 > {renderTimeOptions(50)} </select>
                 
-                { isForTimeSets && <ForTimeSets /> }
-                
-                <button
-                    onClick={() => setIsForTimeSets()}
-                > Add sets (optional) </button>
+                { isForTimeSets ? (
+                        <ForTimeSets />
+                    ) : (
+                        <button
+                            onClick={() => handleForTimeSets()}
+                        > Add sets (optional) </button>
+                    )
+                }
                 
                 <button onClick={()=>prepareForTime()}>
                     START TIME
