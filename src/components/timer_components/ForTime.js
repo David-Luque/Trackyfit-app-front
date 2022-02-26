@@ -12,6 +12,7 @@ const ForTime = ()=>{
     const {
         getTimeOptions,
         isSessionEnd,
+        setTimerReady,
         isTimerReady,
         resetState,
         isOnRest,
@@ -26,6 +27,8 @@ const ForTime = ()=>{
     const [ allForTimeSets, setAllForTimeSets ] = useState([]);
     const [ userLastTime, setUserLastTime ] = useState(null);
     const [ userRounds, setUserRounds ] = useState(0);
+    const [ sessionSets, setSessionSets ] = useState(3);
+    const [ sessionRest, setSessionRest ] = useState(60);
 
 
     useEffect(()=>{ resetState() }, []);
@@ -54,7 +57,7 @@ const ForTime = ()=>{
     };
 
     const prepareForTime = ()=>{
-        console.log('prepareForTime()')
+        setTimerReady();
     };
 
     const renderForTimeCount = ()=>{
@@ -65,15 +68,15 @@ const ForTime = ()=>{
                     { isOnRest ? (
                         <p>REST</p>
                     ) : (
-                        <p>{splitTimeToSecs(allForTimeSets[count.forTime])} minutes</p>
+                        <p> minutes</p>
                     )}
                 </>
             )
         } else {
             return (
                 <>
-                    <h3>AMRAP</h3>
-                    <p>{splitTimeToSecs(allForTimeSets[count.forTime])} minutes</p>
+                    <h3>FOR TIME</h3>
+                    <p> minutes</p>
                 </>
             )
         }
@@ -133,7 +136,7 @@ const ForTime = ()=>{
                 <div>
                     <main id='timer' className="inactive" onClick={()=>handleTimer()}>
                         {/* <img/> */}
-                        <h1>{splitTimeToSecs(currentTime_ref)}</h1>
+                        <h1>title</h1>
                         <p>Tap to start</p>
                     </main>
                     <aside>
@@ -160,7 +163,13 @@ const ForTime = ()=>{
                 > {renderTimeOptions(50)} </select>
                 
                 { isForTimeSets ? (
-                        <ForTimeSets />
+                        <ForTimeSets
+                            renderTimeOptions={renderTimeOptions}
+                            setSessionSets={setSessionSets}
+                            setSessionRest={setSessionRest}
+                            sessionRest={sessionRest}
+                            sessionSets={sessionSets}
+                        />
                     ) : (
                         <button
                             onClick={() => handleForTimeSets()}
