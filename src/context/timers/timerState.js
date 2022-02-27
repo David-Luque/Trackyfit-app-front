@@ -67,6 +67,16 @@ const TimerState = ({ children })=>{
         });
     };
 
+    // const handleUserTimes = ()=>{
+    //     console.log('handleUserTimes()')
+    //     const userRoundsTimes_copy = userRoundsTimes;
+    //     const userRoundTimes_keys = Object.keys(userRoundsTimes_copy)
+    //     let newRound_value = Number(userRoundTimes_keys[userRoundTimes_keys.length - 1]) + 1;
+    //     if(isNaN(newRound_value)) newRound_value = 0;
+    //     userRoundsTimes_copy[newRound_value.toString()] = [];
+    //     setUserRoundsTimes(userRoundsTimes_copy);
+    // };
+
     const setPauseData = (data)=>{
         dispatch({
             type: HANDLE_PAUSE_DATA,
