@@ -4,6 +4,8 @@ import TimerContext from '../../context/timers/timerContext';
 import ForTimeResults from './minor_timer_comp/ForTimeResults';
 import ForTimeSets from './minor_timer_comp/ForTimeSets';
 
+//TODO: create logic to finish the current set if current_time is equal to time cap
+//TODO: create button for user to finish manually the current set
 
 const ForTime = ()=>{
 
@@ -36,13 +38,11 @@ const ForTime = ()=>{
     const { currentTime_ref, timer_ref } = timersRef;
 
     const [ forTimeCap, setForTimeCap ] = useState(0);
-    const [ isForTimeSets, setIsForTimeSets ] = useState(false);
-    const [ count, setCount ] = useState({ forTime: 1, rest: 1 });
-    //const [ allForTimeSets, setAllForTimeSets ] = useState([]);
-    const [ userLastTime, setUserLastTime ] = useState(null);
-    //const [ userRounds, setUserRounds ] = useState(0);
     const [ sessionSets, setSessionSets ] = useState(3);
     const [ sessionRest, setSessionRest ] = useState(60);
+    const [ isForTimeSets, setIsForTimeSets ] = useState(false);
+    const [ count, setCount ] = useState(0);
+    const [ userLastTime, setUserLastTime ] = useState(null);
     const [ userRoundsTimes, setUserRoundsTimes ] = useState({});
 
 
@@ -78,7 +78,7 @@ const ForTime = ()=>{
     const renderForTimeCount = ()=>{
         return (
             <>
-                <h3> FOR TIME  { isForTimeSets && <span>{count.forTime} of {sessionSets}</span> } </h3>
+                <h3> FOR TIME  { isForTimeSets && <span>{count+1} of {sessionSets}</span> } </h3>
                 { isOnRest ? (
                     <p>REST</p>
                 ) : (
@@ -98,7 +98,7 @@ const ForTime = ()=>{
             if(pausedDataLocal) {
                 forTimeCount = pausedDataLocal.forTimeCount;
             } else {
-                forTimeCount = count.forTime;
+                forTimeCount = count;
             }
             
             const startCountDown = ()=>{
@@ -147,20 +147,20 @@ const ForTime = ()=>{
                     pausedDataLocal = null;
                 } else {
                     timer = 0;
-                    //currentTime = all_session_amraps[amrap_count] + 1;
+                    currentTime = 0;
                 }
 
                 let workIntervalID;
                 
                 const workInterval = setInterval(()=>{
                     timer++;
-                    //currentTime--;
+                    currentTime++;
                     setTimersRef({
-                        //currentTime_ref: currentTime,
+                        currentTime_ref: currentTime,
                         timer_ref: timer
                     });
                     
-                    if(currentTime === 0) {
+                    if(currentTime === forTimeCap) {
                         clearInterval(workIntervalID);
                         forTimeCount++;
                         if(forTimeCount === sessionSets) {
@@ -175,7 +175,6 @@ const ForTime = ()=>{
             };
     
             const startRest = ()=>{
-                //console.log('startRest')
                 handleIsOnRest(true);
                 
                 if(pausedDataLocal) {
@@ -184,30 +183,30 @@ const ForTime = ()=>{
                     pausedDataLocal = null;
                 } else {
                     timer = 0;
-                    //currentTime = session_rests[rest_count] + 1; 
+                    currentTime = 0; 
                 }
 
                 let restIntervalID;
   
                 const restInterval = setInterval(()=>{
-                    timer ++
-                    //currentTime--;
+                    timer ++;
+                    currentTime++;
                     setTimersRef({
                         currentTime_ref: currentTime,
                         timer_ref: timer
                     });
                     
-                    if(currentTime === 0) {
+                    if(currentTime === sessionRest) {
                         clearInterval(restIntervalID);
                         //rest_count++;
                         
-                        if(count.forTime === sessionSets) {
+                        if(forTimeCount === sessionSets - 1) {
                             console.log('final round!')
                         } else {
                             console.log('one more set!')
                         };
     
-                        setCount({ ...count, amrap: forTimeCount });
+                        setCount(forTimeCount);
                         sumUserRound();
                         startForTime();
                     }
@@ -231,15 +230,13 @@ const ForTime = ()=>{
             handleIsSessionPaused(true);
             handleRoundsButtonStatus('inactive');
             setPauseData({
-                //currentTime: currentTime_ref,
+                currentTime: currentTime_ref,
                 timer: timer_ref,
-                forTimeCount: count.forTime,
-                //restCount: count.rest
+                forTimeCount: count,
             });
         };
 
         const restartSession = ()=>{
-            //console.log('restartSession()')
             startSession();
         };
 
@@ -255,13 +252,31 @@ const ForTime = ()=>{
                 timerElem.className = 'active';
                 return restartSession();
             default:
-                return console.log('handleTimer switch error')
+                return console.log('handleTimer switch error');
         }
 
     };
 
     const addUserRound = ()=>{
-        console.log('addUserRound()')
+        const roundsButton = document.getElementById('round-btn');
+        if(roundsButton.className === 'active') {
+            const userTimes_copy = userRoundsTimes[count.toString()];
+
+            const userPrevTimesTotal = userTimes_copy.reduce((acc, curr)=>{
+                return acc + curr
+            }, 0);
+            const lastTime =  currentTime_ref - userPrevTimesTotal;
+            
+            userTimes_copy.push(lastTime);
+            
+            setUserRoundsTimes({
+                ...userRoundsTimes,
+                [count.toString()] : userTimes_copy
+            });
+
+            setUserLastTime(lastTime);
+            sumUserRound();
+        }
     };
 
     const handleForTimeSets = ()=>{
@@ -324,7 +339,7 @@ const ForTime = ()=>{
                 <div>
                     <main id='timer' className="inactive" onClick={()=>handleTimer()}>
                         {/* <img/> */}
-                        <h1>{splitTimeToSecs(timer_ref)}</h1>
+                        <h1>{splitTimeToSecs(currentTime_ref)}</h1>
                         <p>Tap to start</p>
                     </main>
                     <aside>

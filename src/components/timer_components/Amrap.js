@@ -167,7 +167,6 @@ const Amrap = ()=>{
             });
             setAmrapState({
                 ...amrapState,
-                userRounds: userRounds + 1,
                 userLastTime: lastTime
             })
             sumUserRound()
